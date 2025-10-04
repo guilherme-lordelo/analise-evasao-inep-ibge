@@ -1,0 +1,30 @@
+# Ambiente virtual
+venv/
+
+# Dados - NÃO versionar os originais ou processados
+data/raw/
+data/interim/
+data/processed/
+
+# Arquivos auxiliares (não necessários no GitHub)
+metodologia.txt
+readSample.py
+sample_output.text
+
+# Arquivos temporários de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+*.tmp
+
+# Arquivos de log
+*.log
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Arquivos de configuração locais
+*.env
+*.vscode/

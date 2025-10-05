@@ -1,66 +1,62 @@
 import os
 import pandas as pd
 
-# Arquivos
+# === CONFIGURAÇÕES ===
 INPUT_FILE = os.path.join("data", "raw", "MICRODADOS_CADASTRO_CURSOS_2024.CSV")
 OUTPUT_FILE = os.path.join("data", "processed", "inep_reduzido.csv")
+ENCODING = "latin1"  # pode ser alterado para 'utf-8' se necessário
+SEP = ";"  # separador padrão dos microdados do INEP
 
-# Colunas de interesse (baseado no dicionário + primeira linha do CSV)
-COLS = [
-    "NU_ANO_CENSO",
-    "NO_REGIAO",
-    "CO_REGIAO",
-    "NO_UF",
-    "SG_UF",
-    "CO_UF",
-    "NO_MUNICIPIO",
-    "CO_MUNICIPIO",
-    "IN_CAPITAL",
-    "TP_ORGANIZACAO_ACADEMICA",
-    "TP_REDE",
-    "TP_CATEGORIA_ADMINISTRATIVA",
-    "IN_COMUNITARIA",
-    "IN_CONFESSIONAL",
-    "CO_IES",
-    "NO_CURSO",
-    "QT_CURSO",
-    "QT_INSCRITO_TOTAL",
-    "QT_MAT",
-    "QT_DOC_TOTAL"
+# === COLUNAS RELEVANTES ===
+COLUNAS_SELECIONADAS = [
+	"NU_ANO_CENSO",
+	"NO_REGIAO",
+	"SG_UF",
+	"NO_MUNICIPIO",
+	"CO_MUNICIPIO",
+	"CO_IES",
+	"NO_CURSO",
+	"TP_REDE",
+	"TP_MODALIDADE_ENSINO",
+	"TP_GRAU_ACADEMICO",
+	"QT_ING_TOTAL",
+	"QT_MAT_TOTAL",
+	"QT_CONC_TOTAL",
+	"QT_SIT_TRANCADA",
+	"QT_SIT_DESVINCULADO",
+	"QT_SIT_TRANSFERIDO",
+	"QT_SIT_FALECIDO"
 ]
 
-CHUNK_SIZE = 100000  # ajusta se quiser menor/grande
+# === ETAPA 1: LER O HEADER ===
+with open(INPUT_FILE, "r", encoding=ENCODING) as f:
+	header = f.readline().strip().split(SEP)
 
-def main():
-    print(f"Reading INEP CSV in chunks: {INPUT_FILE}")
+# Verificar se todas as colunas selecionadas estão no arquivo
+colunas_existentes = [c for c in COLUNAS_SELECIONADAS if c in header]
+faltando = set(COLUNAS_SELECIONADAS) - set(colunas_existentes)
+if faltando:
+	print(f"Atenção: as seguintes colunas não foram encontradas e serão ignoradas: {faltando}")
 
-    dfs = []
-    for i, chunk in enumerate(pd.read_csv(
-        INPUT_FILE,
-        sep=";",              # CSV do INEP usa ";"
-        encoding="latin1",    # encoding comum nos microdados
-        chunksize=CHUNK_SIZE,
-        low_memory=False
-    )):
-        # Remove espaços extras nos nomes das colunas
-        chunk.columns = chunk.columns.str.strip()
+# === ETAPA 2: LER SOMENTE AS LINHAS A PARTIR DA 11780 ===
+print("🔍 Lendo arquivo a partir da linha 11780...")
+df = pd.read_csv(
+	INPUT_FILE,
+	sep=SEP,
+	skiprows=range(1, 11779),  # pula linhas 2 até 11780 (header é mantido)
+	usecols=colunas_existentes,
+	encoding=ENCODING,
+	low_memory=False
+)
 
-        # Seleciona só colunas que realmente existem no CSV
-        cols_existing = [c for c in COLS if c in chunk.columns]
-        df_chunk = chunk[cols_existing]
+# === ETAPA 3: LIMPEZA BÁSICA ===
+# Remove linhas sem município ou curso
+df = df.dropna(subset=["CO_MUNICIPIO", "NO_CURSO"], how="any")
 
-        dfs.append(df_chunk)
-        print(f"Chunk {i+1} processed ({len(df_chunk)} rows).")
+# Remove duplicatas se houver
+df = df.drop_duplicates()
 
-    # Concatena tudo em um dataframe final
-    df_final = pd.concat(dfs, ignore_index=True)
-
-    # Salva em CSV reduzido
-    os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
-    df_final.to_csv(OUTPUT_FILE, index=False, sep=";", encoding="utf-8-sig")
-
-    print(f"Done! Reduced file saved at: {OUTPUT_FILE}")
-    print(f"Final shape: {df_final.shape}")
-
-if __name__ == "__main__":
-    main()
+# === ETAPA 4: SALVAR RESULTADO ===
+df.to_csv(OUTPUT_FILE, sep=";", index=False, encoding="utf-8")
+print(f"Arquivo salvo com sucesso: {OUTPUT_FILE}")
+print(f"Total de linhas processadas: {len(df)}")

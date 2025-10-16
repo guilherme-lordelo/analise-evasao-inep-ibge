@@ -23,6 +23,7 @@ os.makedirs(INTERIM_DIR, exist_ok=True)
 # === CONFIGURAÇÕES ===
 ENCODING = "latin1"  # pode ser alterado para 'utf-8' se necessário
 SEP = ";"  # separador padrão dos microdados do INEP
+CHUNKSIZE = 100_000  # número de linhas por bloco
 
 # === COLUNAS RELEVANTES ===
 COLUNAS_SELECIONADAS = [
@@ -81,15 +82,26 @@ if faltando:
 # Guardar o mapeamento para renomear depois da leitura
 renomear_apos_leitura = mapeamento_renome
 
-# === ETAPA 2: LEITURA PRINCIPAL ===
-print(f" Lendo arquivo completo de {ano} ...")
-df = pd.read_csv(
+# === ETAPA 2: LEITURA PRINCIPAL (em chunks) ===
+print(f" Lendo arquivo completo de {ano} em partes de {CHUNKSIZE:,} linhas...")
+
+chunks = pd.read_csv(
 	INPUT_FILE,
 	sep=SEP,
 	usecols=colunas_existentes,
 	encoding=ENCODING,
-	low_memory=False
+	low_memory=False,
+	chunksize=CHUNKSIZE
 )
+
+df_list = []
+total_linhas = 0
+for i, chunk in enumerate(chunks, start=1):
+	df_list.append(chunk)
+	total_linhas += len(chunk)
+	print(f"  → Chunk {i} lido ({len(chunk):,} linhas, total: {total_linhas:,})")
+
+df = pd.concat(df_list, ignore_index=True)
 
 # Aplicar renomeação de colunas antigas, se necessário
 df = df.rename(columns=renomear_apos_leitura)
@@ -97,17 +109,26 @@ df = df.rename(columns=renomear_apos_leitura)
 # === ETAPA 3: LIMPEZA ===
 print(" Limpando dados...")
 
-# 3.1 — Linhas sem CO_MUNICIPIO
-sem_municipio = df[df["CO_MUNICIPIO"].isna() | (df["CO_MUNICIPIO"].astype(str).str.strip() == "")]
-print(f" Linhas sem código de município: {len(sem_municipio):,}")
+# 3.1 — Linhas sem CO_MUNICIPIO ou com CO_MUNICIPIO = 0
+sem_municipio = df[
+	df["CO_MUNICIPIO"].isna() |
+	(df["CO_MUNICIPIO"].astype(str).str.strip() == "") |
+	(df["CO_MUNICIPIO"].astype(str).str.strip() == "0")
+]
 
-# 3.2 — Salvar linhas removidas (somente as sem município)
+print(f" Linhas sem ou com código de município inválido (0): {len(sem_municipio):,}")
+
+# 3.2 — Salvar linhas removidas
 if len(sem_municipio) > 0:
-    sem_municipio.to_csv(REMOVIDAS_FILE, sep=";", index=False, encoding="utf-8")
-    print(f" Linhas removidas salvas em: {REMOVIDAS_FILE}")
+	sem_municipio.to_csv(REMOVIDAS_FILE, sep=";", index=False, encoding="utf-8")
+	print(f" Linhas removidas salvas em: {REMOVIDAS_FILE}")
 
-# 3.3 — Manter apenas válidas
-df = df.dropna(subset=["CO_MUNICIPIO"], how="any")
+# 3.3 — Manter apenas válidas (CO_MUNICIPIO diferente de 0 e não nulo)
+df = df[
+	df["CO_MUNICIPIO"].notna() &
+	(df["CO_MUNICIPIO"].astype(str).str.strip() != "") &
+	(df["CO_MUNICIPIO"].astype(str).str.strip() != "0")
+]
 
 # === ETAPA 4: SALVAR RESULTADO ===
 df.to_csv(OUTPUT_FILE, sep=";", index=False, encoding="utf-8")

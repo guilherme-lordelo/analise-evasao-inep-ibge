@@ -9,7 +9,7 @@ COLUNAS_POR_TABELA = {
     # Tabela 1 - População total, urbana/rural e sexo
     # -------------------------------------------------
     "tab1.csv": [
-        "CO_MUNICIPIO", "SG_UF", "NO_MUNICIPIO",
+        "CO_MUNICIPIO", "SG_UF", "NO_MUNICIPIO_OU_CLASSE",
         "POP_TOTAL", "PERC_URBANA", "PERC_RURAL",
         "PERC_HOMEM", "PERC_MULHER", "RAZAO_SEXO"
     ],

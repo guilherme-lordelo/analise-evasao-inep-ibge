@@ -10,6 +10,8 @@ data/processed/
 metodologia.txt
 readSample.py
 sample_output.text
+diagram_pipeline.py
+pipeline_evasao.png
 
 # Arquivos temporários de Python
 __pycache__/

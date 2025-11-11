@@ -7,7 +7,7 @@ Este projeto tem como objetivo analisar a evasão na educação superior brasile
 - `data/raw/` → dados brutos originais do INEP, não modificados (não versionados no GitHub)
 - `data/interim/` → dados parcialmente processados do INEP
 - `data/interim/ibge_csv/` → dados IBGE extraídos de XLS e convertidos para CSV
-- `data/processed/` → dados finais do INEP
+- `data/processed/` → dados agregados finais
 - `data/processed/ibge_csv_final/` → tabelas IBGE finais
 - `src/` → scripts de processamento
 
@@ -15,39 +15,41 @@ Este projeto tem como objetivo analisar a evasão na educação superior brasile
 
 - **INEP**
   - `src/extract_inep.py` → gera datasets reduzidos (`inep_reduzido_YYYY.csv`) em `data/interim/`
-  - `src/extract_ies.py` → gera dataset de instituições (`inep_ies_reduzido.csv`)
-  - `src/merge_ies_cursos.py` → consolida cursos e IES em `inep_ies_merged.csv`
+  - `src/aggregate_two_years.py` → Une pares de anos e calcula evasão anual (`evasao_YYYY_YYYY.csv`) em `data/processed`
 
 - **IBGE**
   - `src/extract_ibge.py` → extrai planilhas XLS e gera CSVs intermediários em `data/interim/ibge_csv/`
   - `src/ibge_limpar_tabelas.py` → limpa e padroniza colunas conforme `src/ibge_colunas.py`, salvando tabelas finais em `data/processed/ibge_csv_final/`
 
-- **Agregação**
-  - `src/aggregate_two_years.py` → agrega dois anos consecutivos de microdados do INEP, gerando dataset consolidado em `data/processed/` com cálculo da taxa de evasão por município
+- **Agregação**  
+  - `src/agregar_evasao.py` → combina todos os pares de anos de evasão (`evasao_YYYY_YYYY.csv`), calcula médias e evasões acumuladas ponderadas, e gera arquivos agregados por município, UF e Brasil em `data/processed/`  
+  - `src/merge_ibge_evasao.py` → une os resultados agregados de evasão com os dados censitários do IBGE (`ibge_csv_final/`), produzindo versões finais completas (`municipios_evasao_valida_ibge_2020_2024.csv` e `municipios_evasao_invalida_ibge_2020_2024.csv`) em `data/processed/`
+
 
 
 ## Fluxo de Processamento
 
-1. **INEP**
-   1. Colocar os arquivos brutos do INEP em `data/raw/`.
-   2. Executar `src/extract_inep.py` para gerar datasets reduzidos em `data/interim/` (ex: `inep_reduzido_2022.csv`).
-   3. Executar `src/extract_ies.py` para gerar dataset de instituições (`inep_ies_reduzido.csv`).
-   4. Executar `src/merge_ies_cursos.py` para consolidar cursos e IES em `inep_ies_merged.csv`.
+1. **INEP**  
+   1. Colocar os arquivos brutos do INEP em `data/raw/`.  
+   2. Executar `src/extract_inep.py` para gerar datasets reduzidos em `data/interim/` (ex: `inep_reduzido_2022.csv`).  
+   3. Executar `src/aggregate_two_years.py` para unir pares de anos consecutivos e calcular a evasão anual (`evasao_YYYY_YYYY.csv`), salvando em `data/processed/`.  
 
-2. **IBGE**
-   1. Colocar os arquivos XLS do IBGE em `data/raw/ibge_xls/`.
-   2. Executar `src/extract_ibge.py` para extrair os sheets e gerar CSVs intermediários em `data/interim/ibge_csv/`.
-   3. Executar `src/ibge_limpar_tabelas.py` para limpar e padronizar colunas conforme `src/ibge_colunas.py`, salvando os arquivos finais em `data/processed/ibge_csv_final/`.
+2. **IBGE**  
+   1. Colocar os arquivos XLS do IBGE em `data/raw/ibge_xls/`.  
+   2. Executar `src/extract_ibge.py` para extrair as planilhas e gerar CSVs intermediários em `data/interim/ibge_csv/`.  
+   3. Executar `src/ibge_limpar_tabelas.py` para limpar e padronizar colunas conforme `src/ibge_colunas.py`, salvando as tabelas finais em `data/processed/ibge_csv_final/`.  
 
-3. **Integração e Análise**
-   1. Executar `src/aggregate_two_years.py` para agregar dois anos consecutivos de microdados do INEP, gerando dataset consolidado em `data/processed/` com cálculo da taxa de evasão por município.
-   2. (Próximo passo) Harmonizar e integrar as bases do IBGE com os dados do INEP para análises exploratórias e modelagem.
+3. **Agregação e Integração**  
+   1. Executar `src/agregar_evasao.py` para combinar todos os pares de anos de evasão (`evasao_YYYY_YYYY.csv`), calcular médias e evasões acumuladas ponderadas, e gerar arquivos agregados por município, UF e Brasil em `data/processed/`.  
+   2. Executar `src/merge_ibge_evasao.py` para integrar os resultados agregados de evasão com os dados censitários do IBGE (`ibge_csv_final/`), produzindo versões finais completas (`municipios_evasao_valida_ibge_2020_2024.csv` e `municipios_evasao_invalida_ibge_2020_2024.csv`) em `data/processed/`.  
+
 
 ## Requisitos
 
 - Python 3.11+
-- Pandas
-- Numpy
+functools==0.5
+numpy==2.3.4
+pandas==2.3.3
 
 Instalar dependências:
 

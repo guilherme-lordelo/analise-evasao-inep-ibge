@@ -16,7 +16,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 # -------------------------------------------------------------
 
 def renomear_colunas(df, novos_nomes):
-    """Renomeia colunas de forma segura conforme lista fornecida."""
+    """Renomeia colunas conforme lista fornecida."""
     if not novos_nomes:
         raise ValueError("Lista de novos nomes de colunas vazia.")
     if len(df.columns) != len(novos_nomes):

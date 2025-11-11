@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from functools import reduce
 
-# Diretórios relativos à raiz do projeto
+# Diretórios
 BASE_DIR = os.path.join("data", "processed")
 IBGE_DIR = os.path.join(BASE_DIR, "ibge_csv_final")
 EVASAO_DIR = BASE_DIR
@@ -10,39 +10,60 @@ EVASAO_DIR = BASE_DIR
 # Pares de anos
 pares = ["2020_2021", "2021_2022", "2022_2023", "2023_2024"]
 
-# === 1. LER ARQUIVOS DE EVASÃO ===
+# === 1. LER ARQUIVOS DE EVASÃO (com pesos) ===
 evasao_dfs = []
 for p in pares:
     arquivo = os.path.join(EVASAO_DIR, f"evasao_{p}.csv")
     if not os.path.exists(arquivo):
         raise FileNotFoundError(f"Arquivo de evasão não encontrado: {arquivo}")
     df = pd.read_csv(arquivo, sep=";", encoding="utf-8", low_memory=False)
-    df = df[["CO_MUNICIPIO", f"TAXA_EVASAO_{p}", f"EVASAO_VALIDO_{p}"]]
+    df = df[
+        ["CO_MUNICIPIO", f"TAXA_EVASAO_{p}", f"EVASAO_VALIDO_{p}", f"QT_ESTUDANTES_TOTAL_{p}"]
+    ]
     evasao_dfs.append(df)
 
 # Merge sequencial por CO_MUNICIPIO
-evasao_all = reduce(lambda left, right: pd.merge(left, right, on="CO_MUNICIPIO", how="outer"), evasao_dfs)
+evasao_all = reduce(
+    lambda left, right: pd.merge(left, right, on="CO_MUNICIPIO", how="outer"), 
+    evasao_dfs
+)
 
 # === 2. FILTRAR MUNICÍPIOS VÁLIDOS PARA TODOS OS PARES ===
 valid_cols = [f"EVASAO_VALIDO_{p}" for p in pares]
 evasao_all["todos_validos"] = evasao_all[valid_cols].all(axis=1)
 
-# Separar válidos e inválidos
 evasao_validos = evasao_all[evasao_all["todos_validos"]].copy()
 evasao_invalidos = evasao_all[~evasao_all["todos_validos"]].copy()
 
-# === 3. CALCULAR MÉDIA E ACUMULADA ===
+# === 3. CÁLCULO PONDERADO ===
 evasao_cols = [f"TAXA_EVASAO_{p}" for p in pares]
+peso_cols = [f"QT_ESTUDANTES_TOTAL_{p}" for p in pares]
 
-# Média simples
-evasao_validos["EVASAO_MEDIA_2020_2024"] = evasao_validos[evasao_cols].mean(axis=1)
+# Substituir NaN por 0 (para multiplicações seguras)
+evasao_validos[evasao_cols + peso_cols] = evasao_validos[evasao_cols + peso_cols].fillna(0)
 
-# Acumulada
-evasao_validos["EVASAO_ACUMULADA_2020_2024"] = 1 - (
-    (1 - evasao_validos[evasao_cols[0]]) *
-    (1 - evasao_validos[evasao_cols[1]]) *
-    (1 - evasao_validos[evasao_cols[2]]) *
-    (1 - evasao_validos[evasao_cols[3]])
+# Soma ponderada: (Σ taxa_i * peso_i) / (Σ peso_i)
+evasao_validos["EVASAO_MEDIA_PONDERADA_2020_2024"] = (
+    (evasao_validos[evasao_cols].values * evasao_validos[peso_cols].values).sum(axis=1)
+    / evasao_validos[peso_cols].sum(axis=1)
+)
+
+# === EVASÃO ACUMULADA PONDERADA ===
+# Considera pesos como "importância" relativa na combinação de períodos
+def evasao_acumulada_ponderada(row):
+    prod = 1.0
+    total_peso = row[peso_cols].sum()
+    if total_peso == 0:
+        return float('nan')
+    for e_col, w_col in zip(evasao_cols, peso_cols):
+        evasao = row[e_col]
+        peso = row[w_col]
+        if peso > 0 and not pd.isna(evasao):
+            prod *= (1 - evasao) ** (peso / total_peso)
+    return 1 - prod
+
+evasao_validos["EVASAO_ACUMULADA_PONDERADA_2020_2024"] = evasao_validos.apply(
+    evasao_acumulada_ponderada, axis=1
 )
 
 # === 4. LER E MERGEAR DADOS IBGE ===

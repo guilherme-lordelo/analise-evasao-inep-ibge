@@ -1,4 +1,4 @@
-# src/ibge_colunas.py
+# src/ibge/columns.py
 
 # -------------------------------------------------------------
 # DICIONÁRIO DE COLUNAS POR ARQUIVO

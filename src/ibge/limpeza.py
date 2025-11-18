@@ -1,13 +1,12 @@
 import pandas as pd
-import os
-import re
 import numpy as np
+import os
+from utils.paths import DATA_INTERIM, DATA_PROCESSED
+from utils.io import read_csv, write_csv
+from ibge.colunas import COLUNAS_POR_TABELA
 
-from ibge_colunas import COLUNAS_POR_TABELA
-
-
-INPUT_DIR = "data/interim/ibge_csv"
-OUTPUT_DIR = "data/processed/ibge_csv_final"
+INPUT_DIR = DATA_INTERIM / "ibge_csv"
+OUTPUT_DIR = DATA_PROCESSED / "ibge_csv_final"
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
@@ -76,7 +75,7 @@ def limpar_linhas(df):
 
 def processar_arquivo(nome_arquivo, colunas):
     """Executa o pipeline completo para um arquivo específico."""
-    input_path = os.path.join(INPUT_DIR, nome_arquivo)
+    input_path = INPUT_DIR / nome_arquivo
     output_path = os.path.join(OUTPUT_DIR, nome_arquivo.replace(".csv", "_final.csv"))
 
     print(f"\n Processando {nome_arquivo} ...")
@@ -95,7 +94,7 @@ def processar_arquivo(nome_arquivo, colunas):
     # Normaliza espaços
     df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 
-    df.to_csv(output_path, index=False, sep=";")
+    write_csv(df, output_path, sep=";")
     print(f"{nome_arquivo} salvo em {output_path} ({len(df)} linhas válidas).")
 
 

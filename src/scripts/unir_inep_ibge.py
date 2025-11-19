@@ -1,7 +1,7 @@
 from utils.paths import DATA_PROCESSED
 from utils.io import read_csv, write_csv
 
-from ibge.leitura_tabelas_finais import ler_tabelas_ibge
+from ibge.carregamento.carregar_tabelas_finais import ler_tabelas_ibge
 import pandas as pd
 
 BASE_DIR = DATA_PROCESSED

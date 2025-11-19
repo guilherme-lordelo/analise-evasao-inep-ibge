@@ -2,10 +2,6 @@
 
 Este projeto tem como objetivo analisar a evasão na educação superior brasileira, a partir dos microdados do Censo da Educação Superior (INEP, 2024), relacionando-os com indicadores socioeconômicos municipais (IBGE).
 
-# Documentação do Projeto — Processamento de Dados INEP e IBGE
-
-Este repositório contém o código para extração, processamento e união de dados educacionais do [INEP](www.inep.gov.br) e dados socioeconômicos do [IBGE](www.ibge.gov.br) para análise de evasão escolar. A arquitetura do projeto segue uma estrutura modular, focando na separação de responsabilidades entre extração (`extracao`), transformação (`inep`, `ibge`) e orquestração (`scripts`).
-
 ---
 
 ## Arquitetura e Estrutura de Diretórios
@@ -69,7 +65,7 @@ Os *entry points* para a execução dos pipelines estão localizados em `src/scr
 - `src/scripts/ibge/executar_limpeza.py`: Executa o processamento completo dos dados IBGE.
 - `src/scripts/unir_inep_ibge.py`: Realiza a união final dos dados processados.
 
-## Fluxo de Processamento
+## Etapas do Processamento
 
 1. **INEP**  
    1. Colocar os arquivos brutos do INEP em `data/raw/`.  

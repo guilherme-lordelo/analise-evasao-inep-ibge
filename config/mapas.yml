@@ -1,0 +1,10 @@
+evasao:
+  coluna_padrao: "EVASAO_MEDIA_PONDERADA_2020_2024"
+
+plot:
+  figsize_municipios: [14, 14]
+  figsize_uf: [10, 10]
+  cmap: "OrRd"
+  legend_shrink: 0.5
+  legend_label_municipios: "Taxa de Evasão Média Ponderada (2020-2024)"
+  

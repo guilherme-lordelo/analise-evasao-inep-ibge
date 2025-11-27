@@ -2,9 +2,7 @@
 venv/
 
 # Dados - NÃO versionar os originais ou processados
-data/raw/
-data/interim/
-data/processed/
+data/
 
 # Arquivos auxiliares (não necessários no GitHub)
 scratch/

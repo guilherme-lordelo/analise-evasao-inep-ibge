@@ -1,5 +1,5 @@
 import pandas as pd
-from .carregamento_pares import PARES
+from inep.config import PARES
 
 def separar_validos_invalidos(df):
     valid_cols = [f"EVASAO_VALIDO_{p}" for p in PARES]

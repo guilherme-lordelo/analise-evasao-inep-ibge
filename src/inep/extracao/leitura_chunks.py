@@ -1,5 +1,5 @@
 import pandas as pd
-from inep.extracao.config import SEP, ENCODING, CHUNKSIZE
+from inep.config import SEP, ENCODING, CHUNKSIZE
 
 
 def ler_em_chunks(path, colunas):

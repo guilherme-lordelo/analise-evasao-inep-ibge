@@ -5,7 +5,7 @@ import pandas as pd
 from utils.io import read_csv
 from utils.paths import DATA_PROCESSED
 
-PARES = ["2020_2021", "2021_2022", "2022_2023", "2023_2024"]
+from inep.config import PARES
 
 def ler_pares_evasao():
     """Lê cada arquivo evasao_XXXX_YYYY.csv e retorna lista de DataFrames."""

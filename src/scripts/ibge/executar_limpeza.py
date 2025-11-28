@@ -1,4 +1,4 @@
-from ibge.config.colunas import COLUNAS_POR_TABELA
+from ibge.config import COLUNAS_POR_TABELA
 from ibge.limpeza.pipeline_limpeza import processar_varias_tabelas
 
 def main():

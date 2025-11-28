@@ -1,5 +1,5 @@
 import pandas as pd
-from .carregamento_pares import PARES
+from inep.config import PARES
 
 def agrega_evasao(df, grupo):
     resultados = []

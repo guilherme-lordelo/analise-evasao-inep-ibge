@@ -4,7 +4,7 @@ from pathlib import Path
 
 from utils.io import read_csv
 from utils.paths import DATA_PROCESSED
-from ibge.config.colunas import COLUNAS_POR_TABELA
+from ibge.config import COLUNAS_POR_TABELA
 
 
 def ler_tabelas_ibge():

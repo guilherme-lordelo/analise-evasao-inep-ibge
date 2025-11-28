@@ -11,8 +11,14 @@ extracao = _cfg.get("extracao", {})
 ENCODING = extracao.get("encoding", "latin1")
 SEP = extracao.get("sep", ";")
 CHUNKSIZE = extracao.get("chunksize", 100000)
-COLUNAS_SELECIONADAS = extracao.get("colunas_selecionadas", [])
+# -----------------------
+# Variáveis (todas as categorias do YAML)
+# -----------------------
+variaveis_cfg = _cfg.get("variaveis", {})
 
+VARIAVEIS = []
+for categoria, campos in variaveis_cfg.items():
+    VARIAVEIS.extend(list(campos.keys()))
 # -----------------------
 # Anos e pares
 # -----------------------

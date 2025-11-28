@@ -27,28 +27,42 @@ extracao:
   sep: ";"
   chunksize: 100000
 
-  colunas_selecionadas:
-    - "NU_ANO_CENSO"
-    - "SG_UF"
-    - "NO_MUNICIPIO"
-    - "CO_MUNICIPIO"
-    - "CO_IES"
-    - "TP_REDE"
-    - "TP_MODALIDADE_ENSINO"
-    - "TP_GRAU_ACADEMICO"
-    - "TP_ORGANIZACAO_ACADEMICA"
-    - "IN_CAPITAL"
-    - "QT_ING_TOTAL"
-    - "QT_MAT_TOTAL"
-    - "QT_CONC_TOTAL"
-    - "QT_SIT_TRANCADA"
-    - "QT_SIT_DESVINCULADO"
-    - "QT_SIT_TRANSFERIDO"
-    - "QT_SIT_FALECIDO"
-    - "QT_ING_FEM"
-    - "QT_ING_MASC"
-    - "QT_MAT_FEM"
-    - "QT_MAT_MASC"
-    - "QT_ING_FINANC"
-    - "QT_MAT_FINANC"
-    - "QT_CONC_FINANC"
+#---------------------------------------------------------------------
+# Definições de variáveis INEP com tipos
+#---------------------------------------------------------------------
+
+variaveis:
+
+  identificadores:
+    CO_MUNICIPIO: "Código do município (chave INEP)"
+    CO_IES: "Código da instituição de ensino superior"
+
+  temporais:
+    NU_ANO_CENSO: "Ano de referência dos dados"
+
+  descritivas:
+    SG_UF: "Sigla da unidade federativa"
+    NO_MUNICIPIO: "Nome do município"
+
+  categorizacao:
+    IN_CAPITAL: "Indicador se o município é capital"
+    TP_ORGANIZACAO_ACADEMICA: "Tipo de organização acadêmica"
+    TP_REDE: "Tipo de rede (natureza jurídica)"
+    TP_GRAU_ACADEMICO: "Tipo de grau acadêmico"
+    TP_MODALIDADE_ENSINO: "Modalidade de ensino"
+
+  quantitativas:
+    QT_ING_TOTAL: "Alunos ingressantes"
+    QT_ING_FEM: "Ingressantes do sexo feminino"
+    QT_ING_MASC: "Ingressantes do sexo masculino"
+    QT_MAT_TOTAL: "Alunos matriculados"
+    QT_MAT_FEM: "Matriculados do sexo feminino"
+    QT_MAT_MASC: "Matriculados do sexo masculino"
+    QT_CONC_TOTAL: "Concluintes"
+    QT_ING_FINANC: "Ingressantes com financiamento"
+    QT_MAT_FINANC: "Matriculados com financiamento"
+    QT_CONC_FINANC: "Concluintes com financiamento"
+    QT_SIT_TRANCADA: "Matrícula trancada"
+    QT_SIT_DESVINCULADO: "Desvinculados"
+    QT_SIT_TRANSFERIDO: "Transferidos"
+    QT_SIT_FALECIDO: "Falecidos"

@@ -1,5 +1,5 @@
 import pandas as pd
-from .carregamento_pares import PARES
+from inep.config import PARES
 
 def calcular_media_ponderada(df):
     evasao_cols = [f"TAXA_EVASAO_{p}" for p in PARES]

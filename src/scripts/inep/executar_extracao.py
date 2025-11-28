@@ -10,7 +10,7 @@ from inep.extracao.header import (
 )
 from inep.extracao.leitura_chunks import ler_em_chunks
 from inep.extracao.limpeza import limpar_municipios
-from inep.extracao.config import SEP, ENCODING
+from inep.config import SEP, ENCODING
 
 
 def executar_extracao():

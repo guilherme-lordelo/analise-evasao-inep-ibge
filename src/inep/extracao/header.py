@@ -1,5 +1,5 @@
 from utils.io import read_csv
-from inep.extracao.config import SEP, ENCODING, COLUNAS_SELECIONADAS
+from inep.config import SEP, ENCODING, COLUNAS_SELECIONADAS
 
 
 def ler_header(path):

@@ -1,0 +1,54 @@
+#---------------------------------------------------------------------
+# Fórmulas configuráveis de evasão e totais
+#
+# Uso de {p} e {n}:
+#   - {p} = ano base
+#   - {n} = ano seguinte
+#
+# Os placeholders são substituídos pelo Python.
+# Exemplo:
+#   formula_evasao: "1 - ((QT_MAT_TOTAL_{n} - QT_ING_TOTAL_{n}) / (QT_MAT_TOTAL_{p} - QT_CONC_TOTAL_{p}))"
+#   Para 2022 e 2023 vira:
+#   "1 - ((QT_MAT_TOTAL_2023 - QT_ING_TOTAL_2023) / (QT_MAT_TOTAL_2022 - QT_CONC_TOTAL_2022))"
+#
+# A expressão deve usar APENAS nomes de colunas reais das tabelas INEP incluídas nas colunas selecionadas.
+#---------------------------------------------------------------------
+
+formula_evasao: "1 - ((QT_MAT_TOTAL_{n} - QT_ING_TOTAL_{n}) / (QT_MAT_TOTAL_{p} - QT_CONC_TOTAL_{p}))"
+
+formula_total_estudantes: "QT_MAT_TOTAL_{p} + QT_ING_TOTAL_{n}"
+
+anos:
+  inicio: 2020
+  fim: 2024
+
+extracao:
+  encoding: "latin1"
+  sep: ";"
+  chunksize: 100000
+
+  colunas_selecionadas:
+    - "NU_ANO_CENSO"
+    - "SG_UF"
+    - "NO_MUNICIPIO"
+    - "CO_MUNICIPIO"
+    - "CO_IES"
+    - "TP_REDE"
+    - "TP_MODALIDADE_ENSINO"
+    - "TP_GRAU_ACADEMICO"
+    - "TP_ORGANIZACAO_ACADEMICA"
+    - "IN_CAPITAL"
+    - "QT_ING_TOTAL"
+    - "QT_MAT_TOTAL"
+    - "QT_CONC_TOTAL"
+    - "QT_SIT_TRANCADA"
+    - "QT_SIT_DESVINCULADO"
+    - "QT_SIT_TRANSFERIDO"
+    - "QT_SIT_FALECIDO"
+    - "QT_ING_FEM"
+    - "QT_ING_MASC"
+    - "QT_MAT_FEM"
+    - "QT_MAT_MASC"
+    - "QT_ING_FINANC"
+    - "QT_MAT_FINANC"
+    - "QT_CONC_FINANC"

@@ -1,10 +1,10 @@
 from utils.paths import DATA_PROCESSED
 from utils.io import write_csv
 
-from inep.pares.carregamento_pares import ler_pares_evasao, merge_pares
-from inep.pares.validacao import separar_validos_invalidos
-from inep.pares.ponderacao import calcular_media_ponderada
-from inep.pares.agregacao import agrega_evasao
+from inep.uniao.carregamento_pares import ler_pares_evasao, merge_pares
+from inep.uniao.validacao import separar_validos_invalidos
+from inep.uniao.ponderacao import calcular_media_ponderada
+from inep.uniao.agregacao import agrega_evasao
 
 import pandas as pd
 

@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------
-# Fórmulas configuráveis de evasão e totais
+# Fórmulas configuráveis
 #
 # Uso de {p} e {n}:
 #   - {p} = ano base
@@ -11,16 +11,60 @@
 #   Para 2022 e 2023 vira:
 #   "1 - ((QT_MAT_TOTAL_2023 - QT_ING_TOTAL_2023) / (QT_MAT_TOTAL_2022 - QT_CONC_TOTAL_2022))"
 #
-# A expressão deve usar APENAS nomes de colunas reais das tabelas INEP incluídas nas colunas selecionadas.
+# A expressão deve usar APENAS nomes de colunas reais das tabelas INEP incluídas nas variáveis selecionadas.
 #---------------------------------------------------------------------
 
-formula_evasao: "1 - ((QT_MAT_TOTAL_{n} - QT_ING_TOTAL_{n}) / (QT_MAT_TOTAL_{p} - QT_CONC_TOTAL_{p}))"
+formulas:
+  evasao_anual:
+    descricao: "Evasão anual considerando todos os alunos"
+    expressao: "1 - ((QT_MAT_TOTAL_{n} - QT_ING_TOTAL_{n}) / (QT_MAT_TOTAL_{p} - QT_CONC_TOTAL_{p}))"
+    validacao:
+      regras:
+        - "QT_MAT_TOTAL_{p} >= minimo_m_prev"
+        - "QT_MAT_TOTAL_{n} >= minimo_m_n"
+        - "QT_ING_TOTAL_{n} >= minimo_i_n"
+        - "QT_CONC_TOTAL_{p} >= minimo_c_prev"
+        - "(QT_MAT_TOTAL_{n} - QT_ING_TOTAL_{n}) > 0"
+        - "(QT_MAT_TOTAL_{p} - QT_CONC_TOTAL_{p}) > 0"
+        - "(QT_MAT_TOTAL_{n} - QT_ING_TOTAL_{n}) <= (QT_MAT_TOTAL_{p} - QT_CONC_TOTAL_{p})"
 
-formula_total_estudantes: "QT_MAT_TOTAL_{p} + QT_ING_TOTAL_{n}"
+  evasao_anual_financiados:
+    descricao: "Evasão entre estudantes com financiamento"
+    expressao: "1 - ((QT_MAT_FINANC_{n} - QT_ING_FINANC_{n}) / (QT_MAT_FINANC_{p} - QT_CONC_FINANC_{p}))"
+    validacao:
+      regras:
+        - "QT_MAT_FINANC_{p} >= minimo_m_prev"
+        - "QT_MAT_FINANC_{n} >= minimo_m_n"
+        - "QT_ING_FINANC_{n} >= minimo_i_n"
+        - "QT_CONC_FINANC_{p} >= minimo_c_prev"
+        - "(QT_MAT_FINANC_{n} - QT_ING_FINANC_{n}) > 0"
+        - "(QT_MAT_FINANC_{p} - QT_CONC_FINANC_{p}) > 0"
+        - "(QT_MAT_FINANC_{n} - QT_ING_FINANC_{n}) <= (QT_MAT_FINANC_{p} - QT_CONC_FINANC_{p})"
+
+  total_estudantes:
+    descricao: "Soma total de estudantes"
+    expressao: "QT_MAT_TOTAL_{p} + QT_ING_TOTAL_{n}"
+    validacao:
+      regras: []   # sem validação
+
+validacao_limites:
+  minimo_m_prev: 10
+  minimo_m_n: 5
+  minimo_i_n: 1
+  minimo_c_prev: 1
+
+
+#---------------------------------------------------------------------
+# Período de análise
+#---------------------------------------------------------------------
 
 anos:
   inicio: 2020
   fim: 2024
+
+#---------------------------------------------------------------------
+# Configurações de extração de dados INEP
+#---------------------------------------------------------------------
 
 extracao:
   encoding: "latin1"
@@ -33,7 +77,7 @@ extracao:
 
 variaveis:
 
-  identificadores:
+  identificadoras:
     CO_MUNICIPIO: "Código do município (chave INEP)"
     CO_IES: "Código da instituição de ensino superior"
 
@@ -44,7 +88,7 @@ variaveis:
     SG_UF: "Sigla da unidade federativa"
     NO_MUNICIPIO: "Nome do município"
 
-  categorizacao:
+  categoricas:
     IN_CAPITAL: "Indicador se o município é capital"
     TP_ORGANIZACAO_ACADEMICA: "Tipo de organização acadêmica"
     TP_REDE: "Tipo de rede (natureza jurídica)"

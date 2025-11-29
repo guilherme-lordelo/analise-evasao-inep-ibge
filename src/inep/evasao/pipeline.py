@@ -4,9 +4,8 @@ from utils.io import read_csv, write_csv
 from pathlib import Path
 
 from .agregacao import agrega_com_sufixo
-from .validacao import validar_linhas
-from .calculo import calcular_taxa_evasao
-
+from .calculo import calcular_formulas
+from inep.config import VARIAVEIS_QUANTITATIVAS
 
 def calcular_evasao(ano_base: str, ano_seguinte: str):
     arquivo_base = DATA_INTERIM / f"inep_reduzido_{ano_base}.csv"
@@ -37,20 +36,26 @@ def calcular_evasao(ano_base: str, ano_seguinte: str):
     )
 
     print("Preenchendo valores ausentes...")
-    num_cols = [c for c in df_merged.columns if c.startswith("QT_")]
+    num_cols = [c for c in df_merged.columns if c.startswith
+    ("QT_")]
     df_merged[num_cols] = df_merged[num_cols].fillna(0).astype(float)
 
-    print("Validando regras de evasão...")
-    df_merged = validar_linhas(df_merged, ano_base, ano_seguinte)
+    print("Calculando fórmulas definidas no YAML...")
+    df_merged = calcular_formulas(df_merged, ano_base, ano_seguinte)
 
-    print("Calculando taxa de evasão...")
-    df_merged = calcular_taxa_evasao(df_merged, ano_base, ano_seguinte)
+    print("Removendo colunas quantitativas...")
+    quant_cols_to_drop = []
+    for base_col in VARIAVEIS_QUANTITATIVAS:
+        quant_cols_to_drop.append(f"{base_col}_{ano_base}")
+        quant_cols_to_drop.append(f"{base_col}_{ano_seguinte}")
+
+    cols_existentes = [c for c in quant_cols_to_drop if c in df_merged.columns]
+
+    df_merged = df_merged.drop(columns=cols_existentes)
 
     print(f"Salvando arquivo final em {arquivo_saida}...")
     write_csv(df_merged, arquivo_saida, sep=";")
 
-    print(f"Processamento concluído!")
+    print("Processamento concluído!")
     print(f"Registros: {len(df_merged):,}")
-    print(f"Válidos: {df_merged[f'EVASAO_VALIDO_{ano_base}_{ano_seguinte}'].sum():,}")
-    print(f"Inválidos: {len(df_merged) - df_merged[f'EVASAO_VALIDO_{ano_base}_{ano_seguinte}'].sum():,}")
-    
+

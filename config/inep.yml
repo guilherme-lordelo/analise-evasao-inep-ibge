@@ -77,23 +77,51 @@ extracao:
 
 variaveis:
 
-  identificadoras:
+  chaves:
     CO_MUNICIPIO: "Código do município (chave INEP)"
-    CO_IES: "Código da instituição de ensino superior"
+    SG_UF: "Sigla da Unidade Federativa"
 
   temporais:
     NU_ANO_CENSO: "Ano de referência dos dados"
 
   descritivas:
-    SG_UF: "Sigla da unidade federativa"
     NO_MUNICIPIO: "Nome do município"
 
   categoricas:
-    IN_CAPITAL: "Indicador se o município é capital"
-    TP_ORGANIZACAO_ACADEMICA: "Tipo de organização acadêmica"
-    TP_REDE: "Tipo de rede (natureza jurídica)"
-    TP_GRAU_ACADEMICO: "Tipo de grau acadêmico"
-    TP_MODALIDADE_ENSINO: "Modalidade de ensino"
+
+    IN_CAPITAL:
+      descricao: "Indicador se o município é capital"
+      valores:
+        0: "Não é capital"
+        1: "É capital"
+
+    TP_ORGANIZACAO_ACADEMICA:
+      descricao: "Tipo de organização acadêmica"
+      valores:
+        1: "Universidade"
+        2: "Centro Universitário"
+        3: "Faculdade"
+        4: "Instituto Federal"
+
+    TP_REDE:
+      descricao: "Tipo de rede"
+      valores:
+        1: "Pública"
+        2: "Privada"
+
+    TP_GRAU_ACADEMICO:
+      descricao: "Tipo de grau acadêmico"
+      valores:
+        1: "Bacharelado"
+        2: "Licenciatura"
+        3: "Tecnológico"
+        4: "Bacharelado e Licenciatura"
+
+    TP_MODALIDADE_ENSINO:
+      descricao: "Modalidade de ensino"
+      valores:
+        1: "Presencial"
+        2: "Educação a Distância"
 
   quantitativas:
     QT_ING_TOTAL: "Alunos ingressantes"
@@ -110,3 +138,21 @@ variaveis:
     QT_SIT_DESVINCULADO: "Desvinculados"
     QT_SIT_TRANSFERIDO: "Transferidos"
     QT_SIT_FALECIDO: "Falecidos"
+
+# ----------------------------------------------
+# Mapeamento de nomes divergentes encontrados em cabeçalhos do INEP
+# ----------------------------------------------
+mapeamento_colunas:
+  QT_ING: QT_ING_TOTAL
+  QT_MAT: QT_MAT_TOTAL
+  QT_CONC: QT_CONC_TOTAL
+
+# ----------------------------------------------
+# Regras de limpeza e tratamento
+# ----------------------------------------------
+limpeza:
+  comportamento_sem_municipio: "atribuir"  # "descartar" ou "atribuir"
+  valor_padrao_sem_municipio:
+    CO_MUNICIPIO: -1
+    SG_UF: "ND"
+    NO_MUNICIPIO: "SEM_MUNICIPIO"

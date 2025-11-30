@@ -1,5 +1,4 @@
-from utils.io import read_csv
-from inep.config import SEP, ENCODING, VARIAVEIS
+from inep.config import SEP, ENCODING, VARIAVEIS, COL_MAPPINGS
 
 def ler_header(path):
     with open(path, "r", encoding=ENCODING) as f:
@@ -8,16 +7,7 @@ def ler_header(path):
 
 
 def detectar_mapeamento(header):
-    mapeamento = {}
-
-    if "QT_ING" in header and "QT_ING_TOTAL" not in header:
-        mapeamento["QT_ING"] = "QT_ING_TOTAL"
-    if "QT_MAT" in header and "QT_MAT_TOTAL" not in header:
-        mapeamento["QT_MAT"] = "QT_MAT_TOTAL"
-    if "QT_CONC" in header and "QT_CONC_TOTAL" not in header:
-        mapeamento["QT_CONC"] = "QT_CONC_TOTAL"
-
-    return mapeamento
+    return {col: destino for col, destino in COL_MAPPINGS.items() if col in header}
 
 
 def determinar_colunas_existentes(header, mapeamento):

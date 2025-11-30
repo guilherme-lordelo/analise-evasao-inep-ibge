@@ -2,15 +2,22 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
-# Diretório geral de dados
 DATA_DIR = ROOT / "data"
 
-# Subpastas
-DATA_RAW = DATA_DIR / "raw"
-DATA_INTERIM = DATA_DIR / "interim"
-DATA_PROCESSED = DATA_DIR / "processed"
-DATA_SHAPEFILES = DATA_DIR / "shapefiles"
+# Fontes originais
+RAW_INEP = DATA_DIR / "raw" / "inep_micros"      # arquivos CSV originais
+RAW_IBGE = DATA_DIR / "raw" / "ibge_xls"         # xls originais
 
-# Caminhos específicos usados anteriormente
-RAW_IBGE_XLS = DATA_RAW / "ibge_xls"
-OUT_IBGE_CSV = DATA_INTERIM / "ibge_csv"
+# Resultados intermediários
+INTERIM_INEP = DATA_DIR / "interim" / "inep_reduzido"    # INEP pós extração
+INTERIM_IBGE = DATA_DIR / "interim" / "ibge_csv"         # IBGE convertido p/ CSV
+
+# Resultados processados
+PROCESSED_INEP = DATA_DIR / "processed" / "inep_evasao"
+PROCESSED_IBGE = DATA_DIR / "processed" / "ibge_limpo"
+
+# Agregações finais
+AGREGACOES = DATA_DIR / "aggregations"
+
+# Shapefiles
+DATA_SHAPEFILES = DATA_DIR / "shapefiles"

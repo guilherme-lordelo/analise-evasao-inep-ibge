@@ -12,23 +12,32 @@ ENCODING = extracao.get("encoding", "latin1")
 SEP = extracao.get("sep", ";")
 CHUNKSIZE = extracao.get("chunksize", 100000)
 
-# -----------------------
-# Variáveis (todas)
-# -----------------------
+# ============================
+# Variáveis
+# ============================
+from utils.config import load_config
+
+_cfg = load_config("inep")
+
 variaveis_cfg = _cfg.get("variaveis", {})
 
+# Lista completa de variáveis do dataset
 VARIAVEIS = []
 for categoria, campos in variaveis_cfg.items():
     VARIAVEIS.extend(list(campos.keys()))
 
-# -----------------------
 # Variáveis por tipo
-# -----------------------
-VARIAVEIS_CHAVE = list(variaveis_cfg.get("identificadoras", {}).keys())
+VARIAVEIS_CHAVES = list(variaveis_cfg.get("chaves", {}).keys())
 VARIAVEIS_TEMPORAIS = list(variaveis_cfg.get("temporais", {}).keys())
 VARIAVEIS_DESCRITIVAS = list(variaveis_cfg.get("descritivas", {}).keys())
 VARIAVEIS_CATEGORICAS = list(variaveis_cfg.get("categoricas", {}).keys())
 VARIAVEIS_QUANTITATIVAS = list(variaveis_cfg.get("quantitativas", {}).keys())
+
+# Mapeamento de sinônimos para colunas
+COL_MAPPINGS = _cfg.get("mapeamento_colunas", {})
+
+# Configurações de limpeza
+LIMPEZA_CFG = _cfg.get("limpeza", {})
 
 # -----------------------
 # Fórmulas

@@ -8,9 +8,19 @@ _cfg = load_config("inep")
 # Extração
 # -----------------------
 extracao = _cfg.get("extracao", {})
-ENCODING = extracao.get("encoding", "latin1")
-SEP = extracao.get("sep", ";")
+ENCODING_IN = extracao.get("encoding", "latin1")
+SEP_IN = extracao.get("sep", ";")
 CHUNKSIZE = extracao.get("chunksize", 100000)
+
+# -----------------------
+# Saída
+# -----------------------
+
+saida_cfg = _cfg.get("saida", {})
+ENCODING_OUT = saida_cfg.get("encoding", "utf-8")
+SEP_OUT = saida_cfg.get("sep", ";")
+COMPRESS = saida_cfg.get("compress", False)
+COLUMNS_ORDER = saida_cfg.get("columns_order", None)
 
 # ============================
 # Variáveis

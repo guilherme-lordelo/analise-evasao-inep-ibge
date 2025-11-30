@@ -1,16 +1,8 @@
 import pandas as pd
-from inep.config import SEP, ENCODING, CHUNKSIZE
-
+from utils.io import read_csv_chunks
 
 def ler_em_chunks(path, colunas):
-    chunks = pd.read_csv(
-        path,
-        sep=SEP,
-        usecols=colunas,
-        encoding=ENCODING,
-        low_memory=False,
-        chunksize=CHUNKSIZE,
-    )
+    chunks = read_csv_chunks(path, usecols=colunas)
 
     df_list = []
     total = 0

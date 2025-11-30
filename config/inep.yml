@@ -53,7 +53,6 @@ validacao_limites:
   minimo_i_n: 1
   minimo_c_prev: 1
 
-
 #---------------------------------------------------------------------
 # Período de análise
 #---------------------------------------------------------------------
@@ -70,6 +69,16 @@ extracao:
   encoding: "latin1"
   sep: ";"
   chunksize: 100000
+
+#---------------------------------------------------------------------
+# Configurações de extração de dados INEP
+#---------------------------------------------------------------------
+
+saida:
+  encoding: "utf-8"
+  sep: ";"
+  compress: false
+  columns_order: []
 
 #---------------------------------------------------------------------
 # Definições de variáveis INEP com tipos
@@ -142,6 +151,7 @@ variaveis:
 # ----------------------------------------------
 # Mapeamento de nomes divergentes encontrados em cabeçalhos do INEP
 # ----------------------------------------------
+
 mapeamento_colunas:
   QT_ING: QT_ING_TOTAL
   QT_MAT: QT_MAT_TOTAL
@@ -150,6 +160,7 @@ mapeamento_colunas:
 # ----------------------------------------------
 # Regras de limpeza e tratamento
 # ----------------------------------------------
+
 limpeza:
   comportamento_sem_municipio: "atribuir"  # "descartar" ou "atribuir"
   valor_padrao_sem_municipio:

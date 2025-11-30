@@ -1,16 +1,16 @@
 import pandas as pd
-from utils.paths import DATA_INTERIM, DATA_PROCESSED
+from utils.paths import INTERIM_INEP, PROCESSED_INEP
 from utils.io import read_csv, write_csv
-from pathlib import Path
 
 from .agregacao import agrega_com_sufixo
 from .calculo import calcular_formulas
 from inep.config import VARIAVEIS_QUANTITATIVAS
 
+
 def calcular_evasao(ano_base: str, ano_seguinte: str):
-    arquivo_base = DATA_INTERIM / f"inep_reduzido_{ano_base}.csv"
-    arquivo_seguinte = DATA_INTERIM / f"inep_reduzido_{ano_seguinte}.csv"
-    arquivo_saida = DATA_PROCESSED / f"evasao_{ano_base}_{ano_seguinte}.csv"
+    arquivo_base = INTERIM_INEP / f"inep_reduzido_{ano_base}.csv"
+    arquivo_seguinte = INTERIM_INEP / f"inep_reduzido_{ano_seguinte}.csv"
+    arquivo_saida = PROCESSED_INEP / f"evasao_{ano_base}_{ano_seguinte}.csv"
 
     if not arquivo_base.exists() or not arquivo_seguinte.exists():
         raise FileNotFoundError(
@@ -18,10 +18,10 @@ def calcular_evasao(ano_base: str, ano_seguinte: str):
         )
 
     print(f"Lendo {arquivo_base}...")
-    df_base = read_csv(arquivo_base, sep=";", encoding="utf-8", low_memory=False)
+    df_base = read_csv(arquivo_base)
 
     print(f"Lendo {arquivo_seguinte}...")
-    df_seg = read_csv(arquivo_seguinte, sep=";", encoding="utf-8", low_memory=False)
+    df_seg = read_csv(arquivo_seguinte)
 
     print("Agregando dados por município...")
     agg_base = agrega_com_sufixo(df_base, ano_base)
@@ -36,8 +36,7 @@ def calcular_evasao(ano_base: str, ano_seguinte: str):
     )
 
     print("Preenchendo valores ausentes...")
-    num_cols = [c for c in df_merged.columns if c.startswith
-    ("QT_")]
+    num_cols = [c for c in df_merged.columns if c.startswith("QT_")]
     df_merged[num_cols] = df_merged[num_cols].fillna(0).astype(float)
 
     print("Calculando fórmulas definidas no YAML...")
@@ -50,12 +49,9 @@ def calcular_evasao(ano_base: str, ano_seguinte: str):
         quant_cols_to_drop.append(f"{base_col}_{ano_seguinte}")
 
     cols_existentes = [c for c in quant_cols_to_drop if c in df_merged.columns]
-
     df_merged = df_merged.drop(columns=cols_existentes)
 
     print(f"Salvando arquivo final em {arquivo_saida}...")
-    write_csv(df_merged, arquivo_saida, sep=";")
+    write_csv(df_merged, arquivo_saida)
 
-    print("Processamento concluído!")
     print(f"Registros: {len(df_merged):,}")
-

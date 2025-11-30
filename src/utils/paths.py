@@ -17,7 +17,7 @@ PROCESSED_INEP = DATA_DIR / "processed" / "inep_evasao"
 PROCESSED_IBGE = DATA_DIR / "processed" / "ibge_limpo"
 
 # Agregações finais
-AGREGACOES = DATA_DIR / "aggregations"
+AGREGACOES = DATA_DIR / "processed" / "aggregations"
 
 # Shapefiles
 DATA_SHAPEFILES = DATA_DIR / "shapefiles"

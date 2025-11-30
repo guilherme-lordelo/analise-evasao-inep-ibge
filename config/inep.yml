@@ -86,14 +86,16 @@ saida:
 
 variaveis:
 
-  chaves:
-    CO_MUNICIPIO: "Código do município (chave INEP)"
+  chaves_municipais:
+    CO_MUNICIPIO: "Código do município"
+
+  chaves_estaduais:
     SG_UF: "Sigla da Unidade Federativa"
 
   temporais:
     NU_ANO_CENSO: "Ano de referência dos dados"
 
-  descritivas:
+  descritivas_municipais:
     NO_MUNICIPIO: "Nome do município"
 
   categoricas:

@@ -4,7 +4,7 @@ from utils.io import read_csv, write_csv
 
 from .agregacao import agrega_com_sufixo
 from .calculo import calcular_formulas
-from inep.config import VARIAVEIS_QUANTITATIVAS
+from inep.config import VARIAVEIS_QUANTITATIVAS, get_campos_municipio
 
 
 def calcular_evasao(ano_base: str, ano_seguinte: str):
@@ -29,10 +29,10 @@ def calcular_evasao(ano_base: str, ano_seguinte: str):
 
     print("Realizando merge dos anos...")
     df_merged = pd.merge(
-        agg_base,
-        agg_seg,
-        on=["CO_MUNICIPIO", "SG_UF", "NO_MUNICIPIO"],
-        how="outer"
+    agg_base,
+    agg_seg,
+    on=get_campos_municipio(agg_base),
+    how="outer"
     )
 
     print("Preenchendo valores ausentes...")

@@ -1,0 +1,8 @@
+# Colunas base comuns a todos os datasets que representam municípios/estados no Brasil
+
+municipio:
+  codigo: "CO_MUNICIPIO"
+  nome:   "NO_MUNICIPIO"
+
+estado:
+  sigla: "SG_UF"

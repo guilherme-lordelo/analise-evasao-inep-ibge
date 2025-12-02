@@ -1,9 +1,4 @@
-from inep.config import (
-    LIMPEZA_CFG,
-    CAMPO_COD_MUNICIPIO,
-    CAMPO_UF,
-    CAMPO_NOME_MUNICIPIO,
-)
+from inep.config import LIMPEZA_CFG, get_campos_municipio
 
 
 def limpar_municipios(df):
@@ -13,12 +8,18 @@ def limpar_municipios(df):
     # -----------------------------
     # Determinar cond_invalido
     # -----------------------------
-    campo = CAMPO_COD_MUNICIPIO
+    CAMPO_COD_MUNICIPIO = get_campos_municipio()[0]  # Código do município
+    CAMPO_UF = get_campos_municipio()[1]  # Sigla da UF
+    CAMPO_NOME_MUNICIPIO = (
+        get_campos_municipio()[2] if len(get_campos_municipio()) > 2 else None
+    )  # Nome do município (opcional)
+
+     # Linhas onde o código do município é inválido
 
     cond_invalido = (
-        df[campo].isna()
-        | (df[campo].astype(str).str.strip() == "")
-        | (df[campo].astype(str).str.strip() == "0")
+        df[CAMPO_COD_MUNICIPIO].isna()
+        | (df[CAMPO_COD_MUNICIPIO].astype(str).str.strip() == "")
+        | (df[CAMPO_COD_MUNICIPIO].astype(str).str.strip() == "0")
     )
 
     # -----------------------------
@@ -31,7 +32,7 @@ def limpar_municipios(df):
     # Modo: atribuir valores padrão
     # -----------------------------
     elif comportamento == "atribuir":
-        df.loc[cond_invalido, campo] = padrao.get(campo, -1)
+        df.loc[cond_invalido, CAMPO_COD_MUNICIPIO] = padrao.get(CAMPO_COD_MUNICIPIO, -1)
 
         # SG_UF é obrigatório e único
         df.loc[cond_invalido, CAMPO_UF] = padrao.get(CAMPO_UF, "ND")

@@ -10,13 +10,8 @@ from ibge.config import SHEETS_IBGE
 
 def extrair_ibge():
     """
-    Etapa de EXTRAÇÃO do IBGE.
-
-    Para cada tabela (tabX) definida em ibge.yml:
-    - Lê o arquivo RAW correspondente (tabX.xls)
-    - Extrai as sheets NA ORDEM definida em ibge.yml
-    - Salva cada sheet em CSV usando o nome especificado no YAML
-    - Não aplica nenhuma limpeza
+    Extrai arquivos XLS do IBGE e salva cada sheet como CSV,
+    adicionando o sufixo '_interim.csv' ao nome configurado no YAML.
     """
 
     for tabela_id, tabela_info in SHEETS_IBGE.items():
@@ -38,7 +33,10 @@ def extrair_ibge():
             continue
 
         for idx, sheet_info in enumerate(sheets):
-            nome_csv = sheet_info["arquivo"]
+            nome_original = sheet_info["arquivo"]
+
+            # ← Nome fornecido no YAML vira base
+            nome_csv_interim = nome_original.replace(".csv", "_interim.csv")
 
             # sheet_name = índice da ordem do YAML
             sheet_name = idx
@@ -49,8 +47,8 @@ def extrair_ibge():
                 print(f"Falha ao ler sheet de índice {sheet_name} ({arquivo_xls}): {e}")
                 continue
 
-            out_path = Path(INTERIM_IBGE) / nome_csv
+            out_path = Path(INTERIM_IBGE) / nome_csv_interim
 
             write_csv(df, out_path)
 
-            print(f"{nome_csv} salvo ({len(df)} linhas).")
+            print(f"{nome_csv_interim} salvo ({len(df)} linhas).")

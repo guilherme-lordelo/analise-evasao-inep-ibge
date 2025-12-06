@@ -1,37 +1,70 @@
-from utils.paths import DATA_PROCESSED
-from utils.io import write_csv
+# src/inep/uniao/executar_uniao.py
+from utils.io import read_csv, write_csv
+from utils.paths import PROCESSED_INEP, AGREGACOES
 
-from inep.uniao.carregamento_pares import ler_pares_evasao, merge_pares
-from inep.uniao.validacao import separar_validos_invalidos
-from inep.uniao.ponderacao import calcular_media_ponderada
-from inep.uniao.agregacao import agrega_evasao
+from inep.config import (
+    PARES,
+    EVASAO_PREFIXO_OUT,
+    EVASAO_EXT_OUT,
+    UNIAO_ARQ_MUNICIPIOS,
+    UNIAO_ARQ_ESTADOS,
+    UNIAO_ARQ_BRASIL,
+)
 
-import pandas as pd
+from inep.uniao.uniao_municipios import unir_municipios
+from inep.uniao.agregacao_estadual import agregar_estadual
+from inep.uniao.agregacao_nacional import agregar_nacional
 
 
-def main():
-    # 1. LER E MERGEAR
-    dfs = ler_pares_evasao()
-    evasao_all = merge_pares(dfs)
+def executar_uniao():
+    lista_dfs = []
 
-    # 2. VALIDOS / INVALIDOS
-    validos, invalidos = separar_validos_invalidos(evasao_all)
+    # ----------------------
+    # 1) Carregar cada par de evasão
+    # ----------------------
+    for par in PARES:
+        ano_p, ano_n = par.split("_")
 
-    # 3. CÁLCULOS
-    validos = calcular_media_ponderada(validos)
+        nome_arq = f"{EVASAO_PREFIXO_OUT}{ano_p}_{ano_n}{EVASAO_EXT_OUT}"
+        caminho = PROCESSED_INEP / nome_arq
 
-    # 4. AGREGAÇÃO
-    agregado_uf = agrega_evasao(validos, "SG_UF")
-    agregado_br = agrega_evasao(validos.assign(NIVEL="BRASIL"), "NIVEL")
-    evasao_agregada = pd.concat([agregado_uf, agregado_br])
+        print(f"Lendo {caminho.name}...")
+        df = read_csv(caminho)
 
-    # 5. SALVAR
-    write_csv(validos, DATA_PROCESSED / "municipios_evasao_valida_2020_2024.csv", sep=";")
-    write_csv(invalidos, DATA_PROCESSED / "municipios_evasao_invalida_2020_2024.csv", sep=";")
-    write_csv(evasao_agregada, DATA_PROCESSED / "evasao_uf_e_brasil_2020_2024.csv", sep=";")
+        lista_dfs.append(df)
 
-    print("Arquivos salvos")
+    # ----------------------
+    # 2) União municipal
+    # ----------------------
+    print("Unindo pares por município...")
+    df_mun = unir_municipios(lista_dfs)
+
+    out_mun = AGREGACOES / UNIAO_ARQ_MUNICIPIOS
+    print(f"Salvando {out_mun.name}...")
+    write_csv(df_mun, out_mun)
+
+    # ----------------------
+    # 3) Agregação estadual
+    # ----------------------
+    print("Agregando nível estadual...")
+    df_uf = agregar_estadual(df_mun)
+
+    out_uf = AGREGACOES / UNIAO_ARQ_ESTADOS
+    print(f"Salvando {out_uf.name}...")
+    write_csv(df_uf, out_uf)
+
+    # ----------------------
+    # 4) Agregação nacional
+    # ----------------------
+    print("Agregando nível nacional...")
+    df_br = agregar_nacional(df_uf)
+
+    out_br = AGREGACOES / UNIAO_ARQ_BRASIL
+    print(f"Salvando {out_br.name}...")
+    write_csv(df_br, out_br)
+
+    print("União final concluída!")
 
 
 if __name__ == "__main__":
-    main()
+    executar_uniao()

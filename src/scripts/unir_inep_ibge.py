@@ -42,12 +42,8 @@ final_invalidos = pd.merge(invalidos, ibge_all, on="CO_MUNICIPIO", how="left")
 # ----------------------------------
 # 6. SALVAR
 # ----------------------------------
-write_csv(final_validos,
-          BASE_DIR / f"municipios_evasao_valida_ibge_{range_str}.csv",
-          sep=";")
+write_csv(final_validos, BASE_DIR / f"municipios_evasao_valida_ibge_{range_str}.csv")
 
-write_csv(final_invalidos,
-          BASE_DIR / f"municipios_evasao_invalida_ibge_{range_str}.csv",
-          sep=";")
+write_csv(final_invalidos, BASE_DIR / f"municipios_evasao_invalida_ibge_{range_str}.csv")
 
 print(f"Merge com IBGE concluído para {range_str}")

@@ -53,6 +53,26 @@ validacao_limites:
   minimo_i_n: 1
   minimo_c_prev: 1
 
+# =======================================
+# ARQUIVOS
+# =======================================
+
+arquivos:
+  extracao:
+    prefixo_input: "MICRODADOS_CADASTRO_CURSOS_"
+    extensao_input: ".CSV"
+    prefixo_output: "inep_reduzido_"
+    extensao_output: ".csv"
+
+  evasao:
+    prefixo_output: "evasao_"
+    extensao_output: ".csv"
+
+  uniao:
+    output_municipios: "inep_unificado_municipios.csv"
+    output_estados:    "inep_unificado_estados.csv"
+    output_nacional:   "inep_unificado_brasil.csv"
+
 #---------------------------------------------------------------------
 # Período de análise
 #---------------------------------------------------------------------

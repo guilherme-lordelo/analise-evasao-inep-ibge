@@ -1,23 +1,27 @@
+# src/scripts/inep/executar_evasao.py
+
 from inep.evasao.pipeline import calcular_evasao
+from inep.config import PARES
 
-def main():
-    ano_seguinte_str = input("Digite o ano de referência (ex: 2023): ").strip()
 
-    try:
-        ano_seguinte = int(ano_seguinte_str)
-    except ValueError:
-        print("Ano inválido. Digite apenas números, ex: 2023.")
-        return
+def executar_evasao():
+    print("=== Iniciando processamento de evasão INEP ===\n")
 
-    ano_base = ano_seguinte - 1
+    for par in PARES:
+        ano_base, ano_seguinte = map(int, par.split("_"))
+        print(f"Processando evasão para {ano_base} -> {ano_seguinte}...")
 
-    print(f"Processando evasão para {ano_base} → {ano_seguinte}...")
+        try:
+            calcular_evasao(ano_base, ano_seguinte)
+            print(f"Concluído: {ano_base}_{ano_seguinte}\n")
 
-    try:
-        calcular_evasao(ano_base, ano_seguinte)
-    except Exception as e:
-        print("\nERRO DURANTE O PROCESSAMENTO:")
-        print(e)
+        except Exception as e:
+            print(f"\nERRO ao processar o par {ano_base}_{ano_seguinte}:")
+            print(e)
+            print("-" * 60 + "\n")
+
+    print("=== Processamento de evasão finalizado ===")
+
 
 if __name__ == "__main__":
-    main()
+    executar_evasao()

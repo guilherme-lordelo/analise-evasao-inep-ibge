@@ -3,31 +3,47 @@ import pandas as pd
 from pathlib import Path
 
 from utils.io import read_csv
-from utils.paths import DATA_PROCESSED
-from ibge.config import COLUNAS_POR_TABELA
+from utils.paths import PROCESSED_IBGE
+from ibge.config import SHEETS_IBGE, COLUNAS_BASE_IBGE
 
 
-def ler_tabelas_ibge():
-    IBGE_DIR = DATA_PROCESSED / "ibge_csv_final"
+def carregar_todos_ibge():
+    """
+    Retorna um DataFrame contendo todas as colunas finais do IBGE.
+    """
+
     dfs = []
 
-    for fname, cols in COLUNAS_POR_TABELA.items():
-        path = IBGE_DIR / fname.replace(".csv", "_final.csv")
+    for tabela_id, tabela_info in SHEETS_IBGE.items():
 
-        if not path.exists():
-            print(f"Aviso: arquivo IBGE não encontrado: {path}")
-            continue
+        for sheet in tabela_info["sheets"]:
 
-        df = read_csv(path, sep=";", encoding="utf-8", usecols=cols, low_memory=False)
+            nome_csv = sheet["arquivo"]   # ex: tab12_rendimento_total.csv
+            path = PROCESSED_IBGE / nome_csv
 
-        redundantes = ["SG_UF", "NO_MUNICIPIO_OU_CLASSE"]
-        df = df.drop(columns=[c for c in redundantes if c in df.columns], errors="ignore")
+            if not path.exists():
+                print(f"Aviso: arquivo IBGE não encontrado: {path}")
+                continue
 
-        dfs.append(df)
+            df = read_csv(path)
+
+            if COLUNAS_BASE_IBGE[0] not in df.columns:
+                raise ValueError(
+                    f"Arquivo {nome_csv} não contém a coluna '{COLUNAS_BASE_IBGE[0]}' (CO_MUNICIPIO)."
+                )
+
+            dfs.append(df)
 
     if not dfs:
         raise FileNotFoundError(
-            "Nenhum arquivo IBGE encontrado em data/processed/ibge_csv_final/"
+            f"Nenhum arquivo IBGE encontrado em {PROCESSED_IBGE}"
         )
 
-    return reduce(lambda l, r: pd.merge(l, r, on="CO_MUNICIPIO", how="outer"), dfs)
+    df_final = reduce(
+        lambda left, right: pd.merge(
+            left, right, on=COLUNAS_BASE_IBGE[0], how="outer"
+        ),
+        dfs
+    )
+
+    return df_final

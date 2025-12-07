@@ -39,7 +39,6 @@ CHUNKSIZE = extracao.get("chunksize", 100000)
 # -----------------------
 # Saída
 # -----------------------
-
 saida_cfg = _cfg.get("saida", {})
 ENCODING_OUT = saida_cfg.get("encoding", "utf-8")
 SEP_OUT = saida_cfg.get("sep", ";")
@@ -49,7 +48,6 @@ COLUMNS_ORDER = saida_cfg.get("columns_order", None)
 # ============================
 # Variáveis
 # ============================
-
 variaveis_cfg = _cfg.get("variaveis", {})
     
 # Campos padrão
@@ -78,19 +76,16 @@ VARIAVEIS_QUANTITATIVAS = list(variaveis_cfg.get("quantitativas", {}).keys())
 # -----------------------
 # Mapeamento de sinônimos para colunas
 # -----------------------
-
 COL_MAPPINGS = _cfg.get("mapeamento_colunas", {})
 
 # ============================
 # Configurações de limpeza
 # ============================
-
 LIMPEZA_CFG = _cfg.get("limpeza", {})
 
 # -----------------------
 # Fórmulas
 # -----------------------
-
 formulas_cfg = _cfg.get("formulas", {})
 
 FORMULAS = {}
@@ -98,8 +93,11 @@ for nome, info in formulas_cfg.items():
     FORMULAS[nome] = {
         "descricao": info.get("descricao", ""),
         "expressao": info.get("expressao"),
+        "agregacao": info.get("agregacao", "soma"),
         "validacao": info.get("validacao", {}).get("regras", []),
     }
+
+COLUNA_PESO = _cfg.get("coluna_peso_inep", "QT_MAT_TOTAL")
 
 # -----------------------
 # Limites de validação

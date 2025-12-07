@@ -12,12 +12,16 @@
 #   "1 - ((QT_MAT_TOTAL_2023 - QT_ING_TOTAL_2023) / (QT_MAT_TOTAL_2022 - QT_CONC_TOTAL_2022))"
 #
 # A expressão deve usar APENAS nomes de colunas reais das tabelas INEP incluídas nas variáveis selecionadas.
+
+# Valores possíveis para "agregacao":
+#   - "media_ponderada", "media_simples", "soma", "minimo", "maximo"
 #---------------------------------------------------------------------
 
 formulas:
   evasao_anual:
     descricao: "Evasão anual considerando todos os alunos"
     expressao: "1 - ((QT_MAT_TOTAL_{n} - QT_ING_TOTAL_{n}) / (QT_MAT_TOTAL_{p} - QT_CONC_TOTAL_{p}))"
+    agregacao: "media_ponderada"
     validacao:
       regras:
         - "QT_MAT_TOTAL_{p} >= minimo_m_prev"
@@ -31,6 +35,7 @@ formulas:
   evasao_anual_financiados:
     descricao: "Evasão entre estudantes com financiamento"
     expressao: "1 - ((QT_MAT_FINANC_{n} - QT_ING_FINANC_{n}) / (QT_MAT_FINANC_{p} - QT_CONC_FINANC_{p}))"
+    agregacao: "media_ponderada"
     validacao:
       regras:
         - "QT_MAT_FINANC_{p} >= minimo_m_prev"
@@ -44,6 +49,7 @@ formulas:
   total_estudantes:
     descricao: "Soma total de estudantes"
     expressao: "QT_MAT_TOTAL_{p} + QT_ING_TOTAL_{n}"
+    agregacao: "soma"
     validacao:
       regras: []   # sem validação
 
@@ -52,6 +58,12 @@ validacao_limites:
   minimo_m_n: 5
   minimo_i_n: 1
   minimo_c_prev: 1
+
+# -----------------------
+# Coluna de peso
+# -----------------------
+
+coluna_peso_inep: "QT_MAT_TOTAL" # Coluna usada como peso na agregação. Deve ser uma variável quantitativa.
 
 # =======================================
 # ARQUIVOS
@@ -79,7 +91,7 @@ arquivos:
 
 anos:
   inicio: 2020
-  fim: 2024
+  fim: 2021
 
 #---------------------------------------------------------------------
 # Configurações de extração de dados INEP

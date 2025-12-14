@@ -3,7 +3,7 @@
 import pandas as pd
 from pathlib import Path
 
-from utils.paths import RAW_IBGE, INTERIM_IBGE
+from utils.paths import RAW_IBGE, IBGE_REDUZIDO
 from utils.io import write_csv
 from ibge.config import SHEETS_IBGE
 
@@ -47,7 +47,7 @@ def extrair_ibge():
                 print(f"Falha ao ler sheet de índice {sheet_name} ({arquivo_xls}): {e}")
                 continue
 
-            out_path = Path(INTERIM_IBGE) / nome_csv_interim
+            out_path = Path(IBGE_REDUZIDO) / nome_csv_interim
 
             write_csv(df, out_path)
 

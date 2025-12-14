@@ -2,7 +2,7 @@ import pandas as pd
 from pathlib import Path
 import re
 
-from utils.paths import INTERIM_IBGE, PROCESSED_IBGE
+from utils.paths import IBGE_REDUZIDO, PROCESSED_IBGE
 from utils.io import read_csv, write_csv
 from ibge.config import SHEETS_IBGE, COLUNAS_BASE_IBGE
 
@@ -28,7 +28,7 @@ def limpar_ibge():
             nome_final = sheet_info["arquivo"]                           # ex: tab12_rendimento_total.csv
             nome_interim = nome_final.replace(".csv", "_interim.csv")    # ex: tab12_rendimento_total_interim.csv
 
-            path_in = Path(INTERIM_IBGE) / nome_interim
+            path_in = Path(IBGE_REDUZIDO) / nome_interim
             path_out = Path(PROCESSED_IBGE) / nome_final
 
             if not path_in.exists():

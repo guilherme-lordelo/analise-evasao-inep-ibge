@@ -1,4 +1,4 @@
-from inep.config import LIMPEZA_CFG, get_campos_municipio
+from inep.config import LIMPEZA_CFG, COLUNA_COD_MUNICIPIO, COLUNA_UF, COLUNA_NOME_MUNICIPIO
 
 
 def limpar_municipios(df):
@@ -8,18 +8,13 @@ def limpar_municipios(df):
     # -----------------------------
     # Determinar cond_invalido
     # -----------------------------
-    CAMPO_COD_MUNICIPIO = get_campos_municipio()[0]  # Código do município
-    CAMPO_UF = get_campos_municipio()[1]  # Sigla da UF
-    CAMPO_NOME_MUNICIPIO = (
-        get_campos_municipio()[2] if len(get_campos_municipio()) > 2 else None
-    )  # Nome do município (opcional)
 
      # Linhas onde o código do município é inválido
 
     cond_invalido = (
-        df[CAMPO_COD_MUNICIPIO].isna()
-        | (df[CAMPO_COD_MUNICIPIO].astype(str).str.strip() == "")
-        | (df[CAMPO_COD_MUNICIPIO].astype(str).str.strip() == "0")
+        df[COLUNA_COD_MUNICIPIO].isna()
+        | (df[COLUNA_COD_MUNICIPIO].astype(str).str.strip() == "")
+        | (df[COLUNA_COD_MUNICIPIO].astype(str).str.strip() == "0")
     )
 
     # -----------------------------
@@ -32,15 +27,15 @@ def limpar_municipios(df):
     # Modo: atribuir valores padrão
     # -----------------------------
     elif comportamento == "atribuir":
-        df.loc[cond_invalido, CAMPO_COD_MUNICIPIO] = padrao.get(CAMPO_COD_MUNICIPIO, -1)
+        df.loc[cond_invalido, COLUNA_COD_MUNICIPIO] = padrao.get(COLUNA_COD_MUNICIPIO, -1)
 
         # SG_UF é obrigatório e único
-        df.loc[cond_invalido, CAMPO_UF] = padrao.get(CAMPO_UF, "ND")
+        df.loc[cond_invalido, COLUNA_UF] = padrao.get(COLUNA_UF, "ND")
 
         # Nome de município é OPCIONAL
-        if CAMPO_NOME_MUNICIPIO is not None and CAMPO_NOME_MUNICIPIO in df.columns:
-            df.loc[cond_invalido, CAMPO_NOME_MUNICIPIO] = padrao.get(
-                CAMPO_NOME_MUNICIPIO, "SEM_MUNICIPIO"
+        if COLUNA_NOME_MUNICIPIO is not None and COLUNA_NOME_MUNICIPIO in df.columns:
+            df.loc[cond_invalido, COLUNA_NOME_MUNICIPIO] = padrao.get(
+                COLUNA_NOME_MUNICIPIO, "SEM_MUNICIPIO"
             )
 
         return df

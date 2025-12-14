@@ -1,4 +1,4 @@
-from utils.paths import RAW_INEP, INTERIM_INEP
+from utils.paths import RAW_INEP, INEP_REDUZIDO
 from utils.io import write_csv
 from inep.extracao.header import (
     ler_header,
@@ -26,7 +26,7 @@ def processar_ano(ano: int):
     output_filename = f"{EXTRACAO_PREFIXO_OUT}{ano}{EXTRACAO_EXT_OUT}"
 
     input_path  = RAW_INEP / input_filename
-    output_path = INTERIM_INEP / output_filename
+    output_path = INEP_REDUZIDO / output_filename
 
     if not input_path.exists():
         print(f"ERRO: Arquivo não encontrado: {input_path}")

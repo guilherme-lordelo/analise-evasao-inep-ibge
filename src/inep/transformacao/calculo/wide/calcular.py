@@ -2,7 +2,7 @@ import re
 import types
 import pandas as pd
 import numpy as np
-from inep.config import LISTA_FORMULAS, ANOS
+from inep.config import FORMULAS_CONFIG, ANOS
 
 IDENTIFIER_RE = re.compile(r"[A-Za-z_]\w*")
 
@@ -48,7 +48,7 @@ def _avaliar_regras(regras, df, ano_base, ano_seguinte):
     oks = []
 
     for idx, row in df.iterrows():
-        contexto = {**row.to_dict(), **LISTA_FORMULAS.limites_validacao}
+        contexto = {**row.to_dict(), **FORMULAS_CONFIG.limites_validacao}
         bits = []
 
         for regra in regras_proc:
@@ -100,7 +100,7 @@ def _avaliar_expressao(expressao, df, ano_base, ano_seguinte):
 def calcular_formulas(df: pd.DataFrame) -> pd.DataFrame:
 
     for ano_base, ano_seguinte in zip(ANOS[:-1], ANOS[1:]):
-        for nome_formula, config in LISTA_FORMULAS.formulas.items():
+        for nome_formula, config in FORMULAS_CONFIG.formulas.items():
 
             regras = config.regras_validacao
 

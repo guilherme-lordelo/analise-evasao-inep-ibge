@@ -17,7 +17,7 @@ def padronizar_categoricas(df: pd.DataFrame) -> pd.DataFrame:
         if var not in df_out.columns:
             continue
 
-        valores_validos = list(VARIAVEIS_YAML["categoricas"][var]["valores"].keys())
+        valores_validos = VARIAVEIS_YAML.valores_categoricos.get(var, [])
 
         # Mapeia OUTROS
         serie = df_out[var].apply(
@@ -43,7 +43,5 @@ def padronizar_categoricas(df: pd.DataFrame) -> pd.DataFrame:
 
         # Remove as colunas originais categóricas
         df_out.drop(columns=[var], inplace=True)
-    
-    print(f"Colunas disponíveis: {df_out.columns}")
-    
+        
     return df_out

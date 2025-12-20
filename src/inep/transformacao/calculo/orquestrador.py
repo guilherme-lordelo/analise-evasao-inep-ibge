@@ -6,8 +6,7 @@ from inep.transformacao.calculo.wide.calcular import calcular_formulas as calcul
 
 def _definir_estrategia(
     df: pd.DataFrame,
-    *,
-    formato: str = "wide",
+    formato: str = "long",
     col_ano: str | None = VARIAVEIS_YAML.coluna_ano,
     col_chave: str | None = None
 ) -> pd.DataFrame:
@@ -33,7 +32,7 @@ def _definir_estrategia(
     raise ValueError("formato deve ser 'wide' ou 'long'")
 
 
-def orquestrar_calculo(dfs: dict[str, "pd.DataFrame"]) -> dict[str, "pd.DataFrame"]:
+def orquestrar_calculo(dfs: dict[str, "pd.DataFrame"], formato: str = "long") -> dict[str, "pd.DataFrame"]:
     """
     Lê os arquivos gerados pela integração (municipal, estadual, nacional),
     aplica o cálculo das fórmulas e devolve os dataframes resultantes.
@@ -41,7 +40,7 @@ def orquestrar_calculo(dfs: dict[str, "pd.DataFrame"]) -> dict[str, "pd.DataFram
 
     resultados = {}
     for nivel, df in dfs.items():
-        resultados[nivel] = _definir_estrategia(df)
+        resultados[nivel] = _definir_estrategia(df, formato=formato)
 
         del df
         gc.collect()

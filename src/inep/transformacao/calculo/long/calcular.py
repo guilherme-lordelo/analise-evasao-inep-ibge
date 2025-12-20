@@ -4,7 +4,7 @@ import types
 import numpy as np
 import pandas as pd
 
-from inep.config import ANOS, VARIAVEIS_YAML, LISTA_FORMULAS
+from inep.config import ANOS, VARIAVEIS_YAML, FORMULAS_CONFIG
 
 
 IDENTIFIER_RE = re.compile(r"[A-Za-z_]\w*")
@@ -89,7 +89,7 @@ def _avaliar_regras_long(
     oks = []
 
     for _, row in df_calc.iterrows():
-        contexto = {**row.to_dict(), **LISTA_FORMULAS.limites_validacao}
+        contexto = {**row.to_dict(), **FORMULAS_CONFIG.limites_validacao}
         bits = []
 
         for regra in regras_proc:
@@ -175,14 +175,14 @@ def calcular_formulas(
 
     col_chave = _resolver_coluna_chave(df, col_chave)
 
-    for nome_formula, config in LISTA_FORMULAS.formulas.items():
+    for nome_formula, config in FORMULAS_CONFIG.formulas.items():
 
         nome_coluna = nome_formula.upper()
 
         if nome_coluna not in df.columns:
             df[nome_coluna] = np.nan
 
-        regras = config.get("validacao", [])
+        regras = config.regras_validacao
 
         for ano_base, ano_seguinte in zip(ANOS[:-1], ANOS[1:]):
 
@@ -199,7 +199,7 @@ def calcular_formulas(
             )
 
             df_valores = _avaliar_expressao_long(
-                config["expressao"],
+                config.expressao,
                 df,
                 ano_base,
                 ano_seguinte,

@@ -4,12 +4,14 @@ from inep.carga import salvar_resultados
 
 
 def executar_transformacao():
-    dfs_agregados = orquestrar_integracao("wide")
+
+    TIPO_FORMATO = "long"  # "wide" ou "long"
+    dfs_agregados = orquestrar_integracao(TIPO_FORMATO)
 
     if dfs_agregados is None:
         raise ValueError("A agregação retornou None.")
 
-    dfs_calculados = orquestrar_calculo(dfs_agregados)
+    dfs_calculados = orquestrar_calculo(dfs_agregados, formato=TIPO_FORMATO)
 
     if dfs_calculados is None:
         raise ValueError("O cálculo retornou None.")

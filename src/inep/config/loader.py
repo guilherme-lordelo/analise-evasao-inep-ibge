@@ -14,7 +14,7 @@ ARQUIVOS = carregar_arquivos(_cfg)
 MAPEAMENTOS = carregar_mapeamento(_cfg)
 VARIAVEIS_YAML = carregar_variaveis(_cfg)
 LIMPEZA = _cfg.get("limpeza", {})
-LISTA_FORMULAS = carregar_formulas(_cfg)
+FORMULAS_CONFIG = carregar_formulas(_cfg)
 
 _anos_cfg = _cfg.get("anos", {})
 ANO_INICIO = int(_anos_cfg["inicio"])

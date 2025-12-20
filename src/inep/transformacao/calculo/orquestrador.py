@@ -1,6 +1,6 @@
 import gc
 import pandas as pd
-from inep.config import COLUNA_ANO
+from inep.config import VARIAVEIS_CONFIG
 from inep.transformacao.calculo.long.calcular import calcular_formulas as calcular_long
 from inep.transformacao.calculo.wide.calcular import calcular_formulas as calcular_wide
 
@@ -8,7 +8,7 @@ def _definir_estrategia(
     df: pd.DataFrame,
     *,
     formato: str = "wide",
-    col_ano: str | None = COLUNA_ANO,
+    col_ano: str | None = VARIAVEIS_CONFIG.coluna_ano,
     col_chave: str | None = None
 ) -> pd.DataFrame:
     """

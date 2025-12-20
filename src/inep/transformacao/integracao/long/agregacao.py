@@ -1,6 +1,6 @@
 import gc
 import pandas as pd
-from inep.config import COLUNA_PESO, VALORES_CATEGORICOS, VARIAVEIS_QUANTITATIVAS, COLUNA_ANO, COLUNA_UF, CAMPOS_PADRAO
+from inep.config import VARIAVEIS_CONFIG
 
 
 def agrega_quantitativas(df: pd.DataFrame, nivel: str = "municipal") -> pd.DataFrame:
@@ -13,16 +13,16 @@ def agrega_quantitativas(df: pd.DataFrame, nivel: str = "municipal") -> pd.DataF
         - "nacional"  : soma total por ano (UF="BRASIL")
     """
 
-    colunas_quant = [c for c in VARIAVEIS_QUANTITATIVAS if c in df.columns]
+    colunas_quant = [c for c in VARIAVEIS_CONFIG.quantitativas if c in df.columns]
 
-    ano = COLUNA_ANO
+    ano = VARIAVEIS_CONFIG.coluna_ano
 
     if nivel == "municipal":
-        colunas_groupby = CAMPOS_PADRAO + [ano]
+        colunas_groupby = VARIAVEIS_CONFIG.campos_padrao + [ano]
 
     elif nivel == "estadual":
         # segundo campo de get_campos_municipio é UF
-        colunas_groupby = [CAMPOS_PADRAO[1], ano]
+        colunas_groupby = [VARIAVEIS_CONFIG.campos_padrao[1], ano]
 
     elif nivel == "nacional":
         colunas_groupby = [ano]
@@ -59,7 +59,7 @@ def agrega_categoricas_ano(df: pd.DataFrame, ano: str, nivel: str = "municipal")
     """
 
     # Nome da coluna de ano
-    col_ano = COLUNA_ANO
+    col_ano = VARIAVEIS_CONFIG.coluna_ano
     if col_ano not in df.columns:
         raise ValueError(f"Coluna temporal '{col_ano}' não existe no dataframe.")
 
@@ -72,7 +72,7 @@ def agrega_categoricas_ano(df: pd.DataFrame, ano: str, nivel: str = "municipal")
 
     presentes = {}
 
-    for var, valores in VALORES_CATEGORICOS.items():
+    for var, valores in VARIAVEIS_CONFIG.valores_categoricos.items():
         lista_valores = list(valores) + ["OUTROS"]
         for valor in lista_valores:
             col = f"{var}_{valor}"
@@ -81,23 +81,23 @@ def agrega_categoricas_ano(df: pd.DataFrame, ano: str, nivel: str = "municipal")
 
     if not presentes:
         if nivel == "municipal":
-            return df[CAMPOS_PADRAO].drop_duplicates()
+            return df[VARIAVEIS_CONFIG.campos_padrao].drop_duplicates()
         elif nivel == "estadual":
-            return df[[CAMPOS_PADRAO[1]]].drop_duplicates()
+            return df[[VARIAVEIS_CONFIG.campos_padrao[1]]].drop_duplicates()
         else:
             return pd.DataFrame({"UF": ["BRASIL"]})
 
     if nivel == "municipal":
-        campos_group = CAMPOS_PADRAO
+        campos_group = VARIAVEIS_CONFIG.campos_padrao
     elif nivel == "estadual":
-        campos_group = [CAMPOS_PADRAO[1]]
+        campos_group = [VARIAVEIS_CONFIG.campos_padrao[1]]
     elif nivel == "nacional":
         campos_group = []
     else:
         raise ValueError("nivel deve ser 'municipal', 'estadual' ou 'nacional'")
 
     # Verifica se a coluna de peso existe
-    col_peso = COLUNA_PESO
+    col_peso = VARIAVEIS_CONFIG.coluna_peso
     if col_peso not in df.columns:
         raise ValueError(f"A coluna de peso '{col_peso}' não existe no DF.")
 
@@ -107,7 +107,7 @@ def agrega_categoricas_ano(df: pd.DataFrame, ano: str, nivel: str = "municipal")
 
     for var, colunas_var in presentes.items():
 
-        ordem = VALORES_CATEGORICOS[var]
+        ordem = VARIAVEIS_CONFIG.valores_categoricos[var]
         colunas_var.sort(
             key=lambda c: (
                 ordem.index(c.split("_")[-1])
@@ -170,7 +170,7 @@ def agrega_categoricas(
         }
     """
 
-    ANO_COL = COLUNA_ANO
+    ANO_COL = VARIAVEIS_CONFIG.coluna_ano
 
     result_mun = None
     result_est = None if include_estadual else None
@@ -203,7 +203,7 @@ def agrega_categoricas(
 
         else:
 
-            ANO_COL = COLUNA_ANO  # ou "NU_ANO_CENSO"
+            ANO_COL = VARIAVEIS_CONFIG.coluna_ano
 
             result_mun = pd.concat(
                 [result_mun, agg_mun_ano],
@@ -242,7 +242,8 @@ def merge_quantitativas_com_categoricas(
     - Retorna os 3 níveis em um dict.
     """
 
-    ANO_COL = COLUNA_ANO
+    ANO_COL = VARIAVEIS_CONFIG.coluna_ano
+    CAMPOS_PADRAO = VARIAVEIS_CONFIG.campos_padrao
 
     quant_mun = agrega_quantitativas(df_quant_all, nivel="municipal")
     quant_est = agrega_quantitativas(quant_mun, nivel="estadual")
@@ -259,7 +260,7 @@ def merge_quantitativas_com_categoricas(
 
     # merge estadual
 
-    chave_est = [COLUNA_UF, ANO_COL]
+    chave_est = [VARIAVEIS_CONFIG.coluna_uf, ANO_COL]
 
     result_est = quant_est.merge(
         cat_est,

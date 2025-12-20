@@ -1,14 +1,7 @@
 import gc
 from typing import Callable
 import pandas as pd
-from inep.config import (
-    CAMPOS_PADRAO,
-    COLUNA_UF,
-    VARIAVEIS_QUANTITATIVAS,
-    VALORES_CATEGORICOS,
-    ANOS,
-    COLUNA_PESO,
-)
+from inep.config import ANOS, VARIAVEIS_CONFIG
 
 def agrega_quantitativas(df: pd.DataFrame, nivel: str = "municipal") -> pd.DataFrame:
     """
@@ -23,17 +16,17 @@ def agrega_quantitativas(df: pd.DataFrame, nivel: str = "municipal") -> pd.DataF
     # Define colunas quantitativas
     todas_quant_ano = {
         f"{var}_{ano}"
-        for var in VARIAVEIS_QUANTITATIVAS
+        for var in VARIAVEIS_CONFIG.quantitativas
         for ano in ANOS
     }
 
     colunas_quant = sorted(c for c in df.columns if c in todas_quant_ano)
 
     if nivel == "municipal":
-        colunas_groupby = CAMPOS_PADRAO
+        colunas_groupby = VARIAVEIS_CONFIG.campos_padrao
 
     elif nivel == "estadual":
-        colunas_groupby = [CAMPOS_PADRAO[1]]
+        colunas_groupby = [VARIAVEIS_CONFIG.campos_padrao[1]]
 
     elif nivel == "nacional":
         colunas_groupby = []
@@ -61,7 +54,7 @@ def agrega_categoricas_ano(df: pd.DataFrame, ano: str, nivel: str = "municipal")
     # Cria dicionário de colunas
     presentes = {}
 
-    for var, valores in VALORES_CATEGORICOS.items():
+    for var, valores in VARIAVEIS_CONFIG.valores_categoricos.items():
         lista_valores = list(valores) + ["OUTROS"]
         for valor in lista_valores:
             col = f"{var}_{valor}_{ano}"
@@ -75,7 +68,7 @@ def agrega_categoricas_ano(df: pd.DataFrame, ano: str, nivel: str = "municipal")
 
     # Ordenar cada variável pela lista de valores categóricos
     for var, colunas_var in lista_var.items():
-        ordem = VALORES_CATEGORICOS[var]
+        ordem = VARIAVEIS_CONFIG.valores_categoricos[var]
         colunas_var.sort(
             key=lambda c: (
                 ordem.index(c.split("_")[-2])
@@ -86,23 +79,23 @@ def agrega_categoricas_ano(df: pd.DataFrame, ano: str, nivel: str = "municipal")
 
     if not lista_var:
         if nivel == "municipal":
-            return df[CAMPOS_PADRAO].drop_duplicates()
+            return df[VARIAVEIS_CONFIG.campos_padrao].drop_duplicates()
         elif nivel == "estadual":
-            return df[[CAMPOS_PADRAO[1]]].drop_duplicates()
+            return df[[VARIAVEIS_CONFIG.campos_padrao[1]]].drop_duplicates()
         else:
             return pd.DataFrame({"UF": ["BRASIL"]})
 
     if nivel == "municipal":
-        campos_group = CAMPOS_PADRAO
+        campos_group = VARIAVEIS_CONFIG.campos_padrao
     elif nivel == "estadual":
-        campos_group = [CAMPOS_PADRAO[1]]
+        campos_group = [VARIAVEIS_CONFIG.campos_padrao[1]]
     elif nivel == "nacional":
         campos_group = []
     else:
         raise ValueError("nivel deve ser 'municipal', 'estadual' ou 'nacional'")
 
     # Verifica se a coluna de peso existe
-    col_peso = f"{COLUNA_PESO}_{ano}"
+    col_peso = f"{VARIAVEIS_CONFIG.coluna_peso}_{ano}"
     if col_peso not in df.columns:
         raise ValueError(f"Peso '{col_peso}' não existe no dataframe para o ano {ano}.")
 
@@ -172,7 +165,7 @@ def agrega_categoricas(
             if include_nacional: result_nat = agg_nat_ano
         else:
             # MUNICIPAL
-            chave_municipal = CAMPOS_PADRAO
+            chave_municipal = VARIAVEIS_CONFIG.campos_padrao
             result_mun = result_mun.merge(
                 agg_mun_ano,
                 on=chave_municipal,
@@ -222,14 +215,14 @@ def merge_quantitativas_com_categoricas(
     # MUNICIPAL
     result_mun = quant_mun.merge(
         cat_mun,
-        on=CAMPOS_PADRAO,
+        on=VARIAVEIS_CONFIG.campos_padrao,
         how="left",
     )
 
     # ESTADUAL
     result_est = quant_est.merge(
         cat_est,
-        on=[COLUNA_UF],
+        on=[VARIAVEIS_CONFIG.coluna_uf],
         how="left",
     )
 

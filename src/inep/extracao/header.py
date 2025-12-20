@@ -1,26 +1,56 @@
 from utils.io import read_header
-from inep.config import VARIAVEIS, COL_MAPPINGS
+from inep.config import VARIAVEIS_CONFIG, MAPEAMENTO_CONFIG
+
 
 def ler_header(path):
-    return read_header(path)
+	return read_header(path)
 
-def detectar_mapeamento(header):
-    return {col: destino for col, destino in COL_MAPPINGS.items() if col in header}
 
-def determinar_colunas_existentes(header, mapeamento):
-    colunas = []
+from inep.config import VARIAVEIS_CONFIG, MAPEAMENTO_CONFIG
 
-    for var in VARIAVEIS:
-        if var in header:
-            colunas.append(var)
-        elif var in mapeamento.values():
-            chave_original = [k for k, v in mapeamento.items() if v == var][0]
-            if chave_original in header:
-                colunas.append(chave_original)
 
-    return colunas
+def resolver_schema_entrada(header: list[str]):
+	"""
+	Resolve o schema de entrada do CSV INEP.
+
+	Retorna:
+	- colunas_fisicas: colunas reais a serem lidas do arquivo
+	- mapeamento: colunas a serem renomeadas (fisico -> logico)
+	- faltantes: variáveis esperadas não encontradas
+	"""
+
+	colunas_fisicas = []
+	mapeamento = {}
+	faltantes = set()
+
+	variaveis_esperadas = VARIAVEIS_CONFIG.variaveis
+	map_dict = MAPEAMENTO_CONFIG.map_dict
+
+	for var in variaveis_esperadas:
+		# Caso 1: variável lógica existe fisicamente
+		if var in header:
+			colunas_fisicas.append(var)
+			continue
+
+		# Caso 2: procurar coluna alternativa
+		encontrado = False
+		for alternativo, destino in map_dict.items():
+			if destino == var and alternativo in header:
+				colunas_fisicas.append(alternativo)
+				mapeamento[alternativo] = var
+				encontrado = True
+				break
+
+		if not encontrado:
+			faltantes.add(var)
+
+	return colunas_fisicas, mapeamento, faltantes
+
 
 def identificar_faltantes(colunas_existentes, mapeamento):
-    return set(VARIAVEIS) - {
-        mapeamento.get(c, c) for c in colunas_existentes
-    }
+	normalizadas = {
+		mapeamento.get(coluna, coluna)
+		for coluna in colunas_existentes
+	}
+
+	return set(VARIAVEIS_CONFIG.variaveis) - normalizadas

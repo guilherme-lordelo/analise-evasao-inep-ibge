@@ -1,5 +1,5 @@
 # inep/Transformacao/Integracao/wide/renomear_por_ano.py
-from inep.config import VARIAVEIS_CATEGORICAS, VARIAVEIS_QUANTITATIVAS
+from inep.config import VARIAVEIS_CONFIG
 
 def renomear_com_ano(df, ano: int):
     """
@@ -15,13 +15,13 @@ def renomear_com_ano(df, ano: int):
     novo_nome = {}
 
     for col in df.columns:
-        if col in VARIAVEIS_CATEGORICAS or col in VARIAVEIS_QUANTITATIVAS:
+        if col in VARIAVEIS_CONFIG.categoricas or col in VARIAVEIS_CONFIG.quantitativas:
             novo_nome[col] = f"{col}{sufixo}"
 
     df = df.rename(columns=novo_nome)
 
     quantitativas_renomeadas = [
-        f"{var}{sufixo}" for var in VARIAVEIS_QUANTITATIVAS
+        f"{var}{sufixo}" for var in VARIAVEIS_CONFIG.quantitativas
         if f"{var}{sufixo}" in df.columns
     ]
 

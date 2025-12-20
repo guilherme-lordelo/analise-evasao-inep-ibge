@@ -1,7 +1,7 @@
 import pandas as pd
 from typing import List, Optional
 
-from inep.config import COLUNA_PESO
+from inep.config import VARIAVEIS_CONFIG
 
 
 def reduzir_colunas(
@@ -35,7 +35,7 @@ def reduzir_colunas(
     """
 
     if manter_peso:
-        variaveis = [v for v in variaveis if v != COLUNA_PESO]
+        variaveis = [v for v in variaveis if v != VARIAVEIS_CONFIG.coluna_peso]
 
     if ano is None:
         # O nome da coluna deve coincidir exatamente com os nomes dados

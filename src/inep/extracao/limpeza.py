@@ -1,4 +1,4 @@
-from inep.config import LIMPEZA_CFG, COLUNA_COD_MUNICIPIO, COLUNA_UF, COLUNA_NOME_MUNICIPIO
+from inep.config import VARIAVEIS_CONFIG, LIMPEZA_CFG
 
 
 def limpar_municipios(df):
@@ -10,6 +10,10 @@ def limpar_municipios(df):
     # -----------------------------
 
      # Linhas onde o código do município é inválido
+
+    COLUNA_COD_MUNICIPIO = VARIAVEIS_CONFIG.coluna_cod_municipio
+    COLUNA_UF = VARIAVEIS_CONFIG.coluna_uf
+    COLUNA_NOME_MUNICIPIO = VARIAVEIS_CONFIG.coluna_nome_municipio
 
     cond_invalido = (
         df[COLUNA_COD_MUNICIPIO].isna()

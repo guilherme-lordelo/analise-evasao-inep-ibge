@@ -1,22 +1,18 @@
-
-from inep.config import (
-    SEP_OUT, ENCODING_OUT,
-    COMPRESS, ORDEM_COLUNAS
-)
+from inep.config import IO_CONFIG
 
 
 def csv_kwargs_saida(df):
-    kwargs = {
-        "sep": SEP_OUT,
-        "encoding": ENCODING_OUT,
-        "index": False,
-    }
+	kwargs = {
+		"sep": IO_CONFIG.sep_out,
+		"encoding": IO_CONFIG.encoding_out,
+		"index": False,
+	}
 
-    if ORDEM_COLUNAS:
-        cols = [c for c in ORDEM_COLUNAS if c in df.columns]
-        df = df[cols]
+	if IO_CONFIG.ordem_colunas:
+		cols = [c for c in IO_CONFIG.ordem_colunas if c in df.columns]
+		df = df[cols]
 
-    if COMPRESS:
-        kwargs["compression"] = "gzip"
+	if IO_CONFIG.compress:
+		kwargs["compression"] = "gzip"
 
-    return df, kwargs
+	return df, kwargs

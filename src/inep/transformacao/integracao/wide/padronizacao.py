@@ -1,5 +1,5 @@
 import pandas as pd
-from inep.config import VARIAVEIS_CONFIG
+from inep.config import VARIAVEIS_YAML
 
 def padronizar_categoricas(df: pd.DataFrame, ano: int) -> pd.DataFrame:
     """
@@ -16,7 +16,7 @@ def padronizar_categoricas(df: pd.DataFrame, ano: int) -> pd.DataFrame:
     sufixo = f"_{ano}"
 
     # Padroniza cada variável categórica
-    for var in VARIAVEIS_CONFIG.categoricas:
+    for var in VARIAVEIS_YAML.categoricas:
 
         col_ano = f"{var}{sufixo}"
         if col_ano not in df_out.columns:
@@ -24,7 +24,7 @@ def padronizar_categoricas(df: pd.DataFrame, ano: int) -> pd.DataFrame:
             continue
 
         # Valores válidos segundo o YAML
-        valores_validos = VARIAVEIS_CONFIG.valores_categoricos[var]
+        valores_validos = VARIAVEIS_YAML.valores_categoricos[var]
 
         # Mapeia OUTROS
         serie = df_out[col_ano].apply(

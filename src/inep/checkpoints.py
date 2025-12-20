@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 from utils.io import write_csv
-from inep.config import IO_CONFIG
+from inep.config import IO
 
 
 def salvar_checkpoint(
@@ -19,7 +19,7 @@ def salvar_checkpoint(
 	write_csv(
 		df,
 		output_path,
-		encoding=IO_CONFIG.encoding_out,
-		sep=IO_CONFIG.sep_out,
-		compression=IO_CONFIG.compress,
+		encoding=IO.encoding_out,
+		sep=IO.sep_out,
+		compression=IO.compress,
 	)

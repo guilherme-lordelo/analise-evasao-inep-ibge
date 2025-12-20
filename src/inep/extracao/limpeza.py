@@ -1,9 +1,9 @@
-from inep.config import VARIAVEIS_CONFIG, LIMPEZA_CFG
+from inep.config import VARIAVEIS_YAML, LIMPEZA
 
 
 def limpar_municipios(df):
-    comportamento = LIMPEZA_CFG.get("comportamento_sem_municipio", "descartar")
-    padrao = LIMPEZA_CFG.get("valor_padrao_sem_municipio", {})
+    comportamento = LIMPEZA.get("comportamento_sem_municipio", "descartar")
+    padrao = LIMPEZA.get("valor_padrao_sem_municipio", {})
 
     # -----------------------------
     # Determinar cond_invalido
@@ -11,9 +11,9 @@ def limpar_municipios(df):
 
      # Linhas onde o código do município é inválido
 
-    COLUNA_COD_MUNICIPIO = VARIAVEIS_CONFIG.coluna_cod_municipio
-    COLUNA_UF = VARIAVEIS_CONFIG.coluna_uf
-    COLUNA_NOME_MUNICIPIO = VARIAVEIS_CONFIG.coluna_nome_municipio
+    COLUNA_COD_MUNICIPIO = VARIAVEIS_YAML.coluna_cod_municipio
+    COLUNA_UF = VARIAVEIS_YAML.coluna_uf
+    COLUNA_NOME_MUNICIPIO = VARIAVEIS_YAML.coluna_nome_municipio
 
     cond_invalido = (
         df[COLUNA_COD_MUNICIPIO].isna()

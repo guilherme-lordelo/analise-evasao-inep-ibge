@@ -1,5 +1,5 @@
 import pandas as pd
-from inep.config import VARIAVEIS_CONFIG
+from inep.config import VARIAVEIS_YAML
 
 def padronizar_categoricas(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -12,12 +12,12 @@ def padronizar_categoricas(df: pd.DataFrame) -> pd.DataFrame:
 
     df_out = df.copy()
 
-    for var in VARIAVEIS_CONFIG.categoricas:
+    for var in VARIAVEIS_YAML.categoricas:
 
         if var not in df_out.columns:
             continue
 
-        valores_validos = list(VARIAVEIS_CONFIG["categoricas"][var]["valores"].keys())
+        valores_validos = list(VARIAVEIS_YAML["categoricas"][var]["valores"].keys())
 
         # Mapeia OUTROS
         serie = df_out[var].apply(

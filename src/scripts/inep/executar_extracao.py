@@ -6,7 +6,7 @@ from inep.extracao import orquestrar_extracao
 from inep.checkpoints import salvar_checkpoint
 from inep.config import (
 	ANOS,
-	ARQUIVOS_CONFIG,
+	ARQUIVOS,
 )
 
 
@@ -19,15 +19,15 @@ def executar_extracao():
 
 		try:
 			input_filename = (
-				f"{ARQUIVOS_CONFIG.extracao_prefixo_in}"
+				f"{ARQUIVOS.extracao_prefixo_in}"
 				f"{ano}"
-				f"{ARQUIVOS_CONFIG.extracao_ext_in}"
+				f"{ARQUIVOS.extracao_ext_in}"
 			)
 
 			output_filename = (
-				f"{ARQUIVOS_CONFIG.extracao_prefixo_out}"
+				f"{ARQUIVOS.extracao_prefixo_out}"
 				f"{ano}"
-				f"{ARQUIVOS_CONFIG.extracao_ext_out}"
+				f"{ARQUIVOS.extracao_ext_out}"
 			)
 
 			input_path = RAW_INEP / input_filename

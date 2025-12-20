@@ -9,7 +9,7 @@ from .renomear_por_ano import renomear_com_ano
 from .padronizacao import padronizar_categoricas
 from .agregacao import agrega_categoricas
 
-from inep.config import ARQUIVOS_CONFIG, VARIAVEIS_CONFIG
+from inep.config import ARQUIVOS, VARIAVEIS_YAML
 
 
 def fetch_categoricas(
@@ -25,11 +25,11 @@ def fetch_categoricas(
 	def leitor_ano(ano: str):
 		df = read_csv(
 			INEP_REDUZIDO
-			/ f"{ARQUIVOS_CONFIG.extracao_prefixo_out}{ano}{ARQUIVOS_CONFIG.extracao_ext_out}"
+			/ f"{ARQUIVOS.extracao_prefixo_out}{ano}{ARQUIVOS.extracao_ext_out}"
 		)
 		df = reduzir_colunas(
 			df,
-			VARIAVEIS_CONFIG.quantitativas,
+			VARIAVEIS_YAML.quantitativas,
 			manter_peso=True,
 			inplace=True,
 		)
@@ -57,11 +57,11 @@ def preparar_quantitativas(anos: list[str]):
 	for ano in anos:
 		df_quant = read_csv(
 			INEP_REDUZIDO
-			/ f"{ARQUIVOS_CONFIG.extracao_prefixo_out}{ano}{ARQUIVOS_CONFIG.extracao_ext_out}"
+			/ f"{ARQUIVOS.extracao_prefixo_out}{ano}{ARQUIVOS.extracao_ext_out}"
 		)
 		df_quant = reduzir_colunas(
 			df_quant,
-			VARIAVEIS_CONFIG.categoricas,
+			VARIAVEIS_YAML.categoricas,
 			inplace=True,
 		)
 		df_quant = renomear_com_ano(df_quant, ano)

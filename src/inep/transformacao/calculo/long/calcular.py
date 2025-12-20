@@ -4,7 +4,7 @@ import types
 import numpy as np
 import pandas as pd
 
-from inep.config import ANOS, VARIAVEIS_CONFIG, FORMULAS_CONFIG
+from inep.config import ANOS, VARIAVEIS_YAML, LISTA_FORMULAS
 
 
 IDENTIFIER_RE = re.compile(r"[A-Za-z_]\w*")
@@ -89,7 +89,7 @@ def _avaliar_regras_long(
     oks = []
 
     for _, row in df_calc.iterrows():
-        contexto = {**row.to_dict(), **FORMULAS_CONFIG.limites_validacao}
+        contexto = {**row.to_dict(), **LISTA_FORMULAS.limites_validacao}
         bits = []
 
         for regra in regras_proc:
@@ -154,7 +154,7 @@ def _resolver_coluna_chave(df: pd.DataFrame, col_chave: str | None) -> str:
     if col_chave in df.columns:
         return col_chave
 
-    for c in VARIAVEIS_CONFIG.campos_padrao:
+    for c in VARIAVEIS_YAML.campos_padrao:
         if c in df.columns:
             return c
 
@@ -175,7 +175,7 @@ def calcular_formulas(
 
     col_chave = _resolver_coluna_chave(df, col_chave)
 
-    for nome_formula, config in FORMULAS_CONFIG.formulas.items():
+    for nome_formula, config in LISTA_FORMULAS.formulas.items():
 
         nome_coluna = nome_formula.upper()
 

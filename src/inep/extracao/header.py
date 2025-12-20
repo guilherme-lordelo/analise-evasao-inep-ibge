@@ -1,12 +1,12 @@
 from utils.io import read_header
-from inep.config import VARIAVEIS_CONFIG, MAPEAMENTO_CONFIG
+from inep.config import VARIAVEIS_YAML, MAPEAMENTOS
 
 
 def ler_header(path):
 	return read_header(path)
 
 
-from inep.config import VARIAVEIS_CONFIG, MAPEAMENTO_CONFIG
+from inep.config import VARIAVEIS_YAML, MAPEAMENTOS
 
 
 def resolver_schema_entrada(header: list[str]):
@@ -23,8 +23,8 @@ def resolver_schema_entrada(header: list[str]):
 	mapeamento = {}
 	faltantes = set()
 
-	variaveis_esperadas = VARIAVEIS_CONFIG.variaveis
-	map_dict = MAPEAMENTO_CONFIG.map_dict
+	variaveis_esperadas = VARIAVEIS_YAML.variaveis
+	map_dict = MAPEAMENTOS.map_dict
 
 	for var in variaveis_esperadas:
 		# Caso 1: variável lógica existe fisicamente
@@ -53,4 +53,4 @@ def identificar_faltantes(colunas_existentes, mapeamento):
 		for coluna in colunas_existentes
 	}
 
-	return set(VARIAVEIS_CONFIG.variaveis) - normalizadas
+	return set(VARIAVEIS_YAML.variaveis) - normalizadas

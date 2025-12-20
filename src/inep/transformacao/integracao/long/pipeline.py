@@ -1,7 +1,7 @@
 import gc
 import pandas as pd
 
-from inep.config import ARQUIVOS_CONFIG, VARIAVEIS_CONFIG
+from inep.config import ARQUIVOS, VARIAVEIS_YAML
 from inep.transformacao.integracao.long.agregacao import agrega_categoricas
 from inep.transformacao.integracao.long.padronizacao import padronizar_categoricas
 
@@ -23,11 +23,11 @@ def fetch_categoricas(
 	def leitor_ano(ano: str):
 		df = read_csv(
 			INEP_REDUZIDO
-			/ f"{ARQUIVOS_CONFIG.extracao_prefixo_out}{ano}{ARQUIVOS_CONFIG.extracao_ext_out}"
+			/ f"{ARQUIVOS.extracao_prefixo_out}{ano}{ARQUIVOS.extracao_ext_out}"
 		)
 		df = reduzir_colunas(
 			df,
-			VARIAVEIS_CONFIG.quantitativas,
+			VARIAVEIS_YAML.quantitativas,
 			manter_peso=True,
 			inplace=True,
 		)
@@ -53,16 +53,16 @@ def preparar_quantitativas(anos: list[str]):
 	for ano in anos:
 		df = read_csv(
 			INEP_REDUZIDO
-			/ f"{ARQUIVOS_CONFIG.extracao_prefixo_out}{ano}{ARQUIVOS_CONFIG.extracao_ext_out}"
+			/ f"{ARQUIVOS.extracao_prefixo_out}{ano}{ARQUIVOS.extracao_ext_out}"
 		)
 
 		df = reduzir_colunas(
 			df,
-			VARIAVEIS_CONFIG.categoricas,
+			VARIAVEIS_YAML.categoricas,
 			inplace=True,
 		)
 
-		for var in VARIAVEIS_CONFIG.quantitativas:
+		for var in VARIAVEIS_YAML.quantitativas:
 			if var in df.columns:
 				df[var] = df[var].fillna(0.0).astype(float)
 

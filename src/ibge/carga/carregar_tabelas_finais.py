@@ -4,21 +4,21 @@ from pathlib import Path
 
 from utils.io import read_csv
 from utils.paths import PROCESSED_IBGE
-from ibge.config import SHEETS_IBGE, COLUNAS_BASE_IBGE
+from ibge.config import COLUNAS_BASE_IBGE, TABELAS_IBGE
 
 
-def carregar_todos_ibge():
+def carregar():
     """
     Retorna um DataFrame contendo todas as colunas finais do IBGE.
     """
 
     dfs = []
 
-    for tabela_id, tabela_info in SHEETS_IBGE.items():
+    for tabela in TABELAS_IBGE.values():
 
-        for sheet in tabela_info["sheets"]:
+        for sheet in tabela.sheets:
 
-            nome_csv = sheet["arquivo"]   # ex: tab12_rendimento_total.csv
+            nome_csv = sheet.arquivo
             path = PROCESSED_IBGE / nome_csv
 
             if not path.exists():

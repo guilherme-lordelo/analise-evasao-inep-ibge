@@ -1,4 +1,4 @@
-# src/inep/config.py
+# src/inep/config/loader.py
 
 from utils.config import load_config
 from inep.config.variaveis import carregar_variaveis

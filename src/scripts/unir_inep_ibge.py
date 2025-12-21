@@ -1,7 +1,7 @@
 from utils.paths import DATA_PROCESSED
 from utils.io import read_csv, write_csv
 from utils.config import load_config
-from ibge.carregamento.carregar_tabelas_finais import ler_tabelas_ibge
+from ibge.carga.carregar_tabelas_finais import ler_tabelas_ibge
 from inep.config import PARES, ANO_INICIO, ANO_FIM
 import pandas as pd
 

@@ -4,6 +4,7 @@ tabelas:
     sheets:
       - descricao_sheet: "Conjunto completo da tabela, sem subdivisões."
         arquivo: "tab1_populacao_total.csv"
+
         colunas:
           - POP_TOTAL
           - PERC_URBANA
@@ -12,12 +13,17 @@ tabelas:
           - PERC_MULHER
           - RAZAO_SEXO
 
+        remover_colunas:
+          - PERC_HOMEM
+          - PERC_MULHER
+
   tab2:
     descricao_tabela: "População residente por faixas etárias, com detalhamento total, urbano e rural."
     sheets:
       - sheet_id: A
         descricao_sheet: "Totais gerais de população por faixas etárias."
         arquivo: "tab2_faixas_etarias_total.csv"
+
         colunas:
           - POP_RESIDENTE_TOTAL
           - PERC_0_A_5
@@ -27,9 +33,28 @@ tabelas:
           - PERC_40_A_59
           - PERC_60_OU_MAIS
 
+        merges_colunas:
+          - destino: PERC_0_A_24
+            fontes:
+              - PERC_0_A_5
+              - PERC_6_A_14
+              - PERC_15_A_24
+            metodo: soma
+
+          - destino: PERC_25_OU_MAIS
+            fontes:
+              - PERC_25_A_39
+              - PERC_40_A_59
+              - PERC_60_OU_MAIS
+            metodo: soma
+
+        remover_colunas:
+          - POP_RESIDENTE_TOTAL
+
       - sheet_id: B
         descricao_sheet: "População urbana por faixas etárias."
         arquivo: "tab2_faixas_etarias_urbana.csv"
+
         colunas:
           - POP_RESIDENTE_URBANA
           - PERC_0_A_5_URBANA
@@ -39,9 +64,28 @@ tabelas:
           - PERC_40_A_59_URBANA
           - PERC_60_OU_MAIS_URBANA
 
+        merges_colunas:
+          - destino: PERC_0_A_24_URBANA
+            fontes:
+              - PERC_0_A_5_URBANA
+              - PERC_6_A_14_URBANA
+              - PERC_15_A_24_URBANA
+            metodo: soma
+
+          - destino: PERC_25_OU_MAIS_URBANA
+            fontes:
+              - PERC_25_A_39_URBANA
+              - PERC_40_A_59_URBANA
+              - PERC_60_OU_MAIS_URBANA
+            metodo: soma
+
+        remover_colunas:
+          - POP_RESIDENTE_URBANA
+
       - sheet_id: C
         descricao_sheet: "População rural por faixas etárias."
         arquivo: "tab2_faixas_etarias_rural.csv"
+
         colunas:
           - POP_RESIDENTE_RURAL
           - PERC_0_A_5_RURAL
@@ -50,6 +94,24 @@ tabelas:
           - PERC_25_A_39_RURAL
           - PERC_40_A_59_RURAL
           - PERC_60_OU_MAIS_RURAL
+
+        merges_colunas:
+          - destino: PERC_0_A_24_RURAL
+            fontes:
+              - PERC_0_A_5_RURAL
+              - PERC_6_A_14_RURAL
+              - PERC_15_A_24_RURAL
+            metodo: soma
+
+          - destino: PERC_25_OU_MAIS_RURAL
+            fontes:
+              - PERC_25_A_39_RURAL
+              - PERC_40_A_59_RURAL
+              - PERC_60_OU_MAIS_RURAL
+            metodo: soma
+
+        remover_colunas:
+          - POP_RESIDENTE_RURAL
 
   tab3:
     descricao_tabela: "Distribuição da população com 15 anos ou mais por grandes faixas etárias."

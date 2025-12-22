@@ -1,0 +1,14 @@
+[project]
+name = "analise-evasao-inep-ibge"
+version = "0.0.0"
+dependencies = [
+	"pyyaml",
+	"pandas",
+	"numpy",
+    "matplotlib",
+    "geopandas",
+    "xlrd",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}

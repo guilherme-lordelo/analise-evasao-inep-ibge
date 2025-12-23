@@ -27,6 +27,41 @@ O código-fonte é modularizado nos seguintes subdiretórios:
 - `src/brpipe/viz/` → Lógica de visualização (charts, dashboards, mapas).
 
 
+# Configurações do Pipeline (YAML)
+
+O comportamento do pipeline é definido pelos arquivos de configuração, permitindo ajustes em cálculos e estruturas sem alterar o código-fonte.
+
+## Configuração INEP (`inep.yaml`)
+
+Gerencia os Microdados do Censo da Educação Superior.
+
+*   **Fórmulas Dinâmicas:** Utiliza `{p}` (ano base) e `{n}` (ano seguinte).
+    *   *Exemplo:* `expressao: "QT_MAT_TOTAL_{n} - QT_MAT_TOTAL_{p}"` calcula a variação absoluta de matrículas.
+*   **Regras de Validação:** Filtros opcionais associados a cada fórmula definidos pelo usuário, servindo para validar ou invalidar as mesmas.
+*   **Mapeamento de Cabeçalhos:** A chave `mapeamento_colunas` normaliza divergências de nomes entre diferentes anos do Censo.
+*   **Peso:** `coluna_peso_inep` Define qual variável quantitativa será utilizada como base numérica nas agregações condicionadas por variáveis categóricas. Exemplo:
+    `TP_REDE` define se a rede é pública ou privada.
+    Se `QT_MAT_TOTAL` for selecionada como coluna de peso, as agregações calcularão distribuição percentual de alunos matriculados em cada tipo de rede.
+    Nesse processo, a variável categórica é desdobrada em colunas derivadas, uma para cada valor possível da categoria definido no YAML.
+
+## Configuração IBGE (`ibge.yaml`)
+
+Gerencia dados demográficos e estruturação de tabelas de população.
+
+*   **Transformação de Colunas (`merges_colunas`):** Permite agrupar faixas de dados de forma declarativa.
+    *   **fontes:** Colunas originais do CSV.
+    *   **destino:** Nova coluna consolidada.
+    *   **metodo:** Operação aplicada (ex: `soma`).
+*   **Remoção:** O campo `remover_colunas` permite excluir variáveis indesejadas.
+
+## Regras de Customização
+
+1.  **Consistência de Nomes:** Ao criar fórmulas, use apenas colunas listadas em `variaveis: quantitativas`.
+2.  **Arquivos de Entrada:** Os prefixos em `arquivos: extracao` devem coincidir exatamente com o início dos nomes dos arquivos `.CSV` locais.
+3.  **Encodings:** O padrão configurado é entrada em `latin1` (padrão governo) e saída em `utf-8` por padrão.
+4.  **Agregação:** O pipeline gera automaticamente saídas nos níveis `municipios`, `estados` e `nacional` conforme definido na seção `transformacao`.
+
+
 
 ## Requisitos
 

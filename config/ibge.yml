@@ -13,9 +13,21 @@ tabelas:
           - PERC_MULHER
           - RAZAO_SEXO
 
+        transformacoes_colunas:
+          - fonte: PERC_URBANA
+            destino: PERC_URBANA_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
+
+          - fonte: PERC_HOMEM
+            destino: PERC_HOMEM_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
+
         remover_colunas:
-          - PERC_HOMEM
+          - PERC_RURAL
           - PERC_MULHER
+          - RAZAO_SEXO
 
   tab2:
     descricao_tabela: "População residente por faixas etárias, com detalhamento total, urbano e rural."
@@ -41,15 +53,17 @@ tabelas:
               - PERC_15_A_24
             metodo: soma
 
-          - destino: PERC_25_OU_MAIS
-            fontes:
-              - PERC_25_A_39
-              - PERC_40_A_59
-              - PERC_60_OU_MAIS
-            metodo: soma
+        transformacoes_colunas:
+          - fonte: PERC_0_A_24
+            destino: FAIXA_ETARIA_0_24_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
 
         remover_colunas:
           - POP_RESIDENTE_TOTAL
+          - PERC_25_A_39
+          - PERC_40_A_59
+          - PERC_60_OU_MAIS
 
       - sheet_id: B
         descricao_sheet: "População urbana por faixas etárias."
@@ -72,15 +86,17 @@ tabelas:
               - PERC_15_A_24_URBANA
             metodo: soma
 
-          - destino: PERC_25_OU_MAIS_URBANA
-            fontes:
-              - PERC_25_A_39_URBANA
-              - PERC_40_A_59_URBANA
-              - PERC_60_OU_MAIS_URBANA
-            metodo: soma
+        transformacoes_colunas:
+          - fonte: PERC_0_A_24_URBANA
+            destino: FAIXA_ETARIA_0_24_URBANA_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
 
         remover_colunas:
           - POP_RESIDENTE_URBANA
+          - PERC_25_A_39_URBANA
+          - PERC_40_A_59_URBANA
+          - PERC_60_OU_MAIS_URBANA
 
       - sheet_id: C
         descricao_sheet: "População rural por faixas etárias."
@@ -103,15 +119,17 @@ tabelas:
               - PERC_15_A_24_RURAL
             metodo: soma
 
-          - destino: PERC_25_OU_MAIS_RURAL
-            fontes:
-              - PERC_25_A_39_RURAL
-              - PERC_40_A_59_RURAL
-              - PERC_60_OU_MAIS_RURAL
-            metodo: soma
+        transformacoes_colunas:
+          - fonte: PERC_0_A_24_RURAL
+            destino: FAIXA_ETARIA_0_24_RURAL_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
 
         remover_colunas:
           - POP_RESIDENTE_RURAL
+          - PERC_25_A_39_RURAL
+          - PERC_40_A_59_RURAL
+          - PERC_60_OU_MAIS_RURAL
 
   tab3:
     descricao_tabela: "Distribuição da população com 15 anos ou mais por grandes faixas etárias."

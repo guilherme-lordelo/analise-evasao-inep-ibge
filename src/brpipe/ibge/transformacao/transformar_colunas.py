@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
-from brpipe.ibge.config.tabelas import SheetIBGEConfig, TransformacaoColunaConfig
+from brpipe.ibge.config.models import SheetIBGEConfig, TransformacaoColunaConfig
 
 
 def aplicar_transformacoes_colunas(

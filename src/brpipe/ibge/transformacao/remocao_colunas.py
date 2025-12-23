@@ -1,5 +1,5 @@
 from pandas import DataFrame
-from brpipe.ibge.config.tabelas import SheetIBGEConfig
+from brpipe.ibge.config.models import SheetIBGEConfig
 
 
 def remover_colunas(

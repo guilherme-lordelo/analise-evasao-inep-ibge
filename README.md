@@ -31,20 +31,20 @@ O código-fonte é modularizado nos seguintes subdiretórios:
 
 O comportamento do pipeline é definido pelos arquivos de configuração, permitindo ajustes em cálculos e estruturas sem alterar o código-fonte.
 
-## Configuração INEP (`inep.yaml`)
+## Configuração INEP (`inep.yml`)
 
 Gerencia os Microdados do Censo da Educação Superior.
 
 *   **Fórmulas Dinâmicas:** Utiliza `{p}` (ano base) e `{n}` (ano seguinte).
     *   *Exemplo:* `expressao: "QT_MAT_TOTAL_{n} - QT_MAT_TOTAL_{p}"` calcula a variação absoluta de matrículas.
-*   **Regras de Validação:** Filtros opcionais associados a cada fórmula definidos pelo usuário, servindo para validar ou invalidar as mesmas.
-*   **Mapeamento de Cabeçalhos:** A chave `mapeamento_colunas` normaliza divergências de nomes entre diferentes anos do Censo.
+*   **Regras de Validação:** Filtros opcionais definidos pelo usuário associados a alguma fórmula, servindo para validar ou invalidar as mesmas.
+*   **Mapeamento de Cabeçalhos:** O campo `mapeamento_colunas` normaliza divergências de nomes entre diferentes anos do Censo.
 *   **Peso:** `coluna_peso_inep` Define qual variável quantitativa será utilizada como base numérica nas agregações condicionadas por variáveis categóricas. Exemplo:
     `TP_REDE` define se a rede é pública ou privada.
     Se `QT_MAT_TOTAL` for selecionada como coluna de peso, as agregações calcularão distribuição percentual de alunos matriculados em cada tipo de rede.
     Nesse processo, a variável categórica é desdobrada em colunas derivadas, uma para cada valor possível da categoria definido no YAML.
 
-## Configuração IBGE (`ibge.yaml`)
+## Configuração IBGE (`ibge.yml`)
 
 Gerencia dados demográficos e estruturação de tabelas de população.
 
@@ -52,7 +52,14 @@ Gerencia dados demográficos e estruturação de tabelas de população.
     *   **fontes:** Colunas originais do CSV.
     *   **destino:** Nova coluna consolidada.
     *   **metodo:** Operação aplicada (ex: `soma`).
+*   **Transformação Logit (`transformacoes_logit`):** Aplica a transformação logit em variáveis de porcentagem.
+    *   **fonte:** Coluna original
+    *   **destino:** Nova coluna contendo o valor transformado em logit.
+    *   **metodo:** Transformação matemática `logit(x) = ln(x / (1 - x))`.
+
 *   **Remoção:** O campo `remover_colunas` permite excluir variáveis indesejadas.
+
+Colunas usadas como base para transformações são automaticamente removidas e não precisam ser incluídas para remoção. O objetivo é não manter colunas redundantes no conjunto de análise final.
 
 ## Regras de Customização
 

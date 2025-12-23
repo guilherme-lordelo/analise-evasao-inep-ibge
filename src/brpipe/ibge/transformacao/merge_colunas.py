@@ -1,6 +1,6 @@
 import pandas as pd
 from pandas import DataFrame
-from brpipe.ibge.config.tabelas import SheetIBGEConfig, MergeColunasConfig
+from brpipe.ibge.config.models import SheetIBGEConfig, MergeColunasConfig
 
 
 def aplicar_merges_colunas(

@@ -1,5 +1,5 @@
 # src/ibge/_config/__init__.py
-from brpipe.ibge.config.loader import COLUNAS_BASE_IBGE, TABELAS_IBGE
+from brpipe.ibge.config.runtime import COLUNAS_BASE_IBGE, TABELAS_IBGE
 
 __all__ = [
     "COLUNAS_BASE_IBGE",

@@ -137,6 +137,7 @@ tabelas:
       - sheet_id: A
         descricao_sheet: "Totais gerais de população de 15 anos ou mais subdivididos por faixa etária."
         arquivo: "tab3_populacao_15_mais.csv"
+
         colunas:
           - PESSOAS_15_MAIS_TOTAL
           - PERC_15_MAIS
@@ -148,11 +149,40 @@ tabelas:
           - PERC_40_59
           - PESSOAS_60_MAIS_TOTAL
           - PERC_60_MAIS
+
+        merges_colunas:
+          - destino: PERC_15_A_39
+            fontes:
+              - PERC_15_24
+              - PERC_25_39
+            metodo: soma
+
+        transformacoes_colunas:
+          - fonte: PERC_15_A_39
+            destino: FAIXA_ETARIA_15_39_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
+
+          - fonte: PERC_60_MAIS
+            destino: FAIXA_ETARIA_60_MAIS_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
+
+        remover_colunas:
+          - PESSOAS_15_MAIS_TOTAL
+          - PESSOAS_15_24_TOTAL
+          - PESSOAS_25_39_TOTAL
+          - PESSOAS_40_59_TOTAL
+          - PESSOAS_60_MAIS_TOTAL
+          - PERC_15_MAIS
+          - PERC_40_59
+
   tab4:
     descricao_tabela: "Unidades domésticas segundo o sexo do responsável, incluindo indicadores de responsabilidade única ou compartilhada."
     sheets:
       - descricao_sheet: "Tabela única contendo totais e distribuição por sexo do responsável."
         arquivo: "tab4_unidades_domesticas_por_sexo.csv"
+
         colunas:
           - UNIDADES_DOMESTICAS_TOTAL
           - PERC_UNICO_RESP
@@ -164,33 +194,94 @@ tabelas:
           - PERC_UNICO_RESP_MULHER
           - PERC_MAIS_DE_1_RESP_MULHER
 
+        transformacoes_colunas:
+          - fonte: PERC_UNICO_RESP
+            destino: RESP_UNICO_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
+
+          - fonte: PERC_UNICO_RESP_HOMEM
+            destino: RESP_UNICO_HOMEM_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
+
+          - fonte: PERC_UNICO_RESP_MULHER
+            destino: RESP_UNICO_MULHER_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
+
+        remover_colunas:
+          - UNIDADES_DOMESTICAS_TOTAL
+          - UNIDADES_DOMESTICAS_HOMEM
+          - UNIDADES_DOMESTICAS_MULHER
+          - PERC_MAIS_DE_1_RESP
+          - PERC_MAIS_DE_1_RESP_HOMEM
+          - PERC_MAIS_DE_1_RESP_MULHER
+
+
   tab7:
     descricao_tabela: "Condições de saneamento dos domicílios, separadas por totais, área urbana e área rural."
     sheets:
       - sheet_id: A
         descricao_sheet: "Situação de saneamento considerando todos os domicílios do município."
         arquivo: "tab7_saneamento_total.csv"
+
         colunas:
           - DOMICILIOS_TOTAL
           - PERC_SANEAMENTO_ADEQUADO
           - PERC_SANEAMENTO_SEMI_ADEQUADO
           - PERC_SANEAMENTO_INADEQUADO
 
+        transformacoes_colunas:
+          - fonte: PERC_SANEAMENTO_ADEQUADO
+            destino: SANEAMENTO_ADEQUADO_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
+
+        remover_colunas:
+          - DOMICILIOS_TOTAL
+          - PERC_SANEAMENTO_SEMI_ADEQUADO
+          - PERC_SANEAMENTO_INADEQUADO
+
       - sheet_id: B
         descricao_sheet: "Situação de saneamento dos domicílios em áreas urbanas."
         arquivo: "tab7_saneamento_urbano.csv"
+
         colunas:
           - DOMICILIOS_URBANOS
           - PERC_SANEAMENTO_ADEQUADO_URBANO
           - PERC_SANEAMENTO_SEMI_ADEQUADO_URBANO
           - PERC_SANEAMENTO_INADEQUADO_URBANO
 
+        transformacoes_colunas:
+          - fonte: PERC_SANEAMENTO_ADEQUADO_URBANO
+            destino: SANEAMENTO_ADEQUADO_URBANO_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
+
+        remover_colunas:
+          - DOMICILIOS_URBANOS
+          - PERC_SANEAMENTO_SEMI_ADEQUADO_URBANO
+          - PERC_SANEAMENTO_INADEQUADO_URBANO
+
       - sheet_id: C
         descricao_sheet: "Situação de saneamento dos domicílios em áreas rurais."
         arquivo: "tab7_saneamento_rural.csv"
+
         colunas:
           - DOMICILIOS_RURAIS
           - PERC_SANEAMENTO_ADEQUADO_RURAL
+          - PERC_SANEAMENTO_SEMI_ADEQUADO_RURAL
+          - PERC_SANEAMENTO_INADEQUADO_RURAL
+
+        transformacoes_colunas:
+          - fonte: PERC_SANEAMENTO_ADEQUADO_RURAL
+            destino: SANEAMENTO_ADEQUADO_RURAL_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
+
+        remover_colunas:
+          - DOMICILIOS_RURAIS
           - PERC_SANEAMENTO_SEMI_ADEQUADO_RURAL
           - PERC_SANEAMENTO_INADEQUADO_RURAL
 
@@ -235,12 +326,14 @@ tabelas:
           - VALOR_MEDIO_PARDA
           - VALOR_MEDIO_AMARELA
           - VALOR_MEDIO_INDIGENA
+
   tab12:
     descricao_tabela: "População residente por faixas de rendimento, com detalhamento total, urbano e rural."
     sheets:
       - sheet_id: A
         descricao_sheet: "População residente total por faixas de rendimento."
         arquivo: "tab12_rendimento_total.csv"
+
         colunas:
           - POP_RESIDENTE_TOTAL
           - PERC_ATE_70_REAIS
@@ -248,9 +341,28 @@ tabelas:
           - PERC_ATE_MEIO_SM
           - PERC_ATE_60_PERC_MEDIANA
 
+        merges_colunas:
+          - destino: PERC_BAIXA_RENDA
+            fontes:
+              - PERC_ATE_70_REAIS
+              - PERC_ATE_QUARTO_SM
+              - PERC_ATE_MEIO_SM
+            metodo: soma
+
+        transformacoes_colunas:
+          - fonte: PERC_BAIXA_RENDA
+            destino: BAIXA_RENDA_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
+
+        remover_colunas:
+          - POP_RESIDENTE_TOTAL
+          - PERC_ATE_60_PERC_MEDIANA
+
       - sheet_id: B
         descricao_sheet: "População residente urbana por faixas de rendimento."
         arquivo: "tab12_rendimento_urbano.csv"
+
         colunas:
           - POP_RESIDENTE_URBANA
           - PERC_ATE_70_REAIS_URBANA
@@ -258,9 +370,28 @@ tabelas:
           - PERC_ATE_MEIO_SM_URBANA
           - PERC_ATE_60_PERC_MEDIANA_URBANA
 
+        merges_colunas:
+          - destino: PERC_BAIXA_RENDA_URBANA
+            fontes:
+              - PERC_ATE_70_REAIS_URBANA
+              - PERC_ATE_QUARTO_SM_URBANA
+              - PERC_ATE_MEIO_SM_URBANA
+            metodo: soma
+
+        transformacoes_colunas:
+          - fonte: PERC_BAIXA_RENDA_URBANA
+            destino: BAIXA_RENDA_URBANA_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
+
+        remover_colunas:
+          - POP_RESIDENTE_URBANA
+          - PERC_ATE_60_PERC_MEDIANA_URBANA
+
       - sheet_id: C
         descricao_sheet: "População residente rural por faixas de rendimento."
         arquivo: "tab12_rendimento_rural.csv"
+
         colunas:
           - POP_RESIDENTE_RURAL
           - PERC_ATE_70_REAIS_RURAL
@@ -268,11 +399,30 @@ tabelas:
           - PERC_ATE_MEIO_SM_RURAL
           - PERC_ATE_60_PERC_MEDIANA_RURAL
 
+        merges_colunas:
+          - destino: PERC_BAIXA_RENDA_RURAL
+            fontes:
+              - PERC_ATE_70_REAIS_RURAL
+              - PERC_ATE_QUARTO_SM_RURAL
+              - PERC_ATE_MEIO_SM_RURAL
+            metodo: soma
+
+        transformacoes_colunas:
+          - fonte: PERC_BAIXA_RENDA_RURAL
+            destino: BAIXA_RENDA_RURAL_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
+
+        remover_colunas:
+          - POP_RESIDENTE_RURAL
+          - PERC_ATE_60_PERC_MEDIANA_RURAL
+
   tab13:
     descricao_tabela: "População com saneamento inadequado distribuída por faixas de rendimento."
     sheets:
       - descricao_sheet: "Tabela única com totais de população em domicílios com saneamento inadequado por faixas de rendimento."
         arquivo: "tab13_saneamento_inadequado_por_renda.csv"
+
         colunas:
           - POP_SANEAMENTO_INADEQUADO_TOTAL
           - PERC_ATE_70_REAIS
@@ -280,14 +430,48 @@ tabelas:
           - PERC_ATE_MEIO_SM
           - PERC_ATE_60_PERC_MEDIANA
 
+        merges_colunas:
+          - destino: PERC_BAIXA_RENDA_SANEAMENTO_INADEQUADO
+            fontes:
+              - PERC_ATE_70_REAIS
+              - PERC_ATE_QUARTO_SM
+              - PERC_ATE_MEIO_SM
+            metodo: soma
+
+        transformacoes_colunas:
+          - fonte: PERC_BAIXA_RENDA_SANEAMENTO_INADEQUADO
+            destino: BAIXA_RENDA_SANEAMENTO_INADEQUADO_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
+
+        remover_colunas:
+          - POP_SANEAMENTO_INADEQUADO_TOTAL
+          - PERC_ATE_60_PERC_MEDIANA
+
   tab14:
-    descricao_tabela: "Taxas de analfabetismo em diferentes faixas etárias nos anos 2000 e 2010."
+    descricao_tabela: "Taxa de analfabetismo total (2010)."
     sheets:
-      - descricao_sheet: "Tabela única contendo taxas totais e por grupos etários."
+      - descricao_sheet: "Tabela única contendo a taxa total de analfabetismo em 2010."
         arquivo: "tab14_taxa_analfabetismo.csv"
+
         colunas:
           - TX_ANALFABETISMO_2000_TOTAL
           - TX_ANALFABETISMO_2010_TOTAL
+          - TX_ANALFABETISMO_2000_15_24
+          - TX_ANALFABETISMO_2010_15_24
+          - TX_ANALFABETISMO_2000_25_59
+          - TX_ANALFABETISMO_2010_25_59
+          - TX_ANALFABETISMO_2000_60_MAIS
+          - TX_ANALFABETISMO_2010_60_MAIS
+
+        transformacoes_colunas:
+          - fonte: TX_ANALFABETISMO_2010_TOTAL
+            destino: ANALFABETISMO_TOTAL_LOGIT
+            tipo: logit
+            escala_origem: "0-100"
+
+        remover_colunas:
+          - TX_ANALFABETISMO_2000_TOTAL
           - TX_ANALFABETISMO_2000_15_24
           - TX_ANALFABETISMO_2010_15_24
           - TX_ANALFABETISMO_2000_25_59
@@ -300,10 +484,22 @@ tabelas:
     sheets:
       - descricao_sheet: "Tabela única contendo indicadores de vulnerabilidade em 2000 e 2010."
         arquivo: "tab16_vulnerabilidade_0a5.csv"
+
         colunas:
-          - PERC_RESPONSAVEL_ANALFABETO_2000
           - PERC_RESPONSAVEL_ANALFABETO_2010
-          - PERC_SANEAMENTO_INADEQUADO_2000
           - PERC_SANEAMENTO_INADEQUADO_2010
-          - PERC_AMBOS_ANALFABETO_E_INADEQUADO_2000
           - PERC_AMBOS_ANALFABETO_E_INADEQUADO_2010
+
+        merges_colunas:
+          - destino: PERC_VULNERABILIDADE_0A5
+            fontes:
+              - PERC_RESPONSAVEL_ANALFABETO_2010
+              - PERC_SANEAMENTO_INADEQUADO_2010
+              - PERC_AMBOS_ANALFABETO_E_INADEQUADO_2010
+            metodo: media
+
+        transformacoes_colunas:
+          - fonte: PERC_VULNERABILIDADE_0A5
+            destino: VULNERABILIDADE_0A5_LOGIT
+            tipo: logit
+            escala_origem: "0-100"

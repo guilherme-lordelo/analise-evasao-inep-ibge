@@ -6,12 +6,6 @@ from brpipe.utils.colunas_base import get_colunas_municipio
 
 @dataclass(frozen=True)
 class VariaveisConfig:
-    """
-    Configuração semântica das colunas do dado bruto INEP
-    (após mapeamento de divergentes).
-
-    Não representa a estrutura dos dados processados (wide/long).
-    """
 
     variaveis_cfg: dict
 
@@ -24,6 +18,7 @@ class VariaveisConfig:
     variaveis: List[str]
 
     temporais: List[str]
+    categoricas_original: List[str]
     categoricas: List[str]
     quantitativas: List[str]
 
@@ -69,10 +64,26 @@ def carregar_variaveis(_cfg: dict) -> VariaveisConfig:
 
     variaveis = list(dict.fromkeys(variaveis))
 
-    valores_categoricos = {
-        var: set(props["valores"].keys())
-        for var, props in variaveis_cfg.get("categoricas", {}).items()
-    }
+    valores_categoricos: Dict[str, Set[str]] = {}
+    categoricas_original: List[str] = []
+
+    for var, props in variaveis_cfg.get("categoricas", {}).items():
+        valores = set(props.get("valores", {}).keys())
+        filtro_excluir = set(props.get("filtro_excluir", []))
+
+        if filtro_excluir:
+            categoricas_original.append(var)
+
+        valores_filtrados = valores - filtro_excluir
+
+        if not valores_filtrados:
+            raise ValueError(
+                f"A variável categórica '{var}' ficou sem valores possíveis "
+                f"após aplicação do filtro_excluir={filtro_excluir}"
+            )
+
+        valores_categoricos[var] = valores_filtrados
+
 
     coluna_peso = _cfg.get("coluna_peso_inep", "QT_MAT_TOTAL")
 
@@ -95,6 +106,7 @@ def carregar_variaveis(_cfg: dict) -> VariaveisConfig:
         variaveis=variaveis,
         temporais=temporais,
         categoricas=categoricas,
+        categoricas_original=categoricas_original,
         quantitativas=quantitativas,
         valores_categoricos=valores_categoricos,
         coluna_ano=coluna_ano,

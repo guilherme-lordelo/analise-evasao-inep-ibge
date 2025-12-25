@@ -1,4 +1,5 @@
 from pathlib import Path
+from brpipe.inep.extracao.filtro_categorico import filtrar_variaveis_categoricas
 import pandas as pd
 
 from brpipe.inep.extracao.header import (
@@ -41,15 +42,14 @@ def orquestrar_extracao(
 	if faltantes:
 		print(f"Atenção: colunas não encontradas: {faltantes}")
 
-	# 2. Leitura em chunks (somente colunas físicas)
 	print(f"Lendo arquivo de {ano} em chunks...")
 	df = ler_em_chunks(input_path, colunas_fisicas)
 
-	# 3. Normalização para o schema lógico
 	if mapeamento:
 		df = df.rename(columns=mapeamento)
+	
+	df = filtrar_variaveis_categoricas(df)
 
-	# 4. Limpeza final
 	print("Aplicando limpeza de municípios...")
 	df = limpar_municipios(df)
 

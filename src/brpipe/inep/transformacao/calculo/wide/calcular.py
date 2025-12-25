@@ -2,18 +2,16 @@ import re
 import types
 import pandas as pd
 import numpy as np
-from brpipe.inep.config import FORMULAS_CONFIG, ANOS
+
 
 IDENTIFIER_RE = re.compile(r"[A-Za-z_]\w*")
+
 
 def _extrair_tokens(expr: str):
     return set(t for t in IDENTIFIER_RE.findall(expr) if not t.isdigit())
 
 
 def _montar_contexto(df, tokens):
-    """
-    Cria o dicionário de contexto para eval()
-    """
     contexto = {col: df[col] for col in df.columns}
     contexto["np"] = np
 
@@ -23,21 +21,28 @@ def _montar_contexto(df, tokens):
 
     safe_context = {}
     for k, v in contexto.items():
-        if isinstance(v, types.ModuleType) or isinstance(v, types.FunctionType):
+        if isinstance(v, (types.ModuleType, types.FunctionType)):
             safe_context[k] = pd.Series(np.nan, index=df.index)
         else:
             safe_context[k] = v
 
     return safe_context
 
-def _avaliar_regras(regras, df, ano_base, ano_seguinte):
+
+def _avaliar_regras(
+    regras,
+    limites_validacao,
+    df,
+    ano_base,
+    ano_seguinte,
+):
     """
     Retorna:
-      - serie_codigos: códigos binários com prefixo "BIN_"
-      - serie_ok: boolean, True se todas as regras forem "1"
+      - serie_codigos
+      - serie_ok
     """
     if not regras:
-        return None, None  # sinaliza ausência de regras
+        return None, None
 
     regras_proc = [
         r.replace("{p}", str(ano_base)).replace("{n}", str(ano_seguinte))
@@ -47,8 +52,8 @@ def _avaliar_regras(regras, df, ano_base, ano_seguinte):
     codigos = []
     oks = []
 
-    for idx, row in df.iterrows():
-        contexto = {**row.to_dict(), **FORMULAS_CONFIG.limites_validacao}
+    for _, row in df.iterrows():
+        contexto = {**row.to_dict(), **limites_validacao}
         bits = []
 
         for regra in regras_proc:
@@ -64,13 +69,20 @@ def _avaliar_regras(regras, df, ano_base, ano_seguinte):
 
     return (
         pd.Series(codigos, index=df.index),
-        pd.Series(oks, index=df.index, dtype=bool)
+        pd.Series(oks, index=df.index, dtype=bool),
     )
 
-def _avaliar_expressao(expressao, df, ano_base, ano_seguinte):
+
+def _avaliar_expressao(
+    expressao,
+    df,
+    ano_base,
+    ano_seguinte,
+):
     expr = (
-        expressao.replace("{p}", str(ano_base))
-                 .replace("{n}", str(ano_seguinte))
+        expressao
+        .replace("{p}", str(ano_base))
+        .replace("{n}", str(ano_seguinte))
     )
 
     tokens = _extrair_tokens(expr)
@@ -97,15 +109,26 @@ def _avaliar_expressao(expressao, df, ano_base, ano_seguinte):
 
     return serie.round(4)
 
-def calcular_formulas(df: pd.DataFrame) -> pd.DataFrame:
 
-    for ano_base, ano_seguinte in zip(ANOS[:-1], ANOS[1:]):
-        for nome_formula, config in FORMULAS_CONFIG.formulas.items():
+def calcular_formulas(
+    df: pd.DataFrame,
+    *,
+    anos: list,
+    formulas: dict,
+    limites_validacao: dict,
+) -> pd.DataFrame:
+
+    for ano_base, ano_seguinte in zip(anos[:-1], anos[1:]):
+        for nome_formula, config in formulas.items():
 
             regras = config.regras_validacao
 
             serie_codigos, serie_ok = _avaliar_regras(
-                regras, df, ano_base, ano_seguinte
+                regras,
+                limites_validacao,
+                df,
+                ano_base,
+                ano_seguinte,
             )
 
             if serie_codigos is not None:
@@ -115,11 +138,14 @@ def calcular_formulas(df: pd.DataFrame) -> pd.DataFrame:
                 serie_ok = pd.Series(True, index=df.index)
 
             valores = _avaliar_expressao(
-                config.expressao, df, ano_base, ano_seguinte
+                config.expressao,
+                df,
+                ano_base,
+                ano_seguinte,
             )
 
-            valores = valores.where(serie_ok, np.nan)
-
-            df[f"{nome_formula.upper()}_{ano_base}_{ano_seguinte}"] = valores
+            df[f"{nome_formula.upper()}_{ano_base}_{ano_seguinte}"] = (
+                valores.where(serie_ok, np.nan)
+            )
 
     return df

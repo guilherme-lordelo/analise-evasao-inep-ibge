@@ -4,19 +4,15 @@ import types
 import numpy as np
 import pandas as pd
 
-from brpipe.inep.config import ANOS, VARIAVEIS_YAML, FORMULAS_CONFIG
-
 
 IDENTIFIER_RE = re.compile(r"[A-Za-z_]\w*")
+
 
 def _extrair_tokens(expr: str):
     return set(t for t in IDENTIFIER_RE.findall(expr) if not t.isdigit())
 
 
 def _montar_contexto(df, tokens):
-    """
-    Cria o dicionário de contexto para eval()
-    """
     contexto = {col: df[col] for col in df.columns}
     contexto["np"] = np
 
@@ -26,7 +22,7 @@ def _montar_contexto(df, tokens):
 
     safe_context = {}
     for k, v in contexto.items():
-        if isinstance(v, types.ModuleType) or isinstance(v, types.FunctionType):
+        if isinstance(v, (types.ModuleType, types.FunctionType)):
             safe_context[k] = pd.Series(np.nan, index=df.index)
         else:
             safe_context[k] = v
@@ -35,9 +31,6 @@ def _montar_contexto(df, tokens):
 
 
 def _preparar_long_pareado(df, ano_base, ano_seguinte, col_ano, col_chave):
-    """
-    Retorna um dataframe com colunas _p e _n para anos base e seguinte.
-    """
     df_p = (
         df[df[col_ano] == ano_base]
         .drop(columns=[col_ano])
@@ -60,13 +53,13 @@ def _preparar_long_pareado(df, ano_base, ano_seguinte, col_ano, col_chave):
         how="inner"
     )
 
-    # manter chave limpa
     df_merge[col_chave] = df_merge[chave_p]
-
     return df_merge
+
 
 def _avaliar_regras_long(
     regras,
+    limites_validacao,
     df,
     ano_base,
     ano_seguinte,
@@ -89,7 +82,7 @@ def _avaliar_regras_long(
     oks = []
 
     for _, row in df_calc.iterrows():
-        contexto = {**row.to_dict(), **FORMULAS_CONFIG.limites_validacao}
+        contexto = {**row.to_dict(), **limites_validacao}
         bits = []
 
         for regra in regras_proc:
@@ -99,8 +92,7 @@ def _avaliar_regras_long(
             except Exception:
                 bits.append("0")
 
-        codigo = "".join(bits)
-        codigos.append("BIN_" + codigo)
+        codigos.append("BIN_" + "".join(bits))
         oks.append(all(b == "1" for b in bits))
 
     return pd.DataFrame({
@@ -123,11 +115,7 @@ def _avaliar_expressao_long(
         df, ano_base, ano_seguinte, col_ano, col_chave
     )
 
-    expr = (
-        expressao
-        .replace("{p}", "p")
-        .replace("{n}", "n")
-    )
+    expr = expressao.replace("{p}", "p").replace("{n}", "n")
 
     tokens = _extrair_tokens(expr)
     tokens.discard("np")
@@ -149,12 +137,17 @@ def _avaliar_expressao_long(
         "VALOR": valores.round(4)
     })
 
-def _resolver_coluna_chave(df: pd.DataFrame, col_chave: str | None) -> str:
 
-    if col_chave in df.columns:
+def _resolver_coluna_chave(
+    df: pd.DataFrame,
+    col_chave: str | None,
+    campos_padrao: list[str],
+) -> str:
+
+    if col_chave and col_chave in df.columns:
         return col_chave
 
-    for c in VARIAVEIS_YAML.campos_padrao:
+    for c in campos_padrao:
         if c in df.columns:
             return c
 
@@ -163,19 +156,24 @@ def _resolver_coluna_chave(df: pd.DataFrame, col_chave: str | None) -> str:
 
     raise ValueError("Nenhuma coluna de chave válida encontrada no dataframe")
 
+
 def calcular_formulas(
     df: pd.DataFrame,
     *,
+    anos: list,
+    formulas: dict,
+    limites_validacao: dict,
+    campos_padrao: list[str],
     col_ano: str,
-    col_chave: str | None
+    col_chave: str | None,
 ) -> pd.DataFrame:
 
     if col_ano not in df.columns:
         raise ValueError(f"col_ano '{col_ano}' não encontrado no dataframe")
 
-    col_chave = _resolver_coluna_chave(df, col_chave)
+    col_chave = _resolver_coluna_chave(df, col_chave, campos_padrao)
 
-    for nome_formula, config in FORMULAS_CONFIG.formulas.items():
+    for nome_formula, config in formulas.items():
 
         nome_coluna = nome_formula.upper()
 
@@ -184,11 +182,12 @@ def calcular_formulas(
 
         regras = config.regras_validacao
 
-        for ano_base, ano_seguinte in zip(ANOS[:-1], ANOS[1:]):
+        for ano_base, ano_seguinte in zip(anos[:-1], anos[1:]):
 
             df_regras = (
                 _avaliar_regras_long(
                     regras,
+                    limites_validacao,
                     df,
                     ano_base,
                     ano_seguinte,
@@ -213,7 +212,6 @@ def calcular_formulas(
                     on=[col_chave, col_ano],
                     how="left"
                 )
-
                 df_valores["VALOR"] = df_valores["VALOR"].where(
                     df_valores["OK"], np.nan
                 )

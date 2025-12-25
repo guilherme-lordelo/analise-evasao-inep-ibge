@@ -1,40 +1,39 @@
 import gc
 import pandas as pd
+from typing import Callable
 
-from brpipe.inep.config import ARQUIVOS, VARIAVEIS_YAML
 from brpipe.inep.transformacao.integracao.long.agregacao import agrega_categoricas
 from brpipe.inep.transformacao.integracao.long.padronizacao import padronizar_categoricas
-
-from brpipe.utils.io import read_csv
-from brpipe.utils.paths import INEP_REDUZIDO
 from brpipe.utils.reduzir_colunas import reduzir_colunas
 
 
 def fetch_categoricas(
-	anos: list[str],
+	leitores_por_ano: dict[str, Callable[[], pd.DataFrame]],
+	colunas_quantitativas: list[str],
 	include_estadual: bool = True,
 	include_nacional: bool = True,
 ):
 	"""
-	Lê cada ano individualmente, reduz para categóricas, padroniza,
-	agrega por município, estado e nacional.
+	Recebe leitores e executa o pipeline LONG de categóricas.
 	"""
 
-	def leitor_ano(ano: str):
-		df = read_csv(
-			INEP_REDUZIDO
-			/ f"{ARQUIVOS.extracao_prefixo_out}{ano}{ARQUIVOS.extracao_ext_out}"
-		)
+	def leitor_processado(ano: str):
+		df = leitores_por_ano[ano]()
+
 		df = reduzir_colunas(
 			df,
-			VARIAVEIS_YAML.quantitativas,
+			colunas_quantitativas,
 			manter_peso=True,
 			inplace=True,
 		)
+
 		df = padronizar_categoricas(df)
 		return df
 
-	leitores = {ano: (lambda a=ano: leitor_ano(a)) for ano in anos}
+	leitores = {
+		ano: (lambda a=ano: leitor_processado(a))
+		for ano in leitores_por_ano
+	}
 
 	return agrega_categoricas(
 		leitores,
@@ -43,26 +42,27 @@ def fetch_categoricas(
 	)
 
 
-def preparar_quantitativas(anos: list[str]):
+def preparar_quantitativas(
+	leitores_por_ano: dict[str, Callable[[], pd.DataFrame]],
+	colunas_categoricas: list[str],
+	colunas_quantitativas: list[str],
+):
 	"""
-	Lê os anos, reduz para quantitativas, e devolve o grande dataframe concatenado.
+	Recebe leitores e executa o pipeline LONG de quantitativas.
 	"""
 
 	dfs_quant = []
 
-	for ano in anos:
-		df = read_csv(
-			INEP_REDUZIDO
-			/ f"{ARQUIVOS.extracao_prefixo_out}{ano}{ARQUIVOS.extracao_ext_out}"
-		)
+	for ano, leitor in leitores_por_ano.items():
+		df = leitor()
 
 		df = reduzir_colunas(
 			df,
-			VARIAVEIS_YAML.categoricas,
+			colunas_categoricas,
 			inplace=True,
 		)
 
-		for var in VARIAVEIS_YAML.quantitativas:
+		for var in colunas_quantitativas:
 			if var in df.columns:
 				df[var] = df[var].fillna(0.0).astype(float)
 

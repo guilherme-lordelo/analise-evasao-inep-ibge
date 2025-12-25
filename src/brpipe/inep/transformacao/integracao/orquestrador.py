@@ -1,11 +1,3 @@
-from brpipe.inep.config import (
-    ANOS,
-    ARQUIVOS,
-    VARIAVEIS_YAML,
-)
-from brpipe.utils.paths import INEP_REDUZIDO
-from brpipe.utils.io import read_csv
-
 from brpipe.inep.transformacao.integracao.wide.pipeline import (
     fetch_categoricas as fetch_categoricas_wide,
     preparar_quantitativas as preparar_quantitativas_wide,
@@ -22,27 +14,11 @@ from brpipe.inep.transformacao.integracao.long.agregacao import (
     merge_quantitativas_com_categoricas as merge_long
 )
 
-def _construir_leitores_csv(
-    anos: list[str],
-):
-    """
-    Constrói leitores CSV por ano (agnóstico de formato).
-    """
-
-    def leitor_ano(ano: str):
-        return read_csv(
-            INEP_REDUZIDO
-            / f"{ARQUIVOS.extracao_prefixo_out}{ano}{ARQUIVOS.extracao_ext_out}"
-        )
-
-    return {
-        ano: (lambda a=ano: leitor_ano(a))
-        for ano in anos
-    }
-
+from brpipe.inep.config.transformacao import INEPConfigTransformacao
 
 
 def orquestrar_integracao(
+    config: INEPConfigTransformacao,
     formato: str = "long",
     include_estadual: bool = True,
     include_nacional: bool = True,
@@ -55,23 +31,21 @@ def orquestrar_integracao(
     if formato not in {"wide", "long"}:
         raise ValueError("formato deve ser 'wide' ou 'long'")
 
-    anos = [str(ano) for ano in ANOS]
+    leitores = config.leitores_por_ano
 
     # WIDE
     if formato == "wide":
 
-        leitores = _construir_leitores_csv(anos)
-
         cat_results = fetch_categoricas_wide(
             leitores_por_ano=leitores,
-            colunas_quantitativas=VARIAVEIS_YAML.quantitativas,
+            colunas_quantitativas=config.colunas_quantitativas,
             include_estadual=include_estadual,
             include_nacional=include_nacional,
         )
 
         df_quant_all = preparar_quantitativas_wide(
             leitores_por_ano=leitores,
-            colunas_categoricas=VARIAVEIS_YAML.categoricas,
+            colunas_categoricas=config.colunas_categoricas,
         )
 
         return merge_wide(
@@ -83,19 +57,17 @@ def orquestrar_integracao(
 
     # LONG
     else:
-        leitores = _construir_leitores_csv(anos)
-
         cat_results = fetch_categoricas_long(
             leitores_por_ano=leitores,
-            colunas_quantitativas=VARIAVEIS_YAML.quantitativas,
+            colunas_quantitativas=config.colunas_quantitativas,
             include_estadual=include_estadual,
             include_nacional=include_nacional,
         )
 
         df_quant_all = preparar_quantitativas_long(
             leitores_por_ano=leitores,
-            colunas_categoricas=VARIAVEIS_YAML.categoricas,
-            colunas_quantitativas=VARIAVEIS_YAML.quantitativas,
+            colunas_categoricas=config.colunas_categoricas,
+            colunas_quantitativas=config.colunas_quantitativas,
         )
 
         return merge_long(

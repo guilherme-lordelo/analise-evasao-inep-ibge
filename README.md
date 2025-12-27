@@ -95,10 +95,10 @@ A etapa de `extração` lê arquivos no formato `xls`, extrai todas as planilhas
 O arquivo de configuração controla os seguintes aspectos da `Extração`: 
 
 *   **Definição da estrutura de entrada e de saída:** Organiza e modela as planilhas para uso na extração e transformação. Exemplo:
-tab2: # Nome do arquivo de entrada
-  descricao_tabela: "População residente por faixas etárias, com detalhamento total, urbano e rural."
   ```yaml
-  sheets:
+    tab2: # Nome do arquivo de entrada
+        descricao_tabela: "População residente por faixas etárias, com detalhamento total, urbano e rural."
+    sheets:
     - sheet_id: A # Primeira planilha do arquivo
       descricao_sheet: "Totais gerais de população por faixas etárias."
       arquivo: "tab2_faixas_etarias_total.csv" # Nome de saída da primeira planilha

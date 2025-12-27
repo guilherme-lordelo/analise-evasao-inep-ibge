@@ -95,44 +95,44 @@ A etapa de `extração` lê arquivos no formato `xls`, extrai todas as planilhas
 O arquivo de configuração controla os seguintes aspectos da `Extração`: 
 
 *   **Definição da estrutura de entrada e de saída:** Organiza e modela as planilhas para uso na extração e transformação. Exemplo:
-tab2: # Nome do arquivo de entrada
-  descricao_tabela: "População residente por faixas etárias, com detalhamento total, urbano e rural."
   ```yaml
-  sheets:
-    - sheet_id: A # Primeira planilha do arquivo
-      descricao_sheet: "Totais gerais de população por faixas etárias."
-      arquivo: "tab2_faixas_etarias_total.csv" # Nome de saída da primeira planilha
-      colunas: # Novos nomes de colunas
-        - POP_TOTAL
-        - PERC_URBANA
-        - PERC_RURAL
-        - PERC_HOMEM
-        - PERC_MULHER
-        - RAZAO_SEXO
+    tab2: # Nome do arquivo de entrada
+        descricao_tabela: "População residente por faixas etárias, com detalhamento total, urbano e rural."
+        sheets:
+          - sheet_id: A # Primeira planilha do arquivo
+            descricao_sheet: "Totais gerais de população por faixas etárias."
+            arquivo: "tab2_faixas_etarias_total.csv" # Nome de saída da primeira planilha
+            colunas: # Novos nomes de colunas
+                - POP_TOTAL
+                - PERC_URBANA
+                - PERC_RURAL
+                - PERC_HOMEM
+                - PERC_MULHER
+                - RAZAO_SEXO
 
-    - sheet_id: B # Segunda planilha do arquivo
-      descricao_sheet: "População urbana por faixas etárias."
-      arquivo: "tab2_faixas_etarias_urbana.csv" # Nome de saída da segunda planilha
-      colunas: # Novos nomes de colunas
-        - POP_RESIDENTE_URBANA
-        - PERC_0_A_5_URBANA
-        - PERC_6_A_14_URBANA
-        - PERC_15_A_24_URBANA
-        - PERC_25_A_39_URBANA
-        - PERC_40_A_59_URBANA
-        - PERC_60_OU_MAIS_URBANA
+          - sheet_id: B # Segunda planilha do arquivo
+            descricao_sheet: "População urbana por faixas etárias."
+            arquivo: "tab2_faixas_etarias_urbana.csv" # Nome de saída da segunda planilha
+            colunas: # Novos nomes de colunas
+                - POP_RESIDENTE_URBANA
+                - PERC_0_A_5_URBANA
+                - PERC_6_A_14_URBANA
+                - PERC_15_A_24_URBANA
+                - PERC_25_A_39_URBANA
+                - PERC_40_A_59_URBANA
+                - PERC_60_OU_MAIS_URBANA
 
-    - sheet_id: C # Terceira planilha do arquivo
-      descricao_sheet: "População rural por faixas etárias."
-      arquivo: "tab2_faixas_etarias_rural.csv" # Nome de saída da terceira planilha
-      colunas: # Novos nomes de colunas
-        - POP_RESIDENTE_RURAL
-        - PERC_0_A_5_RURAL
-        - PERC_6_A_14_RURAL
-        - PERC_15_A_24_RURAL
-        - PERC_25_A_39_RURAL
-        - PERC_40_A_59_RURAL
-        - PERC_60_OU_MAIS_RURAL
+          - sheet_id: C # Terceira planilha do arquivo
+            descricao_sheet: "População rural por faixas etárias."
+            arquivo: "tab2_faixas_etarias_rural.csv" # Nome de saída da terceira planilha
+            colunas: # Novos nomes de colunas
+                - POP_RESIDENTE_RURAL
+                - PERC_0_A_5_RURAL
+                - PERC_6_A_14_RURAL
+                - PERC_15_A_24_RURAL
+                - PERC_25_A_39_RURAL
+                - PERC_40_A_59_RURAL
+                - PERC_60_OU_MAIS_RURAL
 ```
 
 **Transformação**

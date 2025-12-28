@@ -1,12 +1,18 @@
 from brpipe.viz.mapas.merge.municipios import merge_municipios_evasao
-from brpipe.viz.mapas.config.config import colunas_municipio
+from brpipe.viz.mapas.config import COLUNAS
 
-uf = colunas_municipio()["uf"]
+UF = COLUNAS.territoriais.municipio.uf
 
 def merge_uf_evasao(coluna: str):
     gdf = merge_municipios_evasao()
 
-    df_media = gdf.groupby(uf)[coluna].mean().reset_index()
-    gdf_uf = gdf.dissolve(by=uf, as_index=False)
+    df_media = (
+        gdf
+        .groupby(UF)[coluna]
+        .mean()
+        .reset_index()
+    )
 
-    return gdf_uf.merge(df_media, on=uf, how="left")
+    gdf_uf = gdf.dissolve(by=UF, as_index=False)
+
+    return gdf_uf.merge(df_media, on=UF, how="left")

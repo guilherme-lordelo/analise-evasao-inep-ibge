@@ -1,7 +1,5 @@
 from brpipe.viz.mapas.merge.municipios import merge_municipios_evasao
-from brpipe.viz.mapas.config.config import (
-    coluna_mapa, plot_cfg, municipios_cfg
-)
+from brpipe.viz.mapas.config import DADOS, PLOT, MUNICIPIOS
 from brpipe.viz.mapas.plot.base import plot_mapa
 
 def mapa_evasao_municipios(sigla_uf: str | None = None):
@@ -12,10 +10,10 @@ def mapa_evasao_municipios(sigla_uf: str | None = None):
 
     plot_mapa(
         gdf=gdf,
-        coluna=coluna_mapa(),
-        figsize=municipios_cfg()["figsize"],
-        cmap=plot_cfg()["cmap"],
-        legend_label=municipios_cfg()["legend_label"],
-        shrink=plot_cfg()["legend_shrink"],
+        coluna=DADOS.metrica_principal.coluna_mapa,
+        figsize=MUNICIPIOS.figsize,
+        cmap=PLOT.cmap,
+        legend_label=MUNICIPIOS.legend_label,
+        shrink=PLOT.legend_shrink,
         titulo=f"Evasão Municipal {f'— {sigla_uf}' if sigla_uf else ''}",
     )

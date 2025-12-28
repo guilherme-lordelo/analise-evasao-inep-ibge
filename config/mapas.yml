@@ -1,19 +1,20 @@
 dados:
-  evasao:
-    formato: long        # wide | long
-    arquivo: inep_municipios_2020_2022_L.csv
-    separador: ";"
-    coluna_mapa: EVASAO_MAPA
+  formato: long        # wide | long
+  arquivo: inep_municipios_2020_2022_L.csv
+  separador: ";"
 
-    wide:
-      coluna_valor: EVASAO_ANUAL
+  metricas:
+    principal:
+      coluna_mapa: VALOR_MAPA
 
-    long:
-      coluna_ano: NU_ANO_CENSO
-      coluna_valor: EVASAO_ANUAL
-      agregacao: mean
-      anos: [2020, 2021, 2022]
+      wide:
+        coluna_valor: EVASAO_ANUAL
 
+      long:
+        coluna_ano: NU_ANO_CENSO
+        coluna_valor: EVASAO_ANUAL
+        agregacao: mean
+        anos: [2020, 2021, 2022]
 
 colunas:
   territoriais:
@@ -22,18 +23,14 @@ colunas:
       tabela: CO_MUNICIPIO
       uf: SG_UF
 
-metricas:
-  evasao:
-    padrao: EVASAO_ANUAL
-
 plot:
   cmap: OrRd
   legend_shrink: 0.5
 
 municipios:
   figsize: [14, 14]
-  legend_label: "Taxa de Evasão Média (2020–2024)"
+  legend_label: "Valor médio da métrica"
 
 uf:
   figsize: [10, 10]
-  legend_label: "Evasão Média Estadual (2020–2024)"
+  legend_label: "Valor médio estadual"

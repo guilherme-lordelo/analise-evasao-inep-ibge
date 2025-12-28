@@ -1,18 +1,24 @@
-from brpipe.viz.mapas.merge.municipios import merge_municipios_evasao
+from brpipe.viz.mapas.malhas.uf import carregar_malha_uf
+from brpipe.viz.mapas.dados.uf import carregar_metrica_uf
 from brpipe.viz.mapas.config import COLUNAS
 
-UF = COLUNAS.territoriais.municipio.uf
+_uf = COLUNAS.territoriais.uf
+MALHA = _uf.malha
+TABELA = _uf.tabela
 
-def merge_uf_evasao(coluna: str):
-    gdf = merge_municipios_evasao()
+def merge_uf_evasao():
+    gdf = carregar_malha_uf()
+    df = carregar_metrica_uf()
 
-    df_media = (
-        gdf
-        .groupby(UF)[coluna]
-        .mean()
-        .reset_index()
+    df = carregar_metrica_uf()
+
+
+    gdf[MALHA] = gdf[MALHA].astype(str)
+    df[TABELA] = df[TABELA].astype(str)
+
+    return gdf.merge(
+        df,
+        left_on=MALHA,
+        right_on=TABELA,
+        how="left"
     )
-
-    gdf_uf = gdf.dissolve(by=UF, as_index=False)
-
-    return gdf_uf.merge(df_media, on=UF, how="left")

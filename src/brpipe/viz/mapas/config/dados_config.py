@@ -20,9 +20,20 @@ class MetricaConfig:
     wide: Optional[MetricaWideConfig] = None
     long: Optional[MetricaLongConfig] = None
 
+from dataclasses import dataclass
+from typing import Optional
+
+@dataclass(frozen=True)
+class ArquivosDadosConfig:
+    municipio: str
+    uf: str
+    nacional: Optional[str] = None
+
+from typing import Literal
+
 @dataclass(frozen=True)
 class DadosConfig:
     formato: Literal["wide", "long"]
-    arquivo: str
     separador: str
+    arquivos: ArquivosDadosConfig
     metrica_principal: MetricaConfig

@@ -1,5 +1,5 @@
 from brpipe.viz.mapas.malhas.municipios import carregar_malha_municipios
-from brpipe.viz.mapas.dados.evasao import carregar_metrica_municipios
+from brpipe.viz.mapas.dados.municipios import carregar_metrica_municipios
 from brpipe.viz.mapas.config import COLUNAS
 
 _municipio = COLUNAS.territoriais.municipio

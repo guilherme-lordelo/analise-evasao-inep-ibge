@@ -1,7 +1,11 @@
 dados:
   formato: long        # wide | long
-  arquivo: inep_municipios_2020_2022_L.csv
   separador: ";"
+
+  arquivos:
+    municipio: inep_municipios_2020_2022_L.csv
+    uf: inep_estados_2020_2022_L.csv
+    nacional: inep_nacional_2020_2022_L.csv
 
   metricas:
     principal:
@@ -23,6 +27,10 @@ colunas:
       tabela: CO_MUNICIPIO
       uf: SG_UF
 
+    uf:
+      malha: SIGLA_UF
+      tabela: SG_UF
+
 plot:
   cmap: OrRd
   legend_shrink: 0.5
@@ -32,5 +40,5 @@ municipios:
   legend_label: "Valor médio da métrica"
 
 uf:
-  figsize: [10, 10]
+  figsize: [14, 14]
   legend_label: "Valor médio estadual"

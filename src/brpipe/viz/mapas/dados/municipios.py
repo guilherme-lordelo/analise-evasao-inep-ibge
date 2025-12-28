@@ -4,9 +4,8 @@ from brpipe.utils.paths import INEP_TRANSFORMACOES
 from brpipe.viz.mapas.config import DADOS, COLUNAS
 
 
-
 def _carregar_csv() -> pd.DataFrame:
-    path = INEP_TRANSFORMACOES / DADOS.arquivo
+    path = INEP_TRANSFORMACOES / DADOS.arquivos.municipio
     return pd.read_csv(path, sep=DADOS.separador)
 
 

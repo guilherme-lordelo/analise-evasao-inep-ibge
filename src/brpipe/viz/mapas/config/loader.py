@@ -5,6 +5,7 @@ from .colunas_config import (
     ColunasConfig,
     TerritoriaisConfig,
     MunicipioColunasConfig,
+    UFColunasConfig,
 )
 from brpipe.utils.config import load_config
 from .plot_config import PlotConfig
@@ -16,16 +17,21 @@ _CFG = load_config("mapas")
 def carregar_dados() -> DadosConfig:
     dados = _CFG["dados"]
     metrica = dados["metricas"]["principal"]
+    arquivos = dados["arquivos"]
 
     return DadosConfig(
         formato=dados["formato"],
-        arquivo=dados["arquivo"],
         separador=dados.get("separador", ";"),
+        arquivos=ArquivosDadosConfig(
+            municipio=arquivos["municipio"],
+            uf=arquivos["uf"],
+            nacional=arquivos.get("nacional", {}),
+        ),
         metrica_principal=MetricaConfig(
             coluna_mapa=metrica["coluna_mapa"],
             wide=MetricaWideConfig(**metrica["wide"]) if "wide" in metrica else None,
             long=MetricaLongConfig(**metrica["long"]) if "long" in metrica else None,
-        )
+        ),
     )
 
 
@@ -39,7 +45,12 @@ def carregar_colunas() -> ColunasConfig:
                 malha=municipio["malha"],
                 tabela=municipio["tabela"],
                 uf=municipio["uf"],
+            ),
+            uf=UFColunasConfig(
+                malha=territoriais["uf"]["malha"],
+                tabela=territoriais["uf"]["tabela"],
             )
+            
         )
     )
 

@@ -1,21 +1,30 @@
 dados:
   evasao:
-    arquivo: inep_municipios_2020_2022_W.csv
+    formato: long        # wide | long
+    arquivo: inep_municipios_2020_2022_L.csv
     separador: ";"
+    coluna_mapa: EVASAO_MAPA
+
+    wide:
+      coluna_valor: EVASAO_ANUAL
+
+    long:
+      coluna_ano: NU_ANO_CENSO
+      coluna_valor: EVASAO_ANUAL
+      agregacao: mean
+      anos: [2020, 2021, 2022]
+
 
 colunas:
   territoriais:
     municipio:
       malha: CD_MUN
       tabela: CO_MUNICIPIO
-      uf: SIGLA_UF
+      uf: SG_UF
 
 metricas:
   evasao:
-    padrao: EVASAO_ANUAL_2020_2021
-    alternativas:
-      - EVASAO_MEDIA_2020_2024
-      - EVASAO_TOTAL_2020_2024
+    padrao: EVASAO_ANUAL
 
 plot:
   cmap: OrRd

@@ -1,6 +1,6 @@
 from brpipe.viz.mapas.merge.municipios import merge_municipios_evasao
 from brpipe.viz.mapas.config.config import (
-    coluna_evasao, plot_cfg, municipios_cfg
+    coluna_mapa, plot_cfg, municipios_cfg
 )
 from brpipe.viz.mapas.plot.base import plot_mapa
 
@@ -12,7 +12,7 @@ def mapa_evasao_municipios(sigla_uf: str | None = None):
 
     plot_mapa(
         gdf=gdf,
-        coluna=coluna_evasao(),
+        coluna=coluna_mapa(),
         figsize=municipios_cfg()["figsize"],
         cmap=plot_cfg()["cmap"],
         legend_label=municipios_cfg()["legend_label"],

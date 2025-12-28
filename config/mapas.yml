@@ -1,10 +1,30 @@
-evasao:
-  coluna_padrao: "EVASAO_MEDIA_PONDERADA_2020_2024"
+dados:
+  evasao:
+    arquivo: inep_municipios_2020_2022_W.csv
+    separador: ";"
+
+colunas:
+  territoriais:
+    municipio:
+      malha: CD_MUN
+      tabela: CO_MUNICIPIO
+      uf: SIGLA_UF
+
+metricas:
+  evasao:
+    padrao: EVASAO_ANUAL_2020_2021
+    alternativas:
+      - EVASAO_MEDIA_2020_2024
+      - EVASAO_TOTAL_2020_2024
 
 plot:
-  figsize_municipios: [14, 14]
-  figsize_uf: [10, 10]
-  cmap: "OrRd"
+  cmap: OrRd
   legend_shrink: 0.5
-  legend_label_municipios: "Taxa de Evasão Média Ponderada (2020-2024)"
-  
+
+municipios:
+  figsize: [14, 14]
+  legend_label: "Taxa de Evasão Média (2020–2024)"
+
+uf:
+  figsize: [10, 10]
+  legend_label: "Evasão Média Estadual (2020–2024)"

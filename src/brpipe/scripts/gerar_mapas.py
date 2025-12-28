@@ -1,9 +1,7 @@
 import sys
-from brpipe.viz.mapas.mapa_municipios import (
-    mapa_evasao_municipios,
-    mapa_evasao_municipios_uf
-)
-from brpipe.viz.mapas.mapa_uf import mapa_evasao_uf
+
+from brpipe.viz.mapas.plot.municipios import mapa_evasao_municipios
+from brpipe.viz.mapas.plot.uf import mapa_evasao_uf
 
 
 def print_help():
@@ -12,9 +10,9 @@ Uso:
     python gerar_mapas.py <tipo> [uf]
 
 Tipos disponíveis:
-    municipios          - Mapa municipal do Brasil inteiro
-    uf                  - Mapa agregado por estados (UF)
-    municipios_uf <UF> - Mapa municipal apenas de um estado
+    municipios           - Mapa municipal do Brasil inteiro
+    uf                   - Mapa agregado por estados (UF)
+    municipios_uf <UF>   - Mapa municipal apenas de um estado
 
 Exemplos:
     python gerar_mapas.py municipios
@@ -44,8 +42,9 @@ def main():
             print("Erro: é necessário informar a sigla da UF.")
             print("Ex: python gerar_mapas.py municipios_uf BA")
             return
-        uf = args[1].upper()
-        mapa_evasao_municipios_uf(uf)
+
+        sigla_uf = args[1].upper()
+        mapa_evasao_municipios(sigla_uf=sigla_uf)
 
     else:
         print(f"Tipo desconhecido: {tipo}")

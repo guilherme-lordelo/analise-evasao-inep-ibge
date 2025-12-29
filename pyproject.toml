@@ -8,6 +8,7 @@ dependencies = [
     "matplotlib",
     "geopandas",
     "xlrd",
+    "plotly",
 ]
 
 [tool.setuptools]

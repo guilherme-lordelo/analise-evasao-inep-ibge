@@ -1,7 +1,7 @@
 import sys
 
 from brpipe.viz.mapas.plot.municipios import mapa_evasao_municipios
-from brpipe.viz.mapas.plot.uf import mapa_evasao_uf
+from brpipe.viz.mapas.plotly.uf import mapa_evasao_uf_plotly
 
 
 def print_help():
@@ -10,9 +10,9 @@ Uso:
     python gerar_mapas.py <tipo> [uf]
 
 Tipos disponíveis:
-    municipios           - Mapa municipal do Brasil inteiro
-    uf                   - Mapa agregado por estados (UF)
-    municipios_uf <UF>   - Mapa municipal apenas de um estado
+    municipios           - Mapa municipal estático (ano fixo)
+    uf                   - Mapa interativo por UF (Plotly + slider)
+    municipios_uf <UF>   - Mapa municipal estático de uma UF
 
 Exemplos:
     python gerar_mapas.py municipios
@@ -35,9 +35,8 @@ def main():
 
     if tipo == "municipios":
         mapa_evasao_municipios(ano=ANO)
-
     elif tipo == "uf":
-        mapa_evasao_uf(ano=ANO)
+        mapa_evasao_uf_plotly()
 
     elif tipo == "municipios_uf":
         if len(args) < 2:
@@ -46,7 +45,7 @@ def main():
             return
 
         sigla_uf = args[1].upper()
-        mapa_evasao_municipios(sigla_uf=sigla_uf)
+        mapa_evasao_municipios(sigla_uf=sigla_uf, ano=ANO)
 
     else:
         print(f"Tipo desconhecido: {tipo}")

@@ -15,6 +15,11 @@ def mapa_evasao_municipios(
 
     gdf_view = visao.get_view()
 
+    gdf_view["geometry"] = gdf_view.geometry.simplify(
+        tolerance=0.01,
+        preserve_topology=True
+    )
+
     plot_mapa(
         gdf=gdf_view,
         coluna=DADOS.metrica_principal.coluna_mapa,

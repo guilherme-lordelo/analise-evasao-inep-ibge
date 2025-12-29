@@ -6,7 +6,7 @@ _municipio = COLUNAS.territoriais.municipio
 MALHA = _municipio.malha
 TABELA = _municipio.tabela
 
-def merge_municipios_evasao():
+def merge_municipios():
     gdf = carregar_malha_municipios()
     df = carregar_metrica_municipios()
 

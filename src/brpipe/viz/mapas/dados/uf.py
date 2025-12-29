@@ -44,7 +44,10 @@ def _metrica_long(df: pd.DataFrame) -> pd.DataFrame:
 	return (
 		df
 		.groupby(
-			cols.tabela,
+			[
+				cols.tabela,
+				cfg.coluna_ano,
+			],
 			as_index=False
 		)
 		.agg({cfg.coluna_valor: cfg.agregacao})

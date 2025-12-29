@@ -41,13 +41,17 @@ def _metrica_long(df: pd.DataFrame) -> pd.DataFrame:
         df = df[df[cfg.coluna_ano].isin(cfg.anos)]
 
     return (
-        df
-        .groupby(
-            [cols.tabela, cols.uf],
-            as_index=False
+        df[
+            [
+                cols.tabela,
+                cols.uf,
+                cfg.coluna_ano,
+                cfg.coluna_valor,
+            ]
+        ]
+        .rename(
+            columns={cfg.coluna_valor: DADOS.metrica_principal.coluna_mapa}
         )
-        .agg({cfg.coluna_valor: cfg.agregacao})
-        .rename(columns={cfg.coluna_valor: DADOS.metrica_principal.coluna_mapa})
     )
 
 

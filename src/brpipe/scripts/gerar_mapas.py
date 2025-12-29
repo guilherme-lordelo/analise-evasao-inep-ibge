@@ -31,11 +31,13 @@ def main():
 
     tipo = args[0].lower()
 
+    ANO: int = 2021
+
     if tipo == "municipios":
-        mapa_evasao_municipios()
+        mapa_evasao_municipios(ano=ANO)
 
     elif tipo == "uf":
-        mapa_evasao_uf()
+        mapa_evasao_uf(ano=ANO)
 
     elif tipo == "municipios_uf":
         if len(args) < 2:

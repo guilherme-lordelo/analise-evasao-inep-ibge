@@ -1,19 +1,28 @@
-from brpipe.viz.mapas.merge.municipios import merge_municipios_evasao
+from brpipe.viz.mapas.merge.municipios import merge_municipios
 from brpipe.viz.mapas.config import DADOS, PLOT, MUNICIPIOS
 from brpipe.viz.mapas.plot.base import plot_mapa
+from brpipe.viz.mapas.visoes.municipios import VisaoMunicipios
 
-def mapa_evasao_municipios(sigla_uf: str | None = None):
-    gdf = merge_municipios_evasao()
+def mapa_evasao_municipios(
+    sigla_uf: str | None = None,
+    ano: int | None = None,
+):
+    gdf = merge_municipios()
 
-    if sigla_uf:
-        gdf = gdf[gdf["SIGLA_UF"] == sigla_uf.upper()]
+    visao = VisaoMunicipios(gdf)
+    visao.set_ano(ano)
+    visao.set_uf(sigla_uf.upper() if sigla_uf else None)
+
+    gdf_view = visao.get_view()
 
     plot_mapa(
-        gdf=gdf,
+        gdf=gdf_view,
         coluna=DADOS.metrica_principal.coluna_mapa,
         figsize=MUNICIPIOS.figsize,
         cmap=PLOT.cmap,
         legend_label=MUNICIPIOS.legend_label,
         shrink=PLOT.legend_shrink,
-        titulo=f"Evasão Municipal {f'— {sigla_uf}' if sigla_uf else ''}",
+        titulo=f"Evasão Municipal"
+               f"{f' — {sigla_uf.upper()}' if sigla_uf else ''}"
+               f"{f' ({ano})' if ano else ''}",
     )

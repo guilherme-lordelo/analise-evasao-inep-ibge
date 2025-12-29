@@ -6,12 +6,9 @@ _uf = COLUNAS.territoriais.uf
 MALHA = _uf.malha
 TABELA = _uf.tabela
 
-def merge_uf_evasao():
+def merge_uf():
     gdf = carregar_malha_uf()
     df = carregar_metrica_uf()
-
-    df = carregar_metrica_uf()
-
 
     gdf[MALHA] = gdf[MALHA].astype(str)
     df[TABELA] = df[TABELA].astype(str)

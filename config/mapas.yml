@@ -1,3 +1,27 @@
+modelo:
+  dados:
+    evasao:
+      granularidade: territorial
+      dimensoes: [ano, uf, municipio]
+      coluna_valor: EVASAO_ANUAL
+      agregacao_padrao: mean
+
+  visoes:
+    territoriais:
+      uf:
+        chave_merge: SIGLA_UF
+        nivel: uf
+      municipio:
+        chave_merge: CO_MUNICIPIO
+        nivel: municipio
+
+  filtros:
+    ano:
+      tipo: discreto
+      coluna: NU_ANO_CENSO
+      valores: auto
+
+
 dados:
   formato: long        # wide | long
   separador: ";"

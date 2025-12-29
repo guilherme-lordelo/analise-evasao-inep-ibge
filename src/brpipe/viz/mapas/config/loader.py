@@ -1,6 +1,7 @@
 # src/brpipe/viz/mapas/config/loader.py
 
 from brpipe.utils.config import load_config
+from brpipe.viz.mapas.config.modelo_config import ModeloConfig
 from .colunas_config import (
     ColunasConfig,
     TerritoriaisConfig,
@@ -34,6 +35,11 @@ def carregar_dados() -> DadosConfig:
         ),
     )
 
+def carregar_modelo() -> ModeloConfig | None:
+    modelo = _CFG.get("modelo")
+    if modelo is None:
+        return None
+    return ModeloConfig.from_dict(modelo)
 
 def carregar_colunas() -> ColunasConfig:
     territoriais = _CFG["colunas"]["territoriais"]

@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-def plot_mapa(
+def construir_mapa(
     gdf,
     coluna: str,
     figsize,
@@ -15,7 +15,10 @@ def plot_mapa(
         column=coluna,
         cmap=cmap,
         legend=True,
-        legend_kwds={"label": legend_label, "shrink": shrink},
+        legend_kwds={
+            "label": legend_label,
+            "shrink": shrink,
+        },
         ax=ax,
     )
 
@@ -23,4 +26,5 @@ def plot_mapa(
         ax.set_title(titulo)
 
     ax.axis("off")
-    plt.show()
+
+    return fig, ax

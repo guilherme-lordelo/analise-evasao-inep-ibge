@@ -1,6 +1,6 @@
 from brpipe.viz.mapas.merge.uf import merge_uf
 from brpipe.viz.mapas.config import DADOS, PLOT, UF
-from brpipe.viz.mapas.plot.base import plot_mapa
+from brpipe.viz.mapas.plot.visualizacao import plot_mapa
 from brpipe.viz.mapas.visoes.uf import VisaoUF
 
 def mapa_evasao_uf(ano: int | None = None):

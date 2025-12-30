@@ -1,6 +1,7 @@
-from brpipe.viz.mapas.plot.base import construir_mapa
+import matplotlib.pyplot as plt
+from .base import construir_mapa
 
-def render_mapa(
+def plot_mapa(
     gdf,
     coluna: str,
     figsize,
@@ -9,7 +10,7 @@ def render_mapa(
     shrink=0.5,
     titulo=None,
 ):
-    return construir_mapa(
+    fig, ax = construir_mapa(
         gdf=gdf,
         coluna=coluna,
         figsize=figsize,
@@ -18,3 +19,5 @@ def render_mapa(
         shrink=shrink,
         titulo=titulo,
     )
+
+    plt.show()

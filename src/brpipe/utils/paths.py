@@ -35,7 +35,7 @@ _ano_ini = min(ANOS)
 _ano_fim = max(ANOS)
 
 
-# Resultados
+# Resultados INEP
 arquivo_municipal = (
 	INEP_TRANSFORMACOES
 	/ f"{ARQUIVOS.transformacao_prefixo_out}"
@@ -56,3 +56,6 @@ arquivo_nacional = (
 	  f"{_NOME_NACIONAL}{_ano_ini}_{_ano_fim}"
 	  f"{ARQUIVOS.transformacao_ext_out}"
 )
+
+# Mapas
+MAPAS_RENDER = DATA_DIR / "rendered" / "mapas"

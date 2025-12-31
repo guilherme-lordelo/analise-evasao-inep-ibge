@@ -1,12 +1,19 @@
+from brpipe.viz.mapas.config.inep import FORMULAS
 from brpipe.viz.mapas.merge.municipios import merge_municipios
-from brpipe.viz.mapas.config import DADOS, PLOT, MUNICIPIOS
+from brpipe.viz.mapas.config import PLOT, MUNICIPIOS
 from brpipe.viz.mapas.plot.visualizacao import plot_mapa
 from brpipe.viz.mapas.visoes.municipios import VisaoMunicipios
 
 def mapa_evasao_municipios(
+    formula_indice: int,
     sigla_uf: str | None = None,
     ano: int | None = None,
 ):
+    
+    try:
+        formula_indice = int(formula_indice)
+    except ValueError:
+        raise ValueError(f'O indice "{formula_indice}" deve ser um número inteiro')
     gdf = merge_municipios()
 
     visao = VisaoMunicipios(gdf)
@@ -22,7 +29,7 @@ def mapa_evasao_municipios(
 
     plot_mapa(
         gdf=gdf_view,
-        coluna=DADOS.metrica_principal.coluna_mapa,
+        coluna=FORMULAS[formula_indice],
         figsize=MUNICIPIOS.figsize,
         cmap=PLOT.cmap,
         legend_label=MUNICIPIOS.legend_label,

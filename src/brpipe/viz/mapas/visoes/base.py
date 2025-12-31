@@ -5,6 +5,7 @@ from __future__ import annotations
 import geopandas as gpd
 from typing import Any, Dict, Optional, Tuple
 
+from brpipe.viz.mapas.config import VARIAVEIS
 from brpipe.viz.mapas.config import DADOS
 from .filtros import filtrar_ano
 
@@ -21,7 +22,7 @@ class VisaoTerritorial:
     - Cache em memória por combinação de filtros
     """
 
-    def __init__(self, gdf: gpd.GeoDataFrame):
+    def __init__(self, gdf: gpd.GeoDataFrame) -> None:
         self._gdf_base = gdf
         self._cache: Dict[CacheKey, gpd.GeoDataFrame] = {}
 
@@ -29,7 +30,7 @@ class VisaoTerritorial:
 
         self.coluna_valor = DADOS.metrica_principal.coluna_mapa
         self.coluna_ano = (
-            DADOS.metrica_principal.long.coluna_ano
+            VARIAVEIS.coluna_ano
             if DADOS.metrica_principal.long
             else None
         )

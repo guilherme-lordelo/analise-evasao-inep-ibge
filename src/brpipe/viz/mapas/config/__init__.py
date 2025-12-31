@@ -1,4 +1,5 @@
 from .loader import carregar_dados, carregar_colunas, carregar_modelo, carregar_plot, carregar_municipios, carregar_uf
+from.inep import VARIAVEIS, FORMULAS
 
 DADOS = carregar_dados()
 MODELO = carregar_modelo()
@@ -14,4 +15,6 @@ __all__ = [
     "PLOT",
     "MUNICIPIOS",
     "UF",
+    "VARIAVEIS",
+    "FORMULAS",
 ]

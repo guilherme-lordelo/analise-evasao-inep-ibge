@@ -1,67 +1,26 @@
 import pandas as pd
-
 from brpipe.utils.paths import INEP_TRANSFORMACOES
-from brpipe.viz.mapas.config import DADOS, COLUNAS
+from brpipe.viz.mapas.config import DADOS
+from brpipe.viz.mapas.config import VARIAVEIS
+from brpipe.viz.mapas.dados.normalizar import normalizar_metrica_long
 
-
-def _carregar_csv() -> pd.DataFrame:
-    path = INEP_TRANSFORMACOES / DADOS.arquivos.municipio
-    return pd.read_csv(path, sep=DADOS.separador)
-
-
-def _metrica_wide(df: pd.DataFrame) -> pd.DataFrame:
-    cols = COLUNAS.territoriais.municipio
-    cfg = DADOS.metrica_principal.wide
-
-    if cfg is None:
-        raise ValueError("Configuração wide não definida para a métrica principal")
-
-    return (
-        df[
-            [
-                cols.tabela,
-                cols.uf,
-                cfg.coluna_valor,
-            ]
-        ]
-        .rename(columns={cfg.coluna_valor: DADOS.metrica_principal.coluna_mapa})
-    )
-
-
-def _metrica_long(df: pd.DataFrame) -> pd.DataFrame:
-    cols = COLUNAS.territoriais.municipio
-    cfg = DADOS.metrica_principal.long
-
-    if cfg is None:
-        raise ValueError("Configuração long não definida para a métrica principal")
-
-    df = df.copy()
-
-    if cfg.anos is not None:
-        df = df[df[cfg.coluna_ano].isin(cfg.anos)]
-
-    return (
-        df[
-            [
-                cols.tabela,
-                cols.uf,
-                cfg.coluna_ano,
-                cfg.coluna_valor,
-            ]
-        ]
-        .rename(
-            columns={cfg.coluna_valor: DADOS.metrica_principal.coluna_mapa}
-        )
-    )
+def carregar_municipios_raw() -> pd.DataFrame:
+	path = INEP_TRANSFORMACOES / DADOS.arquivos.municipio
+	return pd.read_csv(path, sep=DADOS.separador)
 
 
 def carregar_metrica_municipios() -> pd.DataFrame:
-    df = _carregar_csv()
+	df = carregar_municipios_raw()
 
-    if DADOS.formato == "wide":
-        return _metrica_wide(df)
+	if DADOS.formato == "long":
+		cfg = DADOS.metrica_principal.long
 
-    if DADOS.formato == "long":
-        return _metrica_long(df)
+		return normalizar_metrica_long(
+			df,
+			coluna_territorio=VARIAVEIS.territoriais["municipio"],
+			coluna_uf=VARIAVEIS.territoriais["uf"],
+			coluna_ano=VARIAVEIS.coluna_ano,
+			anos=cfg.anos,
+		)
 
-    raise ValueError(f"Formato de dados desconhecido: {DADOS.formato}")
+	raise NotImplementedError("Formato wide não implementado")

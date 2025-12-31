@@ -1,69 +1,32 @@
 import pandas as pd
-
+from brpipe.viz.mapas.config import VARIAVEIS
 from brpipe.utils.paths import INEP_TRANSFORMACOES
-from brpipe.viz.mapas.config import DADOS, COLUNAS
+from brpipe.viz.mapas.config import DADOS
+from brpipe.viz.mapas.dados.normalizar import normalizar_metrica_long
 
 
-def _carregar_csv() -> pd.DataFrame:
+def carregar_uf_raw() -> pd.DataFrame:
 	path = INEP_TRANSFORMACOES / DADOS.arquivos.uf
 	return pd.read_csv(path, sep=DADOS.separador)
 
-
-def _metrica_wide(df: pd.DataFrame) -> pd.DataFrame:
-	cols = COLUNAS.territoriais.uf
-	cfg = DADOS.metrica_principal.wide
-
-	if cfg is None:
-		raise ValueError("Configuração wide não definida para a métrica principal (UF)")
-
-	return (
-		df[
-			[
-				cols.tabela,
-				cfg.coluna_valor,
-			]
-		]
-		.rename(
-			columns={cfg.coluna_valor: DADOS.metrica_principal.coluna_mapa}
-		)
-	)
-
-
-def _metrica_long(df: pd.DataFrame) -> pd.DataFrame:
-	cols = COLUNAS.territoriais.uf
-	cfg = DADOS.metrica_principal.long
-
-	if cfg is None:
-		raise ValueError("Configuração long não definida para a métrica principal (UF)")
-
-	df = df.copy()
-
-	if cfg.anos is not None:
-		df = df[df[cfg.coluna_ano].isin(cfg.anos)]
-
-	return (
-		df
-		.groupby(
-			[
-				cols.tabela,
-				cfg.coluna_ano,
-			],
-			as_index=False
-		)
-		.agg({cfg.coluna_valor: cfg.agregacao})
-		.rename(
-			columns={cfg.coluna_valor: DADOS.metrica_principal.coluna_mapa}
-		)
-	)
-
+def normalizar_uf(df: pd.DataFrame):
+	return df.rename(columns={
+		VARIAVEIS.territoriais["uf"]: "uf",
+		VARIAVEIS.coluna_ano: "ano",
+	})
 
 def carregar_metrica_uf() -> pd.DataFrame:
-	df = _carregar_csv()
-
-	if DADOS.formato == "wide":
-		return _metrica_wide(df)
+	df = carregar_uf_raw()
 
 	if DADOS.formato == "long":
-		return _metrica_long(df)
+		cfg = DADOS.metrica_principal.long
 
-	raise ValueError(f"Formato de dados desconhecido: {DADOS.formato}")
+		return normalizar_metrica_long(
+			df,
+			coluna_territorio=VARIAVEIS.territoriais["uf"],
+			coluna_uf=None,
+			coluna_ano=VARIAVEIS.coluna_ano,
+			anos=cfg.anos,
+		)
+
+	raise NotImplementedError("Formato wide não implementado")

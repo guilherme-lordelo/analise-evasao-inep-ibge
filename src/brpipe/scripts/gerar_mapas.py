@@ -3,7 +3,6 @@ import sys
 from brpipe.viz.mapas.plot.municipios import mapa_evasao_municipios
 from brpipe.viz.mapas.plotly.uf import mapa_evasao_uf_plotly
 
-
 def print_help():
     print("""
 Uso:
@@ -34,9 +33,15 @@ def main():
     ANO: int = 2021
 
     if tipo == "municipios":
-        mapa_evasao_municipios(ano=ANO)
+        if not len(args) < 2:
+            mapa_evasao_municipios(formula_indice=args[1], ano=ANO)
+        else:
+            mapa_evasao_municipios(formula_indice=0, ano=ANO)
     elif tipo == "uf":
-        mapa_evasao_uf_plotly()
+        if not len(args) < 2:
+            mapa_evasao_uf_plotly(formula_indice = args[1])
+        else:
+            mapa_evasao_uf_plotly(formula_indice = 0)
 
     elif tipo == "municipios_uf":
         if len(args) < 2:

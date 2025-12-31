@@ -1,3 +1,4 @@
+import pandas as pd
 from brpipe.viz.mapas.malhas.municipios import carregar_malha_municipios
 from brpipe.viz.mapas.dados.municipios import carregar_metrica_municipios
 from brpipe.viz.mapas.config import COLUNAS
@@ -6,7 +7,7 @@ _municipio = COLUNAS.territoriais.municipio
 MALHA = _municipio.malha
 TABELA = _municipio.tabela
 
-def merge_municipios():
+def merge_municipios() -> pd.DataFrame:
     gdf = carregar_malha_municipios()
     df = carregar_metrica_municipios()
 

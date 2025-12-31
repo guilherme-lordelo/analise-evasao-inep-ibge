@@ -1,9 +1,10 @@
 from brpipe.viz.mapas.merge.uf import merge_uf
-from brpipe.viz.mapas.config import DADOS, PLOT, UF
+from brpipe.viz.mapas.config import PLOT, UF
 from brpipe.viz.mapas.plot.visualizacao import plot_mapa
 from brpipe.viz.mapas.visoes.uf import VisaoUF
+from brpipe.viz.mapas.config import FORMULAS
 
-def mapa_evasao_uf(ano: int | None = None):
+def mapa_evasao_uf(formula_indice: int, ano: int | None = None):
     gdf = merge_uf()
 
     visao = VisaoUF(gdf)
@@ -13,7 +14,7 @@ def mapa_evasao_uf(ano: int | None = None):
 
     plot_mapa(
         gdf=gdf_view,
-        coluna=DADOS.metrica_principal.coluna_mapa,
+        coluna=FORMULAS[formula_indice],
         figsize=UF.figsize,
         cmap=PLOT.cmap,
         legend_label=UF.legend_label,

@@ -1,12 +1,13 @@
 import plotly.express as px
 import geopandas as gpd
+from brpipe.viz.mapas.config.inep import FORMULAS
 
 
 def plot_mapa_plotly(
     gdf: gpd.GeoDataFrame,
-    coluna_valor: str,
     coluna_chave: str,
     coluna_ano: str,
+    indice,
     titulo: str = "",
     color_continuous_scale: str = "Viridis",
 ):
@@ -19,7 +20,7 @@ def plot_mapa_plotly(
         gdf,
         geojson=geojson,
         locations=coluna_chave,
-        color=coluna_valor,
+        color=FORMULAS[indice],
         animation_frame=coluna_ano,
         color_continuous_scale=color_continuous_scale,
         title=titulo,

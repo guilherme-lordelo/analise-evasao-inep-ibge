@@ -1,13 +1,11 @@
-from brpipe.viz.mapas.render.municipios import render_municipios_por_ano
-from brpipe.viz.mapas.render.uf import render_uf_por_ano
-
+from brpipe.viz.mapas.render.territorios import render_municipios, render_uf
 
 def main():
     print("Renderizando mapas municipais...")
-    render_municipios_por_ano()
+    render_municipios()
 
     print("Renderizando mapas por UF...")
-    render_uf_por_ano()
+    render_uf()
 
     print("Renderização concluída.")
 

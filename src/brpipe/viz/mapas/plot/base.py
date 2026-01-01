@@ -1,5 +1,11 @@
 import matplotlib.pyplot as plt
 
+def _plotar_se_nao_vazio(gdf, **kwargs):
+    if gdf.empty:
+        return
+    gdf.plot(**kwargs)
+
+
 def construir_mapa(
     gdf,
     coluna: str,
@@ -11,7 +17,28 @@ def construir_mapa(
 ):
     fig, ax = plt.subplots(figsize=figsize)
 
-    gdf.plot(
+    ax.set_aspect("equal")
+
+    _plotar_se_nao_vazio(
+        gdf[gdf["sem_inep"]],
+        ax=ax,
+        color="#9e9e9e",
+        edgecolor="#636363",
+        linewidth=0.3,
+        label="Fora do INEP",
+    )
+
+    _plotar_se_nao_vazio(
+        gdf[gdf["sem_metrica"]],
+        ax=ax,
+        color="#c6dbef",
+        edgecolor="#6baed6",
+        linewidth=0.3,
+        label="Sem métrica",
+    )
+
+    _plotar_se_nao_vazio(
+        gdf[~gdf["sem_inep"] & ~gdf["sem_metrica"]],
         column=coluna,
         cmap=cmap,
         legend=True,
@@ -20,17 +47,14 @@ def construir_mapa(
             "shrink": shrink,
         },
         ax=ax,
-        missing_kwds={
-            "color": "#d9d9d9",
-            "edgecolor": "black",
-            "hatch": "///",
-            "label": "Sem dados"
-	    },
+        edgecolor="white",
+        linewidth=0.2,
     )
 
     if titulo:
         ax.set_title(titulo)
 
     ax.axis("off")
+    ax.set_facecolor("white")
 
     return fig, ax

@@ -50,18 +50,16 @@ class VisaoTerritorial:
     def _cache_key(self) -> CacheKey:
         return (self._ano,)
 
+    def _aplicar_filtro_ano(self, gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+        if not self.coluna_ano or self._ano is None:
+            return gdf
+
+        col = self.coluna_ano
+        ano = str(self._ano) if gdf[col].dtype == object else self._ano
+
+        mask = (gdf[col] == ano) | (gdf[col].isna())
+        return gdf[mask]
+
     def _build_view(self) -> gpd.GeoDataFrame:
         gdf = self._gdf_base.copy()
-
-        if self.coluna_ano and self._ano is not None:
-
-            col = self.coluna_ano
-
-            if gdf[col].dtype == object:
-                ano = str(self._ano)
-            else:
-                ano = self._ano
-
-            gdf = filtrar_ano(df=gdf, coluna_ano=col, ano=ano)
-
-        return gdf
+        return self._aplicar_filtro_ano(gdf)

@@ -17,5 +17,5 @@ def merge_municipios() -> pd.DataFrame:
         df,
         left_on=CHAVE_MALHA,
         right_on=CHAVE_TABELA,
-        how="left"
+        how="left",
     )

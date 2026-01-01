@@ -29,13 +29,7 @@ class VisaoMunicipios(VisaoTerritorial):
         return (self._ano, self._uf)
 
     def _build_view(self) -> gpd.GeoDataFrame:
-        gdf = self._gdf_base.copy()
-
-        if self.coluna_ano and self._ano is not None:
-            
-            col = self.coluna_ano
-
-            gdf = filtrar_ano(df=gdf, coluna_ano=col, ano=self._ano)
+        gdf = self._aplicar_filtro_ano(self._gdf_base.copy())
 
         if self._uf is not None:
             gdf = gdf[gdf[self.coluna_uf] == self._uf]

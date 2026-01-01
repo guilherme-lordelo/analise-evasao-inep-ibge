@@ -6,7 +6,8 @@ class FormulasParaMetricas:
         self._cfg = cfg
 
     def listar_metricas(self) -> list[str]:
-        return list(self._cfg.formulas.keys())
+        _lista_formulas = list(self._cfg.formulas.keys())
+        return [item.upper() for item in _lista_formulas]
 
     def resolver(self, nome: str) -> FormulaConfig:
         if nome not in self._cfg.formulas:

@@ -9,11 +9,19 @@ from .colunas_config import (
     UFColunasConfig,
 )
 from brpipe.utils.config import load_config
+from .malha import MalhaConfig
 from .plot_config import PlotConfig
 from .mapas_config import MapaConfig
 from .dados_config import *
 
 _CFG = load_config("mapas")
+
+def carregar_malha() -> MalhaConfig:
+    malha = _CFG["malha"]
+    return MalhaConfig(
+        municipio=malha["municipio"],
+        uf = malha["uf"],
+    )
 
 def carregar_dados() -> DadosConfig:
     dados = _CFG["dados"]
@@ -66,6 +74,7 @@ def carregar_plot() -> PlotConfig:
     return PlotConfig(
         cmap=plot["cmap"],
         legend_shrink=plot["legend_shrink"],
+        figsize=tuple(plot["figsize"]),
     )
 
 def _carregar_mapa(chave: str) -> MapaConfig:

@@ -1,22 +1,21 @@
 import pandas as pd
 from brpipe.viz.mapas.malhas.municipios import carregar_malha_municipios
 from brpipe.viz.mapas.dados.municipios import carregar_metrica_municipios
-from brpipe.viz.mapas.config import COLUNAS
+from brpipe.viz.mapas.config import VARIAVEIS, MALHA
 
-_municipio = COLUNAS.territoriais.municipio
-MALHA = _municipio.malha
-TABELA = _municipio.tabela
+CHAVE_MALHA = MALHA.municipio
+CHAVE_TABELA = VARIAVEIS.territoriais["municipio"]
 
 def merge_municipios() -> pd.DataFrame:
     gdf = carregar_malha_municipios()
     df = carregar_metrica_municipios()
 
-    gdf[MALHA] = gdf[MALHA].astype(int)
-    df[TABELA] = df[TABELA].astype(int)
+    gdf[CHAVE_MALHA] = gdf[CHAVE_MALHA].astype(int)
+    df[CHAVE_TABELA] = df[CHAVE_TABELA].astype(int)
 
     return gdf.merge(
         df,
-        left_on=MALHA,
-        right_on=TABELA,
+        left_on=CHAVE_MALHA,
+        right_on=CHAVE_TABELA,
         how="left"
     )

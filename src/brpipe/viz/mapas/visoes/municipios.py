@@ -1,11 +1,9 @@
 # src/brpipe/viz/mapas/visoes/municipios.py
 
 from __future__ import annotations
-
 import geopandas as gpd
 from typing import Optional
-
-from brpipe.viz.mapas.config import COLUNAS
+from brpipe.viz.mapas.config import VARIAVEIS, MALHA
 from .base import VisaoTerritorial
 from .filtros import filtrar_ano
 
@@ -18,9 +16,8 @@ class VisaoMunicipios(VisaoTerritorial):
     def __init__(self, gdf: gpd.GeoDataFrame):
         super().__init__(gdf)
 
-        cols = COLUNAS.territoriais.municipio
-        self.coluna_chave = cols.malha
-        self.coluna_uf = cols.uf
+        self.coluna_chave = MALHA.municipio
+        self.coluna_uf = VARIAVEIS.territoriais["uf"]
 
         self._uf: Optional[str] = None
 

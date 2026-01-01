@@ -1,5 +1,4 @@
 import pandas as pd
-
 from brpipe.viz.mapas.config import FORMULAS
 
 def normalizar_metrica_long(

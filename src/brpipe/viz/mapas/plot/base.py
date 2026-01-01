@@ -20,6 +20,12 @@ def construir_mapa(
             "shrink": shrink,
         },
         ax=ax,
+        missing_kwds={
+            "color": "#d9d9d9",
+            "edgecolor": "black",
+            "hatch": "///",
+            "label": "Sem dados"
+	    },
     )
 
     if titulo:

@@ -1,10 +1,8 @@
 # src/brpipe/viz/mapas/visoes/uf.py
 
 from __future__ import annotations
-
 import geopandas as gpd
-
-from brpipe.viz.mapas.config import COLUNAS
+from brpipe.viz.mapas.config import MALHA
 from .base import VisaoTerritorial
 from .filtros import filtrar_ano
 
@@ -17,8 +15,7 @@ class VisaoUF(VisaoTerritorial):
     def __init__(self, gdf: gpd.GeoDataFrame):
         super().__init__(gdf)
 
-        cols = COLUNAS.territoriais.uf
-        self.coluna_chave = cols.malha
+        self.coluna_chave = MALHA.uf
 
     def _cache_key(self):
         return (self._ano,)

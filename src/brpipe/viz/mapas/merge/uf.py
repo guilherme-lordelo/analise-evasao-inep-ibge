@@ -1,23 +1,21 @@
 import pandas as pd
-from brpipe.viz.mapas.config import VARIAVEIS
 from brpipe.viz.mapas.malhas.uf import carregar_malha_uf
 from brpipe.viz.mapas.dados.uf import carregar_metrica_uf
-from brpipe.viz.mapas.config import COLUNAS
+from brpipe.viz.mapas.config import VARIAVEIS, MALHA
 
-_uf = COLUNAS.territoriais.uf
-MALHA = _uf.malha
+CHAVE_MALHA = MALHA.uf
+CHAVE_TABELA = VARIAVEIS.territoriais["uf"]
 
 def merge_uf() -> pd.DataFrame:
     gdf = carregar_malha_uf()
     df = carregar_metrica_uf()
 
-    tabela = VARIAVEIS.territoriais['uf']
-    gdf[MALHA] = gdf[MALHA].astype(str)
-    df[tabela] = df[tabela].astype(str)
+    gdf[CHAVE_MALHA] = gdf[CHAVE_MALHA].astype(str)
+    df[CHAVE_TABELA] = df[CHAVE_TABELA].astype(str)
 
     return gdf.merge(
         df,
-        left_on=MALHA,
-        right_on=tabela,
+        left_on=CHAVE_MALHA,
+        right_on=CHAVE_TABELA,
         how="left"
     )

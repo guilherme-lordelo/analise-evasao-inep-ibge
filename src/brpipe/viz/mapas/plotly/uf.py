@@ -1,6 +1,5 @@
-from brpipe.viz.mapas.config import VARIAVEIS, FORMULAS
+from brpipe.viz.mapas.config import VARIAVEIS, FORMULAS, MALHA
 from brpipe.viz.mapas.merge.uf import merge_uf
-from brpipe.viz.mapas.config import COLUNAS
 from brpipe.viz.mapas.visoes.uf import VisaoUF
 from brpipe.viz.mapas.plotly.base import plot_mapa_plotly
 
@@ -17,11 +16,11 @@ def mapa_evasao_uf_plotly(formula_indice):
 
     gdf_view = visao.get_view()
 
-    cols = COLUNAS.territoriais.uf
+    CHAVE_MALHA = MALHA.uf
 
     fig = plot_mapa_plotly(
         gdf=gdf_view,
-        coluna_chave=cols.malha,
+        coluna_chave=CHAVE_MALHA,
         coluna_ano=VARIAVEIS.coluna_ano,
         titulo=f"{FORMULAS[formula_indice]} (UF)",
         indice=formula_indice,

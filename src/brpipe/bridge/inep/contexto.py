@@ -6,3 +6,4 @@ from brpipe.bridge.inep.variaveis import VariaveisParaMapas
 class InepContext:
 	variaveis: VariaveisParaMapas
 	formulas: FormulasParaMetricas
+	anos: list[int]

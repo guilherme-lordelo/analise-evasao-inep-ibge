@@ -6,7 +6,6 @@ import geopandas as gpd
 from typing import Any, Dict, Optional, Tuple
 
 from brpipe.viz.mapas.config import VARIAVEIS
-from brpipe.viz.mapas.config import DADOS
 from .filtros import filtrar_ano
 
 
@@ -28,12 +27,7 @@ class VisaoTerritorial:
 
         self._ano: Optional[int] = None
 
-        self.coluna_valor = DADOS.metrica_principal.coluna_mapa
-        self.coluna_ano = (
-            VARIAVEIS.coluna_ano
-            if DADOS.metrica_principal.long
-            else None
-        )
+        self.coluna_ano = VARIAVEIS.coluna_ano
 
     def set_ano(self, ano: Optional[int]) -> None:
         """Define o ano ativo da visão."""
@@ -53,12 +47,6 @@ class VisaoTerritorial:
     def clear_cache(self) -> None:
         self._cache.clear()
 
-    def to_plotly(self) -> Any:
-        """
-        Stub para integração futura com Plotly.
-        """
-        raise NotImplementedError("Integração Plotly ainda não implementada")
-
     def _cache_key(self) -> CacheKey:
         return (self._ano,)
 
@@ -66,7 +54,7 @@ class VisaoTerritorial:
         gdf = self._gdf_base.copy()
 
         if self.coluna_ano and self._ano is not None:
-            
+
             col = self.coluna_ano
 
             if gdf[col].dtype == object:

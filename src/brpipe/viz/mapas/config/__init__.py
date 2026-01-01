@@ -1,20 +1,13 @@
-from .loader import carregar_dados, carregar_colunas, carregar_modelo, carregar_plot, carregar_municipios, carregar_uf
-from.inep import VARIAVEIS, FORMULAS
+from .loader import carregar_malha, carregar_plot
+from.inep import VARIAVEIS, FORMULAS, ANOS
 
-DADOS = carregar_dados()
-MODELO = carregar_modelo()
-COLUNAS = carregar_colunas()
+MALHA = carregar_malha()
 PLOT = carregar_plot()
-MUNICIPIOS = carregar_municipios()
-UF = carregar_uf()
 
 __all__ = [
-    "DADOS",
-    "MODELO",
-    "COLUNAS",
+    "MALHA"
     "PLOT",
-    "MUNICIPIOS",
-    "UF",
     "VARIAVEIS",
     "FORMULAS",
+    "ANOS",
 ]

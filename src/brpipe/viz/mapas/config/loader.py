@@ -3,7 +3,7 @@
 from brpipe.utils.config import load_config
 from brpipe.utils.config import load_config
 from .malha import MalhaConfig
-from .plot_config import PlotConfig
+from .plot import PlotConfig
 
 _CFG = load_config("mapas")
 
@@ -21,4 +21,5 @@ def carregar_plot() -> PlotConfig:
         cmap=plot["cmap"],
         legend_shrink=plot["legend_shrink"],
         figsize=tuple(plot["figsize"]),
+        mostrar_titulo=plot["mostrar_titulo"],
     )

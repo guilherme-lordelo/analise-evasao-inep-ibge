@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from brpipe.viz.mapas.plot.legendas import LEGENDA_SITUACAO_MUNICIPIOS
 
 def _plotar_se_nao_vazio(gdf, **kwargs):
     if gdf.empty:
@@ -56,5 +57,11 @@ def construir_mapa(
 
     ax.axis("off")
     ax.set_facecolor("white")
+    ax.legend(
+        handles=LEGENDA_SITUACAO_MUNICIPIOS,
+        loc="lower left",
+        frameon=True,
+        title="Situação dos municípios",
+    )
 
     return fig, ax

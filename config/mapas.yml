@@ -6,3 +6,5 @@ plot:
   cmap: OrRd
   legend_shrink: 0.5
   figsize: [14, 14]
+  mostrar_titulo: False
+

@@ -6,3 +6,4 @@ class PlotConfig:
     cmap: str
     legend_shrink: float
     figsize: Tuple[int, int]
+    mostrar_titulo: str

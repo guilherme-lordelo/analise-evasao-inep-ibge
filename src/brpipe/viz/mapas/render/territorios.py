@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from typing import Callable, Type
+from brpipe.utils.parser import parse_bool
 from brpipe.viz.mapas.config import PLOT, FORMULAS, ANOS, VARIAVEIS
 from brpipe.viz.mapas.merge.municipios import merge_municipios
 from brpipe.viz.mapas.merge.uf import merge_uf
@@ -56,17 +57,21 @@ def _render_por_ano(
                 gdf_view[formula].isna()
             )
 
+            titulo = None
+            if parse_bool(PLOT.mostrar_titulo):
+                titulo = (
+                    f"{formula.replace('_', ' ').title()} "
+                    f"por {titulo_base} ({ano})"
+                )
+
             fig, ax = render_mapa(
                 gdf=gdf_view,
                 coluna=formula,
                 figsize=PLOT.figsize,
                 cmap=PLOT.cmap,
-                legend_label="Porcentagem",
+                legend_label="Índice",
                 shrink=PLOT.legend_shrink,
-                titulo=(
-                    f"{formula.replace('_', ' ').title()} "
-                    f"por {titulo_base} ({ano})"
-                ),
+                titulo=titulo,
             )
 
             arquivo = out_formula / f"{formula.lower()}_{sufixo_arquivo}_{ano}.png"

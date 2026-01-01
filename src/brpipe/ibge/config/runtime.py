@@ -3,8 +3,10 @@ from brpipe.utils.colunas_base import get_colunas_municipio
 from brpipe.ibge.config.parser import parse_tabelas
 from brpipe.ibge.config.models import TabelaIBGEConfig
 
-_cfg = load_config("ibge")
+_cfg_ibge = load_config("ibge")
+_cfg_base = load_config("base")
 
 COLUNAS_BASE_IBGE = get_colunas_municipio(include_nome=True)
-TABELAS_IBGE: dict[str, TabelaIBGEConfig] = parse_tabelas(_cfg)
-ARQUIVO_FINAL_IBGE = _cfg.get("arquivo_final", "ibge_final.csv")
+TABELAS_IBGE: dict[str, TabelaIBGEConfig] = parse_tabelas(_cfg_ibge)
+SAIDA_IBGE = _cfg_base.get("saida")
+ARQUIVO_FINAL_IBGE = _cfg_ibge.get("arquivo_final", "ibge_final.csv")

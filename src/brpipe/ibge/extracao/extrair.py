@@ -3,7 +3,7 @@ import pandas as pd
 from pathlib import Path
 
 from brpipe.utils.paths import RAW_IBGE, IBGE_REDUZIDO
-from brpipe.utils.io import write_csv
+from brpipe.ibge.checkpoints import salvar_checkpoint
 
 from brpipe.ibge.config import TABELAS_IBGE
 
@@ -23,6 +23,6 @@ def extrair_ibge():
 
 		nome_csv_interim = sheet.arquivo.replace(".csv", "_interim.csv")
 		out_path = Path(IBGE_REDUZIDO) / nome_csv_interim
-		write_csv(df, out_path)
+		salvar_checkpoint(df, output_path=out_path)
 
 	iterar_sheets_ibge(TABELAS_IBGE, _extrair_sheet, incluir_idx=True)

@@ -8,7 +8,7 @@ from brpipe.ibge.transformacao.aplicar_schema import aplicar_schema_ibge
 from brpipe.ibge.transformacao.remocao_colunas import remover_colunas
 from brpipe.ibge.transformacao.merge_colunas import aplicar_merges_colunas
 from brpipe.ibge.transformacao.transformar_colunas import aplicar_transformacoes_colunas
-from brpipe.utils.io import read_csv
+from brpipe.ibge.checkpoints import carregar_checkpoint
 from brpipe.utils.paths import IBGE_REDUZIDO
 
 
@@ -27,7 +27,7 @@ def _transformar_sheet(
 	if not path_in.exists():
 		return None
 
-	df = read_csv(path_in, header=None, dtype=str)
+	df = carregar_checkpoint(path_in)
 
 	if df.empty:
 		return None

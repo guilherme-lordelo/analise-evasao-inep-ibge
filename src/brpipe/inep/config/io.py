@@ -31,6 +31,5 @@ def carregar_io(cfg_inep: dict, cfg_base: dict) -> IOConfig:
 
 		encoding_out=saida.get("encoding", "utf-8"),
 		sep_out=saida.get("sep", ";"),
-		compress=saida.get("compress", None),
 		ordem_colunas=saida.get("ordem_colunas")
 	)

@@ -20,9 +20,9 @@ class IOConfig:
 		if not isinstance(self.chunksize, int) or self.chunksize <= 0:
 			raise ValueError("chunksize deve ser inteiro positivo")
 
-def carregar_io(cfg: dict) -> IOConfig:
-	extracao = cfg.get("extracao", {})
-	saida = cfg.get("saida", {})
+def carregar_io(cfg_inep: dict, cfg_base: dict) -> IOConfig:
+	extracao = cfg_inep.get("extracao", {})
+	saida = cfg_base.get("saida", {})
 
 	return IOConfig(
 		encoding_in=extracao.get("encoding", "latin1"),

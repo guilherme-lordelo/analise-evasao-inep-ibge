@@ -23,3 +23,13 @@ def salvar_checkpoint(
 		sep=IO.sep_out,
 		compression=IO.compress,
 	)
+
+def carregar_checkpoint(
+    input_path: Path,
+) -> pd.DataFrame:
+    return pd.read_csv(
+        input_path,
+        encoding=IO.encoding_out,
+        sep=IO.sep_out,
+        low_memory=False,
+    )

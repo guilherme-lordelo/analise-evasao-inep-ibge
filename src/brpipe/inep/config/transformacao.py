@@ -3,9 +3,9 @@ from typing import Callable
 
 import pandas as pd
 
+from brpipe.inep.checkpoints import carregar_checkpoint
 from brpipe.inep.config import ANOS, ARQUIVOS, VARIAVEIS_YAML, FORMULAS_CONFIG
 from brpipe.utils.paths import INEP_REDUZIDO
-from brpipe.utils.io import read_csv
 
 
 @dataclass(frozen=True)
@@ -27,7 +27,7 @@ def construir_config_transformacao() -> INEPConfigTransformacao:
     anos = list(ANOS)
 
     def leitor_ano(ano: int):
-        return read_csv(
+        return carregar_checkpoint(
             INEP_REDUZIDO
             / f"{ARQUIVOS.extracao_prefixo_out}{ano}{ARQUIVOS.extracao_ext_out}"
         )

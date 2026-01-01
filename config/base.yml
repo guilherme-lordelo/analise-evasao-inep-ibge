@@ -1,0 +1,6 @@
+
+saida:
+  encoding: "utf-8"
+  sep: ";"
+  compress:                  # Opções: null (vázio), 'gzip', 'zip', 'xz', 'bz2'
+  ordem_colunas: []

@@ -1,20 +1,71 @@
+from brpipe.bridge.inep.tipos import ResultadoTipo
 from brpipe.inep.config.variaveis import VariaveisConfig
 
+from dataclasses import dataclass
 
-class VariaveisParaMapas:
-    def __init__(self, cfg: VariaveisConfig):
-        self._cfg = cfg
+@dataclass(frozen=True)
+class VariavelINEP:
+	nome: str
+	resultado: "ResultadoTipo"
 
-    @property
-    def coluna_ano(self) -> str:
-        return self._cfg.coluna_ano
+	def to_ratio(self, series):
+		return self.resultado.to_ratio(series)
 
-    @property
-    def territoriais(self) -> dict:
-        return {
-            "municipio": self._cfg.coluna_cod_municipio,
-            "uf": self._cfg.coluna_uf,
-        }
+	def to_percent_0_100(self, series):
+		return self.resultado.to_percent_0_100(series)
 
-    def is_quantitativa(self, nome: str) -> bool:
-        return nome in self._cfg.quantitativas
+	def to_logit(self, series):
+		return self.resultado.to_logit(series)
+
+
+
+class VariaveisINEP:
+	def __init__(self, cfg: VariaveisConfig):
+		self._cfg = cfg
+		self._variaveis = self._build_variaveis()
+
+	def _build_variaveis(self) -> dict[str, VariavelINEP]:
+		q = self._cfg.quantitativas
+
+		if isinstance(q, dict):
+			return {
+				nome: VariavelINEP(nome, resultado)
+				for nome, resultado in q.items()
+			}
+
+		return {
+			nome: VariavelINEP(nome, ResultadoTipo.COUNT)
+			for nome in q
+		}
+
+	@property
+	def coluna_ano(self) -> str:
+		return self._cfg.coluna_ano
+
+	@property
+	def territoriais(self) -> dict:
+		return {
+			"municipio": self._cfg.coluna_cod_municipio,
+			"uf": self._cfg.coluna_uf,
+		}
+
+	def is_quantitativa(self, nome: str) -> bool:
+		return nome in self._variaveis
+	
+	def is_categorica(self, nome: str) -> bool:
+		return nome in self._cfg.categoricas
+	
+	def get_variavel(self, nome: str) -> VariavelINEP:
+		try:
+			return self._variaveis[nome]
+		except KeyError:
+			raise KeyError(f"Variável '{nome}' não configurada para mapas")
+
+	def get_meta_label(self, nome: str) -> str:
+		var = self.get_variavel(nome)
+
+		if var.resultado == ResultadoTipo.PERCENT_0_100:
+			return f"{nome} (%)"
+		if var.resultado == ResultadoTipo.PROPORTION:
+			return f"{nome} (0–1)"
+		return nome

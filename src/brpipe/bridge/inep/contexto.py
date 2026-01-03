@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from brpipe.bridge.inep.formulas import FormulasParaMetricas
-from brpipe.bridge.inep.variaveis import VariaveisParaMapas
+from brpipe.bridge.inep.variaveis import VariaveisINEP
 
 @dataclass(frozen=True)
 class InepContext:
-	variaveis: VariaveisParaMapas
+	variaveis: VariaveisINEP
 	formulas: FormulasParaMetricas
 	anos: list[int]

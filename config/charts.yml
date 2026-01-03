@@ -1,0 +1,12 @@
+linha_temporal:
+  plot:
+    figsize: [8, 4]
+    mostrar_titulo: true
+    grid: true
+
+  variaveis:
+    - QT_ING_TOTAL
+
+  saida:
+    formato: png
+    dpi: 150

@@ -1,17 +1,17 @@
 import matplotlib.pyplot as plt
 
-from brpipe.viz.charts.config import (
+from brpipe.viz.charts.common import (
     VisualizadorVariavel,
     TipoChart,
 )
-from brpipe.viz.charts.config.enums import NormalizacaoPlot
+from brpipe.viz.charts.common.enums import NormalizacaoPlot
 
 
 def render_linha_temporal(
     df,
     variaveis,
     coluna_ano: str,
-    plot_spec,
+    plot_spec: NormalizacaoPlot,
     cfg,
 ):
     fig, ax = plt.subplots(figsize=cfg.plot.figsize)

@@ -29,3 +29,33 @@ linha_temporal:
   saida:
     formato: png
     dpi: 150
+
+scatter:
+  plot:
+    figsize: [6, 6]
+    mostrar_titulo: true
+    grid: true
+
+  plots:
+    - nome: ingresso_vs_populacao_nacional
+      nivel: nacional
+      eixo_x: QT_MAT_TOTAL
+      eixo_y: QT_ING_TOTAL
+
+    - nome: ingresso_fem_vs_total_ba
+      nivel: estadual
+      territorio:
+        ufs: "BA"
+      eixo_x: QT_ING_TOTAL
+      eixo_y: QT_ING_FEM
+
+    - nome: ingresso_vs_populacao_municipal
+      nivel: municipal
+      territorio:
+        municipios: 2927408
+      eixo_x: QT_MAT_TOTAL
+      eixo_y: QT_ING_TOTAL
+
+  saida:
+    formato: png
+    dpi: 150

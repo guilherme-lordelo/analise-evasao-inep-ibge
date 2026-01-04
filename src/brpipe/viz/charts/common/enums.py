@@ -5,6 +5,7 @@ class TipoChart(Enum):
 	BARRA = auto()
 	LINHA = auto()
 	HISTOGRAMA = auto()
+	SCATTER = auto()
 
 class NormalizacaoPlot(Enum):
 	COUNT = auto()

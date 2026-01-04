@@ -1,10 +1,8 @@
 from dataclasses import dataclass
-from typing import Dict, List, Optional
-
+from typing import List, Optional
 from brpipe.bridge.inep.tipos import ResultadoTipo
-from brpipe.bridge.inep.variaveis import VariaveisINEP
 from brpipe.utils.config import load_config
-from brpipe.viz.charts.config.enums import NormalizacaoPlot
+from brpipe.viz.charts.common import NormalizacaoPlot, PlotSpecBase
 
 
 _CFG = load_config("charts")
@@ -18,13 +16,12 @@ class LinhaTemporalPlotConfig:
     max_variaveis_por_plot: int
 
 @dataclass(frozen=True)
-class LinhaTemporalPlotSpec:
-	nome: str
-	nivel: str
+class LinhaTemporalPlotSpec(PlotSpecBase):
 	variaveis: list[str]
 	territorio_chave: Optional[str] = None
 	territorio_valor: Optional[str | int] = None
 	normalizacao: NormalizacaoPlot = NormalizacaoPlot.COUNT
+
 
 @dataclass(frozen=True)
 class LinhaTemporalConfig:

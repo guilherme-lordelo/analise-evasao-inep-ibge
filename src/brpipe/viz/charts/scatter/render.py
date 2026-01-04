@@ -4,9 +4,10 @@ import matplotlib.pyplot as plt
 from brpipe.bridge.inep.variaveis import VariaveisINEP
 from brpipe.viz.charts.common import (
     VisualizadorVariavel,
+    NormalizacaoPlot,
     TipoChart,
+    persistir_chart,
 )
-from brpipe.viz.charts.common.enums import NormalizacaoPlot
 from brpipe.viz.charts.scatter.config import ScatterConfig, ScatterPlotSpec
 
 
@@ -53,8 +54,11 @@ def render_scatter(
         ax.grid(True, alpha=0.3)
 
     fig.tight_layout()
-    fig.savefig(
-        f"{plot_spec.nome}.{cfg.formato_saida}",
+    persistir_chart(
+        fig=fig,
+        tipo="scatter",
+        nome=plot_spec.nome,
+        formato=cfg.formato_saida,
         dpi=cfg.dpi,
     )
 

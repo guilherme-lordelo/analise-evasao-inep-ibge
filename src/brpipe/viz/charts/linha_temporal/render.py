@@ -3,8 +3,9 @@ import matplotlib.pyplot as plt
 from brpipe.viz.charts.common import (
     VisualizadorVariavel,
     TipoChart,
+    NormalizacaoPlot,
+    persistir_chart,
 )
-from brpipe.viz.charts.common.enums import NormalizacaoPlot
 
 
 def render_linha_temporal(
@@ -51,8 +52,11 @@ def render_linha_temporal(
     ax.legend()
     fig.tight_layout()
 
-    fig.savefig(
-        f"{plot_spec.nome}.{cfg.formato_saida}",
+    persistir_chart(
+        fig=fig,
+        tipo="linha_temporal",
+        nome=plot_spec.nome,
+        formato=cfg.formato_saida,
         dpi=cfg.dpi,
     )
 

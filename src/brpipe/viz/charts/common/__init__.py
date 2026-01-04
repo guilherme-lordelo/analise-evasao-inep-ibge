@@ -1,3 +1,4 @@
+from brpipe.viz.charts.common.persistencia import persistir_chart
 from brpipe.viz.charts.common.plot_spec import PlotSpecBase
 from brpipe.viz.charts.common.dataframe import carregar_dataframe_por_plot
 from brpipe.viz.charts.common.graficos import VisualizadorVariavel
@@ -11,6 +12,7 @@ LINHA_TEMPORAL = carregar_linha_temporal(CONTEXTO.variaveis)
 SCATTER = carregar_scatter(CONTEXTO.variaveis)
 
 __all__ = [
+    "persistir_chart",
     "LINHA_TEMPORAL",
     "SCATTER",
     "meta_para_linha",

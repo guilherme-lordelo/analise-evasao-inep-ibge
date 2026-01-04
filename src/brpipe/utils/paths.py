@@ -57,5 +57,6 @@ arquivo_nacional = (
 	  f"{ARQUIVOS.transformacao_ext_out}"
 )
 
-# Mapas
+# Visualizações
 MAPAS_RENDER = DATA_DIR / "rendered" / "mapas"
+CHARTS_RENDER = DATA_DIR / "rendered" / "charts"

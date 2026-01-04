@@ -1,7 +1,7 @@
 from brpipe.bridge.inep.tipos import ResultadoTipo
 from brpipe.bridge.inep.variaveis import VariavelINEP
-from brpipe.viz.config.metadados import MetaVisual, meta_para_linha
-from brpipe.viz.config.tipos import TipoChart
+from brpipe.viz.charts.config.metadados import MetaVisual, meta_para_linha
+from brpipe.viz.charts.config.enums import TipoChart
 
 class VisualizadorVariavel:
     def __init__(self, variavel: VariavelINEP):

@@ -3,9 +3,28 @@ linha_temporal:
     figsize: [8, 4]
     mostrar_titulo: true
     grid: true
+    max_variaveis_por_plot: 4
 
-  variaveis:
-    - QT_ING_TOTAL
+  plots:
+    - nome: ingresso_total_nacional
+      nivel: nacional
+      variaveis:
+        - QT_ING_TOTAL
+
+    - nome: ingresso_total_por_uf
+      nivel: estadual
+      territorio:
+        ufs: "BA"
+      variaveis:
+        - QT_ING_TOTAL
+        - QT_ING_FEM
+
+    - nome: ingresso_municipal
+      nivel: municipal
+      territorio:
+        municipios: 2927408
+      variaveis:
+        - QT_ING_TOTAL
 
   saida:
     formato: png

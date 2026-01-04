@@ -1,52 +1,58 @@
 import matplotlib.pyplot as plt
 
-from brpipe.viz.config.graficos import VisualizadorVariavel
-from brpipe.viz.config.metadados import meta_para_linha
-from brpipe.viz.config.tipos import TipoChart
-
+from brpipe.viz.charts.config import (
+    VisualizadorVariavel,
+    TipoChart,
+)
+from brpipe.viz.charts.config.enums import NormalizacaoPlot
 
 
 def render_linha_temporal(
     df,
     variaveis,
     coluna_ano: str,
-    nome_variavel: str,
+    plot_spec,
     cfg,
 ):
-    var = variaveis.get_variavel(nome_variavel)
-
-    viz = VisualizadorVariavel(var)
-
-    df_plot = df[[coluna_ano, nome_variavel]].copy()
-
-    df_plot[nome_variavel] = viz.preparar_para_chart(
-        df_plot[nome_variavel],
-        TipoChart.LINHA_TEMPORAL,
-    )
-
-    meta = meta_para_linha(var)
-
     fig, ax = plt.subplots(figsize=cfg.plot.figsize)
 
-    ax.plot(
-        df_plot[coluna_ano],
-        df_plot[nome_variavel],
-        marker="o",
-    )
+    for nome_variavel in plot_spec.variaveis:
+
+        var = variaveis.get_variavel(nome_variavel)
+        viz = VisualizadorVariavel(var)
+
+        df_plot = df[[coluna_ano, nome_variavel]].copy()
+
+        if plot_spec.normalizacao == NormalizacaoPlot.RATIO:
+            serie = viz.preparar_para_chart(
+                df_plot[nome_variavel],
+                TipoChart.LINHA_TEMPORAL,
+            )
+        else:
+            serie = df_plot[nome_variavel]
+
+        meta = viz.meta_para_chart(TipoChart.LINHA_TEMPORAL)
+
+        ax.plot(
+            df_plot[coluna_ano],
+            serie,
+            marker="o",
+            label=meta.y_label,
+        )
 
     ax.set_xlabel("Ano")
-    ax.set_ylabel(meta.y_label)
 
     if cfg.plot.mostrar_titulo:
-        ax.set_title(nome_variavel)
+        ax.set_title(plot_spec.nome)
 
     if cfg.plot.grid:
         ax.grid(True, alpha=0.3)
 
+    ax.legend()
     fig.tight_layout()
 
     fig.savefig(
-        f"{nome_variavel}.{cfg.formato_saida}",
+        f"{plot_spec.nome}.{cfg.formato_saida}",
         dpi=cfg.dpi,
     )
 

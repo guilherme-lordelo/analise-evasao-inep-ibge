@@ -20,7 +20,7 @@ class ConsumiveisINEP:
 
         if self._metricas:
             try:
-                return self._metricas.resolver_com_formato(nome)
+                return self._metricas.resolver(nome)
             except KeyError:
                 pass
 

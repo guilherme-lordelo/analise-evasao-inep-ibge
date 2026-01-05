@@ -5,6 +5,8 @@ from dataclasses import dataclass
 class PlotSpecBase(ABC):
 	nome: str
 	nivel: str
+	coluna_territorial: str | None
+	valor_territorial: str | None
 
 	@property
 	@abstractmethod

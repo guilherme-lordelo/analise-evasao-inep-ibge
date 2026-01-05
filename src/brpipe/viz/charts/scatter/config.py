@@ -3,6 +3,8 @@ from typing import List, Optional
 from brpipe.bridge.inep.tipos import ResultadoTipo
 from brpipe.viz.charts.common import NormalizacaoPlot, PlotSpecBase
 from brpipe.utils.config import load_config
+from brpipe.viz.charts.common.consumiveis import ConsumiveisINEP
+from brpipe.viz.charts.common.territorio import TerritoriosINEP
 
 _CFG = load_config("charts")
 
@@ -32,7 +34,10 @@ class ScatterConfig:
 	formato_saida: str
 	dpi: int
 
-def carregar_scatter(variaveis_inep) -> ScatterConfig:
+def carregar_scatter(
+	consumiveis: ConsumiveisINEP,
+	territorios: TerritoriosINEP,
+) -> ScatterConfig:
 	cfg = _CFG["scatter"]
 
 	plot_cfg = cfg["plot"]

@@ -60,7 +60,7 @@ def carregar_formulas(_cfg: dict) -> FormulasConfig:
 			nome=nome,
 			descricao=descricao,
 			expressao=expressao,
-			formato=formato,
+			formato=formato or None,
 			regras_validacao=regras,
 		)
 

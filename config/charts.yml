@@ -6,25 +6,29 @@ linha_temporal:
     max_variaveis_por_plot: 4
 
   plots:
-    - nome: ingresso_total_nacional
+    - nome: Ingresso Nacional Total
       nivel: nacional
       variaveis:
         - QT_ING_TOTAL
 
-    - nome: ingresso_total_por_uf
+    - nome: evasao_anual_nacional
+      nivel: nacional
+      variaveis:
+        - evasao_anual
+
+    - nome: ingresso_vs_evasao_nacional
+      nivel: nacional
+      variaveis:
+        - TP_REDE_1
+        - TP_REDE_2
+        - evasao_anual
+
+    - nome: evasao_anual_ba
       nivel: estadual
       territorio:
         ufs: "BA"
       variaveis:
-        - QT_ING_TOTAL
-        - QT_ING_FEM
-
-    - nome: ingresso_municipal
-      nivel: municipal
-      territorio:
-        municipios: 2927408
-      variaveis:
-        - QT_ING_TOTAL
+        - evasao_anual
 
   saida:
     formato: png
@@ -42,18 +46,21 @@ scatter:
       eixo_x: QT_MAT_TOTAL
       eixo_y: QT_ING_TOTAL
 
-    - nome: ingresso_fem_vs_total_ba
+    - nome: ingresso_vs_evasao_nacional
+      nivel: nacional
+      eixo_x: QT_ING_TOTAL
+      eixo_y: evasao_anual
+
+    - nome: evasao_vs_evasao_nacional
+      nivel: nacional
+      eixo_x: evasao_anual
+      eixo_y: evasao_anual
+
+    - nome: evasao_vs_ingresso_ba
       nivel: estadual
       territorio:
         ufs: "BA"
-      eixo_x: QT_ING_TOTAL
-      eixo_y: QT_ING_FEM
-
-    - nome: ingresso_vs_populacao_municipal
-      nivel: municipal
-      territorio:
-        municipios: 2927408
-      eixo_x: QT_MAT_TOTAL
+      eixo_x: evasao_anual
       eixo_y: QT_ING_TOTAL
 
   saida:

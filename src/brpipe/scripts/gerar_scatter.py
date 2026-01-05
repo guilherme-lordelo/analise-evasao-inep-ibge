@@ -7,7 +7,7 @@ def main():
 	METRICAS = CONTEXTO.metricas
 
 	print("Renderizando gráficos scatter...")
-	executar_scatter(variaveis=VARIAVEIS, metricas=METRICAS, coluna_ano=VARIAVEIS.coluna_ano)
+	executar_scatter()
 	print("Renderização de charts concluída.")
 
 

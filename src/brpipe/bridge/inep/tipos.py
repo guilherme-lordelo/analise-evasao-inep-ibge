@@ -1,4 +1,6 @@
 from enum import Enum, auto
+
+from pandas import Series
 from brpipe.utils.transformacoes import logit, inv_logit
 
 class ResultadoTipo(Enum):
@@ -34,11 +36,16 @@ class ResultadoTipo(Enum):
 		if self == ResultadoTipo.PERCENT_0_100:
 			return logit(series / 100)
 		raise ValueError("Conversão para logit não suportada")
+	
+	def apply(self, series) -> Series:
+		if self is not ResultadoTipo.COUNT:
+			return self.to_ratio(series)
+		return series
 
 
 def resolver_resultado_tipo(valor) -> ResultadoTipo:
 	if valor is None:
-		return ResultadoTipo.RATIO
+		return ResultadoTipo.PROPORTION
 
 	if isinstance(valor, ResultadoTipo):
 		return valor

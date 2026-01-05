@@ -21,28 +21,20 @@ def render_linha_temporal(
 ):
     fig, ax = plt.subplots(figsize=cfg.plot.figsize)
 
-    filtrar_ano_inicial(
-        df,
-        consumiveis=consumiveis,
-        coluna_ano=coluna_ano,
-        plot_spec=plot_spec,
-    )
-
     for nome in plot_spec.variaveis:
+        item = consumiveis.get(nome)
+        coluna = item.nome
 
-        var = consumiveis.get(nome)
+        viz = Visualizador(item)
 
-        viz = Visualizador(var)
+        df_plot = df[[coluna_ano, coluna]].copy()
 
-        df_plot = df[[coluna_ano, nome]].copy()
+        serie = item.aplicar_formato(df_plot[coluna])
 
-        if plot_spec.normalizacao == NormalizacaoPlot.RATIO:
-            serie = viz.preparar_para_chart(
-                df_plot[nome],
-                TipoChart.LINHA_TEMPORAL,
-            )
-        else:
-            serie = df_plot[nome]
+        serie = viz.preparar_para_chart(
+            serie,
+            TipoChart.LINHA_TEMPORAL,
+        )
 
         meta = viz.meta_para_chart(TipoChart.LINHA_TEMPORAL)
 

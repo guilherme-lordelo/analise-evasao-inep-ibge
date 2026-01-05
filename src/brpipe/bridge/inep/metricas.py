@@ -8,7 +8,7 @@ class MetricaINEP:
         formula_cfg,
         resultado: ResultadoTipo,
     ):
-        self.nome = nome
+        self.nome = nome.upper()
         self._cfg = formula_cfg
         self.resultado = resultado
 
@@ -16,38 +16,37 @@ class MetricaINEP:
     def lag(self) -> int:
         return 1
 
-    def to_ratio(self, series):
-        return self.resultado.to_ratio(series)
-
-    def to_percent_0_100(self, series):
-        return self.resultado.to_percent_0_100(series)
-
-    def to_logit(self, series):
-        return self.resultado.to_logit(series)
+    def aplicar_formato(self, series):
+        return self.resultado.apply(series)
 
 
 class FormulasParaMetricas:
     def __init__(self, cfg: FormulasConfig):
         self._cfg = cfg
 
+        self._index_ci = {
+            nome.upper(): nome
+            for nome in cfg.formulas.keys()
+        }
+
     def listar_metricas(self) -> list[str]:
-        _lista_formulas = list(self._cfg.formulas.keys())
-        return [item.upper() for item in _lista_formulas]
+        return list(self._index_ci.keys())
 
-    def resolver(self, nome: str) -> FormulaConfig:
-        if nome not in self._cfg.formulas:
+    def resolver(self, nome: str) -> MetricaINEP:
+        chave = nome.upper()
+
+        if chave not in self._index_ci:
             raise KeyError(f"Métrica '{nome}' não definida no INEP")
-        return self._cfg.formulas[nome]
 
-    def resolver_com_formato(self, nome: str) -> MetricaINEP:
-        cfg = self.resolver(nome)
+        nome_real = self._index_ci[chave]
+        cfg = self._cfg.formulas[nome_real]
 
         resultado = resolver_resultado_tipo(
-            getattr(cfg, "formato", None)
+            cfg.formato or ResultadoTipo.PROPORTION
         )
 
         return MetricaINEP(
-            nome=nome,
+            nome=nome_real,
             formula_cfg=cfg,
             resultado=resultado,
         )

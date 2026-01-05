@@ -8,15 +8,8 @@ class VariavelINEP:
 	nome: str
 	resultado: "ResultadoTipo"
 
-	def to_ratio(self, series):
-		return self.resultado.to_ratio(series)
-
-	def to_percent_0_100(self, series):
-		return self.resultado.to_percent_0_100(series)
-
-	def to_logit(self, series):
-		return self.resultado.to_logit(series)
-
+	def aplicar_formato(self, series):
+		return self.resultado.apply(series)
 
 
 class VariaveisINEP:
@@ -68,7 +61,7 @@ class VariaveisINEP:
 		try:
 			return self._variaveis[nome]
 		except KeyError:
-			raise KeyError(f"Variável '{nome}' não configurada para mapas")
+			raise KeyError(f"Variável '{nome}' não encontrada")
 
 	def get_meta_label(self, nome: str) -> str:
 		var = self.get_variavel(nome)

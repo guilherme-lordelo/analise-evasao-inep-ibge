@@ -1,12 +1,10 @@
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List
 from brpipe.bridge.inep.tipos import ResultadoTipo
 from brpipe.utils.config import load_config
-from brpipe.viz.charts.common import NormalizacaoPlot, PlotSpecBase
-
+from brpipe.viz.charts.common import NormalizacaoPlot, PlotSpecBase, ConsumiveisINEP, TerritoriosINEP
 
 _CFG = load_config("charts")
-
 
 @dataclass(frozen=True)
 class LinhaTemporalPlotConfig:
@@ -17,14 +15,12 @@ class LinhaTemporalPlotConfig:
 
 @dataclass(frozen=True)
 class LinhaTemporalPlotSpec(PlotSpecBase):
-	_variaveis: list[str]
-	territorio_chave: Optional[str] = None
-	territorio_valor: Optional[str | int] = None
-	normalizacao: NormalizacaoPlot = NormalizacaoPlot.COUNT
+    _variaveis: list[str]
+    normalizacao: NormalizacaoPlot = NormalizacaoPlot.COUNT
 
-	@property
-	def variaveis(self) -> list[str]:
-		return self._variaveis
+    @property
+    def variaveis(self) -> list[str]:
+        return self._variaveis
 
 
 @dataclass(frozen=True)
@@ -35,8 +31,10 @@ class LinhaTemporalConfig:
     dpi: int
 
 
-
-def carregar_linha_temporal(variaveis_inep) -> LinhaTemporalConfig:
+def carregar_linha_temporal(
+	consumiveis: ConsumiveisINEP,
+	territorios: TerritoriosINEP,
+) -> LinhaTemporalConfig:
 	cfg = _CFG["linha_temporal"]
 
 	plot_cfg = cfg["plot"]
@@ -58,42 +56,33 @@ def carregar_linha_temporal(variaveis_inep) -> LinhaTemporalConfig:
 				f"Plot '{p['nome']}' excede max_variaveis_por_plot"
 			)
 
-		territorio_chave = None
-		territorio_valor = None
+		coluna_territorial = None
+		valor_territorial = None
 
 		if "territorio" in p:
-			if len(p["territorio"]) != 1:
-				raise ValueError(
-					f"Plot '{p['nome']}' deve ter exatamente um território"
-				)
+			(chave, valor_territorial), = p["territorio"].items()
 
-			territorio_chave, territorio_valor = next(
-				iter(p["territorio"].items())
+			coluna_territorial = territorios.coluna(
+				nivel=p["nivel"],
+				chave=chave,
 			)
 
-			if isinstance(territorio_valor, list):
-				raise ValueError(
-					f"Plot '{p['nome']}' não aceita múltiplos territórios"
-				)
-
-		resultados = set()
-		for nome in nomes_vars:
-			var = variaveis_inep.get_variavel(nome)
-			resultados.add(var.resultado)
+		resultados = {
+			consumiveis.get(nome).resultado
+			for nome in nomes_vars
+		}
 
 		if resultados == {ResultadoTipo.COUNT}:
 			normalizacao = NormalizacaoPlot.COUNT
-
 		elif resultados.issubset({
 			ResultadoTipo.LOGIT,
 			ResultadoTipo.PROPORTION,
 			ResultadoTipo.PERCENT_0_100,
 		}):
 			normalizacao = NormalizacaoPlot.RATIO
-
 		else:
 			raise ValueError(
-				f"Plot '{p['nome']}' mistura tipos incompatíveis"
+				f"Plot '{p['nome']}' mistura tipos incompatíveis" + f" ({resultados})"
 			)
 
 		plots.append(
@@ -101,8 +90,8 @@ def carregar_linha_temporal(variaveis_inep) -> LinhaTemporalConfig:
 				nome=p["nome"],
 				nivel=p["nivel"],
 				_variaveis=nomes_vars,
-				territorio_chave=territorio_chave,
-				territorio_valor=territorio_valor,
+				coluna_territorial=coluna_territorial,
+				valor_territorial=valor_territorial,
 				normalizacao=normalizacao,
 			)
 		)

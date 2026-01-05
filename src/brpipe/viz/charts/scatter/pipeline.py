@@ -20,7 +20,7 @@ def executar_scatter(
     )
 
     for plot_spec in SCATTER.plots:
-        df = carregar_dataframe_por_plot(plot_spec, variaveis)
+        df = carregar_dataframe_por_plot(plot_spec)
 
         render_scatter(
             df=df,

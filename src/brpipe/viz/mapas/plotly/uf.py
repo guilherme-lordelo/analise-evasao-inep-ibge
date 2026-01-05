@@ -1,4 +1,4 @@
-from brpipe.viz.mapas.config import VARIAVEIS, FORMULAS, MALHA
+from brpipe.viz.mapas.config import VARIAVEIS, METRICAS, MALHA
 from brpipe.viz.mapas.merge.uf import merge_uf
 from brpipe.viz.mapas.visoes.uf import VisaoUF
 from brpipe.viz.mapas.plotly.base import plot_mapa_plotly
@@ -22,7 +22,7 @@ def mapa_evasao_uf_plotly(formula_indice):
         gdf=gdf_view,
         coluna_chave=CHAVE_MALHA,
         coluna_ano=VARIAVEIS.coluna_ano,
-        titulo=f"{FORMULAS[formula_indice]} (UF)",
+        titulo=f"{METRICAS[formula_indice]} (UF)",
         indice=formula_indice,
     )
 

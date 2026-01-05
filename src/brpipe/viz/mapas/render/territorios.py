@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from typing import Callable, Type
 from brpipe.utils.parser import parse_bool
-from brpipe.viz.mapas.config import PLOT, FORMULAS, ANOS, VARIAVEIS
+from brpipe.viz.mapas.config import PLOT, METRICAS, ANOS, VARIAVEIS
 from brpipe.viz.mapas.merge.municipios import merge_municipios
 from brpipe.viz.mapas.merge.uf import merge_uf
 from brpipe.viz.mapas.render.getFiguras import render_mapa
@@ -43,7 +43,7 @@ def _render_por_ano(
 
     visao = visao_classe(gdf_base)
 
-    for formula in FORMULAS:
+    for formula in METRICAS:
         print("    " + formula + "...")
         out_formula = out_dir / formula.lower()
         out_formula.mkdir(parents=True, exist_ok=True)

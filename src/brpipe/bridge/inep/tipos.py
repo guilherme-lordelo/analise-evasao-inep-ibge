@@ -34,3 +34,24 @@ class ResultadoTipo(Enum):
 		if self == ResultadoTipo.PERCENT_0_100:
 			return logit(series / 100)
 		raise ValueError("Conversão para logit não suportada")
+
+
+def resolver_resultado_tipo(valor) -> ResultadoTipo:
+	if valor is None:
+		return ResultadoTipo.RATIO
+
+	if isinstance(valor, ResultadoTipo):
+		return valor
+
+	if isinstance(valor, str):
+		try:
+			return ResultadoTipo[valor.upper()]
+		except KeyError:
+			raise ValueError(
+				f"Formato '{valor}' inválido. "
+				f"Suportados: {[e.name for e in ResultadoTipo]}"
+			)
+
+	raise TypeError(
+		f"Formato deve ser str, ResultadoTipo ou None. Recebido: {type(valor)}"
+	)

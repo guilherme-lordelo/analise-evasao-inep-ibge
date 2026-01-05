@@ -21,6 +21,10 @@ class ScatterPlotSpec(PlotSpecBase):
 	territorio_valor: Optional[str | int] = None
 	normalizacao: NormalizacaoPlot = NormalizacaoPlot.COUNT
 
+	@property
+	def variaveis(self) -> list[str]:
+		return [self.eixo_x, self.eixo_y]
+
 @dataclass(frozen=True)
 class ScatterConfig:
 	plot: ScatterPlotConfig

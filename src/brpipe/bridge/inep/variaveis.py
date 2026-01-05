@@ -25,18 +25,27 @@ class VariaveisINEP:
 		self._variaveis = self._build_variaveis()
 
 	def _build_variaveis(self) -> dict[str, VariavelINEP]:
+		variaveis: dict[str, VariavelINEP] = {}
+
 		q = self._cfg.quantitativas
 
 		if isinstance(q, dict):
-			return {
-				nome: VariavelINEP(nome, resultado)
-				for nome, resultado in q.items()
-			}
+			for nome, resultado in q.items():
+				variaveis[nome] = VariavelINEP(nome, resultado)
+		else:
+			for nome in q:
+				variaveis[nome] = VariavelINEP(nome, ResultadoTipo.COUNT)
 
-		return {
-			nome: VariavelINEP(nome, ResultadoTipo.COUNT)
-			for nome in q
-		}
+		for nome_base, valores in self._cfg.valores_categoricos.items():
+			for valor in valores:
+				nome_coluna = f"{nome_base}_{valor}"
+
+				variaveis[nome_coluna] = VariavelINEP(
+					nome=nome_coluna,
+					resultado=ResultadoTipo.PERCENT_0_100,
+				)
+
+		return variaveis
 
 	@property
 	def coluna_ano(self) -> str:

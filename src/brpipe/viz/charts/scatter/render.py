@@ -1,28 +1,36 @@
 import matplotlib.pyplot as plt
 from pandas import DataFrame
-import matplotlib.pyplot as plt
-from brpipe.bridge.inep.variaveis import VariaveisINEP
+
 from brpipe.viz.charts.common import (
-    VisualizadorVariavel,
+    Visualizador,
     NormalizacaoPlot,
     TipoChart,
     persistir_chart,
 )
-from brpipe.viz.charts.scatter.config import ScatterConfig, ScatterPlotSpec
-
+from brpipe.viz.charts.common.consumiveis import ConsumiveisINEP
+from brpipe.viz.charts.common.filtros import filtrar_ano_inicial
+from brpipe.viz.charts.linha_temporal.config import LinhaTemporalConfig, LinhaTemporalPlotSpec
 
 
 def render_scatter(
     df: DataFrame,
-    variaveis: VariaveisINEP,
-    plot_spec: ScatterPlotSpec,
-    cfg: ScatterConfig,
+    consumiveis: ConsumiveisINEP,
+    coluna_ano: str,
+    plot_spec: LinhaTemporalPlotSpec,
+    cfg: LinhaTemporalConfig,
 ):
-    var_x = variaveis.get_variavel(plot_spec.eixo_x)
-    var_y = variaveis.get_variavel(plot_spec.eixo_y)
+    filtrar_ano_inicial(
+        df,
+        consumiveis=consumiveis,
+        coluna_ano=coluna_ano,
+        plot_spec=plot_spec,
+    )
 
-    viz_x = VisualizadorVariavel(var_x)
-    viz_y = VisualizadorVariavel(var_y)
+    item_x = consumiveis.get(plot_spec.eixo_x)
+    item_y = consumiveis.get(plot_spec.eixo_y)
+
+    viz_x = Visualizador(item_x)
+    viz_y = Visualizador(item_y)
 
     df_plot = df[[plot_spec.eixo_x, plot_spec.eixo_y]].copy()
 
@@ -43,9 +51,8 @@ def render_scatter(
 
     ax.scatter(x, y, alpha=0.7)
 
-    ax.set_xlabel(var_x.nome)
-    ax.set_ylabel(var_y.nome)
-
+    ax.set_xlabel(item_x.nome)
+    ax.set_ylabel(item_y.nome)
 
     if cfg.plot.mostrar_titulo:
         ax.set_title(plot_spec.nome)
@@ -54,6 +61,7 @@ def render_scatter(
         ax.grid(True, alpha=0.3)
 
     fig.tight_layout()
+
     persistir_chart(
         fig=fig,
         tipo="scatter",
@@ -63,4 +71,3 @@ def render_scatter(
     )
 
     plt.close(fig)
-

@@ -17,10 +17,14 @@ class LinhaTemporalPlotConfig:
 
 @dataclass(frozen=True)
 class LinhaTemporalPlotSpec(PlotSpecBase):
-	variaveis: list[str]
+	_variaveis: list[str]
 	territorio_chave: Optional[str] = None
 	territorio_valor: Optional[str | int] = None
 	normalizacao: NormalizacaoPlot = NormalizacaoPlot.COUNT
+
+	@property
+	def variaveis(self) -> list[str]:
+		return self._variaveis
 
 
 @dataclass(frozen=True)
@@ -96,7 +100,7 @@ def carregar_linha_temporal(variaveis_inep) -> LinhaTemporalConfig:
 			LinhaTemporalPlotSpec(
 				nome=p["nome"],
 				nivel=p["nivel"],
-				variaveis=nomes_vars,
+				_variaveis=nomes_vars,
 				territorio_chave=territorio_chave,
 				territorio_valor=territorio_valor,
 				normalizacao=normalizacao,

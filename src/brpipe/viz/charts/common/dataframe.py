@@ -1,3 +1,5 @@
+from pandas import DataFrame
+from brpipe.bridge.inep.variaveis import VariaveisINEP
 from brpipe.viz.charts.common import PlotSpecBase
 from brpipe.utils.paths import (
 	arquivo_nacional,
@@ -9,8 +11,8 @@ from brpipe.utils.io import read_csv
 
 def carregar_dataframe_por_plot(
 	plot_spec: PlotSpecBase,
-	variaveis,
-):
+	variaveis: VariaveisINEP,
+) -> DataFrame:
 	if plot_spec.nivel == "nacional":
 		df = read_csv(arquivo_nacional)
 

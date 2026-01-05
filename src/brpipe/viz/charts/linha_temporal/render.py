@@ -1,36 +1,48 @@
 import matplotlib.pyplot as plt
+from pandas import DataFrame
 
 from brpipe.viz.charts.common import (
-    VisualizadorVariavel,
+    Visualizador,
     TipoChart,
     NormalizacaoPlot,
     persistir_chart,
 )
+from brpipe.viz.charts.common.consumiveis import ConsumiveisINEP
+from brpipe.viz.charts.common.filtros import filtrar_ano_inicial
+from brpipe.viz.charts.linha_temporal.config import LinhaTemporalConfig, LinhaTemporalPlotSpec
 
 
 def render_linha_temporal(
-    df,
-    variaveis,
+    df: DataFrame,
+    consumiveis: ConsumiveisINEP,
     coluna_ano: str,
-    plot_spec: NormalizacaoPlot,
-    cfg,
+    plot_spec: LinhaTemporalPlotSpec,
+    cfg: LinhaTemporalConfig,
 ):
     fig, ax = plt.subplots(figsize=cfg.plot.figsize)
 
-    for nome_variavel in plot_spec.variaveis:
+    filtrar_ano_inicial(
+        df,
+        consumiveis=consumiveis,
+        coluna_ano=coluna_ano,
+        plot_spec=plot_spec,
+    )
 
-        var = variaveis.get_variavel(nome_variavel)
-        viz = VisualizadorVariavel(var)
+    for nome in plot_spec.variaveis:
 
-        df_plot = df[[coluna_ano, nome_variavel]].copy()
+        var = consumiveis.get(nome)
+
+        viz = Visualizador(var)
+
+        df_plot = df[[coluna_ano, nome]].copy()
 
         if plot_spec.normalizacao == NormalizacaoPlot.RATIO:
             serie = viz.preparar_para_chart(
-                df_plot[nome_variavel],
+                df_plot[nome],
                 TipoChart.LINHA_TEMPORAL,
             )
         else:
-            serie = df_plot[nome_variavel]
+            serie = df_plot[nome]
 
         meta = viz.meta_para_chart(TipoChart.LINHA_TEMPORAL)
 

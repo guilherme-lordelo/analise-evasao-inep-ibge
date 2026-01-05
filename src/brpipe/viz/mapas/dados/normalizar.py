@@ -1,5 +1,5 @@
 import pandas as pd
-from brpipe.viz.mapas.config import FORMULAS
+from brpipe.viz.mapas.config import METRICAS
 
 def normalizar_metrica_long(
 	df: pd.DataFrame,
@@ -20,5 +20,5 @@ def normalizar_metrica_long(
 		colunas.insert(1, coluna_uf)
 
 	return (
-		df[colunas + FORMULAS]
+		df[colunas + METRICAS]
 	)

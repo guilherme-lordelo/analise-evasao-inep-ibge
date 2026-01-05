@@ -1,21 +1,31 @@
+from brpipe.bridge.inep.metricas import FormulasParaMetricas
 from brpipe.bridge.inep.variaveis import VariaveisINEP
+from brpipe.viz.charts.common.consumiveis import ConsumiveisINEP
 from brpipe.viz.charts.common import (
-	SCATTER,
-	carregar_dataframe_por_plot,
+    SCATTER,
+    carregar_dataframe_por_plot,
 )
 from brpipe.viz.charts.scatter.render import render_scatter
 
 
 def executar_scatter(
-	variaveis: VariaveisINEP,
+    variaveis: VariaveisINEP,
+    metricas: FormulasParaMetricas,
+	coluna_ano: str,
 ):
-	for plot_spec in SCATTER.plots:
+    
+    consumiveis = ConsumiveisINEP(
+        variaveis=variaveis,
+        metricas=metricas,
+    )
 
-		df = carregar_dataframe_por_plot(plot_spec, variaveis)
+    for plot_spec in SCATTER.plots:
+        df = carregar_dataframe_por_plot(plot_spec, variaveis)
 
-		render_scatter(
-			df=df,
-			variaveis=variaveis,
-			plot_spec=plot_spec,
-			cfg=SCATTER,
-		)
+        render_scatter(
+            df=df,
+            consumiveis=consumiveis,
+			coluna_ano=coluna_ano,
+            plot_spec=plot_spec,
+            cfg=SCATTER,
+        )

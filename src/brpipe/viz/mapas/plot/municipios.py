@@ -1,4 +1,4 @@
-from brpipe.viz.mapas.config import PLOT, FORMULAS
+from brpipe.viz.mapas.config import PLOT, METRICAS
 from brpipe.viz.mapas.merge.municipios import merge_municipios
 from brpipe.viz.mapas.plot.visualizacao import plot_mapa
 from brpipe.viz.mapas.visoes.municipios import VisaoMunicipios
@@ -28,10 +28,10 @@ def mapa_evasao_municipios(
 
     plot_mapa(
         gdf=gdf_view,
-        coluna=FORMULAS[formula_indice],
+        coluna=METRICAS[formula_indice],
         figsize=PLOT.figsize,
         cmap=PLOT.cmap,
         legend_label="Porcentagem",
         shrink=PLOT.legend_shrink,
-        titulo=f"{FORMULAS[formula_indice]} {ano} por Município"
+        titulo=f"{METRICAS[formula_indice]} {ano} por Município"
     )

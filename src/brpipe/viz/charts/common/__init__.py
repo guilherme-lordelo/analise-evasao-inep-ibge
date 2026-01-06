@@ -8,15 +8,18 @@ from brpipe.viz.charts.common.enums import NormalizacaoPlot, TipoChart
 from brpipe.viz.charts.common.territorio import TerritoriosINEP
 from brpipe.viz.charts.scatter.config import carregar_scatter
 from ..linha_temporal.config import LinhaTemporalConfig, carregar_linha_temporal
-from brpipe.bridge.inep import CONTEXTO
+from brpipe.bridge.inep import CONTEXTO as CONTEXTO_INEP
+from brpipe.bridge.ibge import CONTEXTO as CONTEXTO_IBGE
 
-_variaveis_inep=CONTEXTO.variaveis
-_metricas_inep=CONTEXTO.metricas
+_variaveis_inep=CONTEXTO_INEP.variaveis
+_metricas_inep=CONTEXTO_INEP.metricas
 _territorios=TerritoriosINEP(_variaveis_inep)
+_variaveis_ibge = CONTEXTO_IBGE.variaveis
 
 CONSUMIVEIS = Consumiveis(
     variaveis_inep=_variaveis_inep,
     metricas_inep=_metricas_inep,
+    variaveis_ibge=_variaveis_ibge,
 )
 COLUNA_ANO =_variaveis_inep.coluna_ano
 
@@ -28,7 +31,7 @@ __all__ = [
     "COLUNA_ANO",
     "persistir_chart",
     "LINHA_TEMPORAL",
-#    "SCATTER",
+    "SCATTER",
     "meta_para_linha",
     "LinhaTemporalConfig",
     "carregar_dataframe_por_plot",

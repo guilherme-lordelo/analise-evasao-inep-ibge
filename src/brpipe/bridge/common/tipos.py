@@ -3,6 +3,7 @@ from matplotlib.axes import Axes
 from matplotlib.ticker import PercentFormatter, ScalarFormatter
 from pandas import Series
 from brpipe.bridge.common.wrappers import SerieFormatada
+from brpipe.ibge.config.models import TransformacaoColunaConfig
 from brpipe.utils.transformacoes import logit, inv_logit
 
 class ResultadoTipo(Enum):
@@ -77,10 +78,16 @@ class ResultadoTipo(Enum):
 			resultado=self,
 		)
 
-
-def resolver_resultado_tipo(valor) -> ResultadoTipo:
+def resolver_resultado_tipo(
+	valor,
+	*,
+	padrao: ResultadoTipo | None,
+	ctx: str,
+) -> ResultadoTipo:
 	if valor is None:
-		return ResultadoTipo.PROPORTION
+		if padrao is not None:
+			return padrao
+		raise ValueError(f"{ctx} Tipo não definido e nenhum padrão disponível")
 
 	if isinstance(valor, ResultadoTipo):
 		return valor
@@ -90,10 +97,52 @@ def resolver_resultado_tipo(valor) -> ResultadoTipo:
 			return ResultadoTipo[valor.upper()]
 		except KeyError:
 			raise ValueError(
-				f"Formato '{valor}' inválido. "
+				f"{ctx} Tipo '{valor}' inválido. "
 				f"Suportados: {[e.name for e in ResultadoTipo]}"
 			)
 
 	raise TypeError(
-		f"Formato deve ser str, ResultadoTipo ou None. Recebido: {type(valor)}"
+		f"{ctx} Tipo deve ser str, ResultadoTipo ou None. Recebido: {type(valor)}"
+	)
+
+def resolver_tipo_metrica(valor) -> ResultadoTipo:
+	return resolver_resultado_tipo(
+		valor,
+		padrao=ResultadoTipo.PROPORTION,
+		ctx="[INEP][MÉTRICA]",
+	)
+
+_TRANSFORMACAO_PARA_TIPO: dict[str, ResultadoTipo] = {
+	"logit": ResultadoTipo.LOGIT,
+}
+
+def resolver_tipo_variavel_ibge(
+	*,
+	tipo_coluna: str | ResultadoTipo | None,
+	transformacao: TransformacaoColunaConfig | None,
+	tipo_default: ResultadoTipo,
+	ctx: str,
+) -> ResultadoTipo:
+	"""
+	Resolve o ResultadoTipo de uma variável IBGE seguindo precedência:
+	1. Transformação
+	2. Tipo explícito da coluna
+	3. Tipo default IBGE
+	"""
+
+	if transformacao is not None:
+		tipo_transformacao = _TRANSFORMACAO_PARA_TIPO.get(transformacao.tipo)
+
+		if not tipo_transformacao:
+			raise ValueError(
+				f"{ctx} Transformação '{transformacao.tipo}' "
+				f"não possui mapeamento para ResultadoTipo"
+			)
+
+		return tipo_transformacao
+
+	return resolver_resultado_tipo(
+		tipo_coluna,
+		padrao=tipo_default,
+		ctx=ctx,
 	)

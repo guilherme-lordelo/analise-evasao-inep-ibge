@@ -1,5 +1,5 @@
 from pandas import Series
-from brpipe.bridge.common.tipos import ResultadoTipo, resolver_resultado_tipo
+from brpipe.bridge.common.tipos import ResultadoTipo, resolver_tipo_metrica
 from brpipe.bridge.common.wrappers import SerieFormatada
 from brpipe.inep.config.formulas import FormulasConfig
 
@@ -44,7 +44,7 @@ class FormulasParaMetricas:
         nome_real = self._index_ci[chave]
         cfg = self._cfg.formulas[nome_real]
 
-        resultado = resolver_resultado_tipo(
+        resultado = resolver_tipo_metrica(
             cfg.formato or ResultadoTipo.PROPORTION
         )
 

@@ -46,17 +46,17 @@ scatter:
       eixo_x: QT_MAT_TOTAL
       eixo_y: QT_ING_TOTAL
 
-    - nome: Evasão em Rede Publica
+    - nome: Evasão vs Rede Publica
       nivel: nacional
       eixo_x: TP_REDE_1
       eixo_y: evasao_anual
 
-    - nome: Evasão em Rede Privada
+    - nome: Evasão vs Rede Privada
       nivel: nacional
       eixo_x: TP_REDE_2
       eixo_y: evasao_anual
 
-    - nome: Evasão em Rede Publica na Bahia
+    - nome: Evasão vs Rede Publica na Bahia
       nivel: estadual
       territorio:
         ufs: "BA"

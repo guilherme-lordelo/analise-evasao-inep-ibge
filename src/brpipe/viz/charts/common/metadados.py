@@ -4,27 +4,39 @@ from brpipe.bridge.inep.tipos import ResultadoTipo
 
 @dataclass(frozen=True)
 class MetaVisual:
-	y_label: str
-	y_min: float | None = None
-	y_max: float | None = None
-	y_fmt: str | None = None
+    x_label: str | None = None
+    y_label: str | None = None
+    x_min: float | None = None
+    x_max: float | None = None
+    y_min: float | None = None
+    y_max: float | None = None
+    x_fmt: str | None = None
+    y_fmt: str | None = None
 
-def meta_para_linha(item) -> MetaVisual:
-    y_label = item.nome.replace("_", " ").title()
+
+def _limites_por_resultado(item):
     if item.resultado == ResultadoTipo.PERCENT_0_100:
-        return MetaVisual(
-            y_label=y_label,
-            y_min=0,
-            y_max=100,
-        )
+        return 0, 100
 
     if item.resultado == ResultadoTipo.PROPORTION:
-        return MetaVisual(
-            y_label=y_label,
-            y_min=0,
-            y_max=1,
-        )
+        return 0, 1
 
-    return MetaVisual(y_label=y_label)
+    return None, None
 
+def meta_para_linha(item) -> MetaVisual:
+    label = item.nome.replace("_", " ").title()
+    ymin, ymax = _limites_por_resultado(item)
 
+    return MetaVisual(
+        y_label=label,
+        y_min=ymin,
+        y_max=ymax,
+    )
+
+def meta_para_scatter(item) -> MetaVisual:
+    label = item.nome.replace("_", " ").title()
+
+    return MetaVisual(
+        x_label=label,
+        y_label=label,
+    )

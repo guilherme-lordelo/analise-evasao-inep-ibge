@@ -11,19 +11,19 @@ linha_temporal:
       variaveis:
         - QT_ING_TOTAL
 
-    - nome: evasao_anual_nacional
+    - nome: Evasão Anual Nacional
       nivel: nacional
       variaveis:
         - evasao_anual
 
-    - nome: ingresso_vs_evasao_nacional
+    - nome: Ingresso vs Tipos de Redes
       nivel: nacional
       variaveis:
         - TP_REDE_1
         - TP_REDE_2
         - evasao_anual
 
-    - nome: evasao_anual_ba
+    - nome: Evasão na Bahia
       nivel: estadual
       territorio:
         ufs: "BA"
@@ -41,27 +41,27 @@ scatter:
     grid: true
 
   plots:
-    - nome: ingresso_vs_populacao_nacional
+    - nome: Matriculados vs Ingressantes
       nivel: nacional
       eixo_x: QT_MAT_TOTAL
       eixo_y: QT_ING_TOTAL
 
-    - nome: ingresso_vs_evasao_nacional
+    - nome: Evasão em Rede Publica
       nivel: nacional
-      eixo_x: QT_ING_TOTAL
+      eixo_x: TP_REDE_1
       eixo_y: evasao_anual
 
-    - nome: evasao_vs_evasao_nacional
+    - nome: Evasão em Rede Privada
       nivel: nacional
-      eixo_x: evasao_anual
+      eixo_x: TP_REDE_2
       eixo_y: evasao_anual
 
-    - nome: evasao_vs_ingresso_ba
+    - nome: Evasão em Rede Publica na Bahia
       nivel: estadual
       territorio:
         ufs: "BA"
       eixo_x: evasao_anual
-      eixo_y: QT_ING_TOTAL
+      eixo_y: TP_REDE_1
 
   saida:
     formato: png

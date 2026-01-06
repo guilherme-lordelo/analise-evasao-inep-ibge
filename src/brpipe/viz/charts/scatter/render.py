@@ -3,21 +3,20 @@ from pandas import DataFrame
 
 from brpipe.viz.charts.common import (
     Visualizador,
-    NormalizacaoPlot,
     TipoChart,
-    persistir_chart,
 )
 from brpipe.viz.charts.common.consumiveis import ConsumiveisINEP
 from brpipe.viz.charts.common.filtros import filtrar_ano_inicial
-from brpipe.viz.charts.linha_temporal.config import LinhaTemporalConfig, LinhaTemporalPlotSpec
+from brpipe.viz.charts.common.render_utils import finalizar_chart
+from brpipe.viz.charts.scatter.config import ScatterConfig, ScatterPlotSpec
 
 
 def render_scatter(
     df: DataFrame,
     consumiveis: ConsumiveisINEP,
     coluna_ano: str,
-    plot_spec: LinhaTemporalPlotSpec,
-    cfg: LinhaTemporalConfig,
+    plot_spec: ScatterPlotSpec,
+    cfg: ScatterConfig,
 ):
     filtrar_ano_inicial(
         df,
@@ -32,42 +31,35 @@ def render_scatter(
     viz_x = Visualizador(item_x)
     viz_y = Visualizador(item_y)
 
-    df_plot = df[[plot_spec.eixo_x, plot_spec.eixo_y]].copy()
+    df_plot = df[[item_x.nome, item_y.nome]].copy()
 
-    if plot_spec.normalizacao == NormalizacaoPlot.RATIO:
-        x = viz_x.preparar_para_chart(
-            df_plot[plot_spec.eixo_x],
-            TipoChart.SCATTER,
-        )
-        y = viz_y.preparar_para_chart(
-            df_plot[plot_spec.eixo_y],
-            TipoChart.SCATTER,
-        )
-    else:
-        x = df_plot[plot_spec.eixo_x]
-        y = df_plot[plot_spec.eixo_y]
+    x = item_x.aplicar_formato(df_plot[item_x.nome])
+    y = item_y.aplicar_formato(df_plot[item_y.nome])
+
+    x = viz_x.preparar_para_chart(x, TipoChart.SCATTER)
+    y = viz_y.preparar_para_chart(y, TipoChart.SCATTER)
+
+    meta_x = viz_x.meta_para_chart(TipoChart.SCATTER)
+    meta_y = viz_y.meta_para_chart(TipoChart.SCATTER)
 
     fig, ax = plt.subplots(figsize=cfg.plot.figsize)
 
     ax.scatter(x, y, alpha=0.7)
 
-    ax.set_xlabel(item_x.nome)
-    ax.set_ylabel(item_y.nome)
+    ax.set_xlabel(meta_x.x_label)
+    ax.set_ylabel(meta_y.y_label)
 
-    if cfg.plot.mostrar_titulo:
-        ax.set_title(plot_spec.nome)
 
-    if cfg.plot.grid:
-        ax.grid(True, alpha=0.3)
-
-    fig.tight_layout()
-
-    persistir_chart(
-        fig=fig,
-        tipo="scatter",
-        nome=plot_spec.nome,
-        formato=cfg.formato_saida,
-        dpi=cfg.dpi,
+    finalizar_chart(
+        fig,
+        ax,
+        titulo=plot_spec.nome if cfg.plot.mostrar_titulo else None,
+        grid=cfg.plot.grid,
+        persistir_args=dict(
+            fig=fig,
+            tipo="scatter",
+            nome=plot_spec.nome,
+            formato=cfg.formato_saida,
+            dpi=cfg.dpi,
+        ),
     )
-
-    plt.close(fig)

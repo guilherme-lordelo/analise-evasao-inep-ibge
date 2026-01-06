@@ -4,11 +4,9 @@ from pandas import DataFrame
 from brpipe.viz.charts.common import (
     Visualizador,
     TipoChart,
-    NormalizacaoPlot,
-    persistir_chart,
 )
 from brpipe.viz.charts.common.consumiveis import ConsumiveisINEP
-from brpipe.viz.charts.common.filtros import filtrar_ano_inicial
+from brpipe.viz.charts.common.render_utils import finalizar_chart
 from brpipe.viz.charts.linha_temporal.config import LinhaTemporalConfig, LinhaTemporalPlotSpec
 
 
@@ -46,22 +44,18 @@ def render_linha_temporal(
         )
 
     ax.set_xlabel("Ano")
-
-    if cfg.plot.mostrar_titulo:
-        ax.set_title(plot_spec.nome)
-
-    if cfg.plot.grid:
-        ax.grid(True, alpha=0.3)
-
     ax.legend()
-    fig.tight_layout()
 
-    persistir_chart(
-        fig=fig,
-        tipo="linha_temporal",
-        nome=plot_spec.nome,
-        formato=cfg.formato_saida,
-        dpi=cfg.dpi,
+    finalizar_chart(
+        fig,
+        ax,
+        titulo=plot_spec.nome if cfg.plot.mostrar_titulo else None,
+        grid=cfg.plot.grid,
+        persistir_args=dict(
+            fig=fig,
+            tipo="linha_temporal",
+            nome=plot_spec.nome,
+            formato=cfg.formato_saida,
+            dpi=cfg.dpi,
+        ),
     )
-
-    plt.close(fig)

@@ -21,7 +21,7 @@ CONSUMIVEIS = ConsumiveisINEP(
 COLUNA_ANO =_variaveis.coluna_ano
 
 LINHA_TEMPORAL = carregar_linha_temporal(CONSUMIVEIS, _territorios)
-#SCATTER = carregar_scatter(CONSUMIVEIS, _territorios)
+SCATTER = carregar_scatter(CONSUMIVEIS, _territorios)
 
 __all__ = [
     "CONSUMIVEIS",

@@ -39,7 +39,7 @@ class ResultadoTipo(Enum):
 	
 	def apply(self, series) -> Series:
 		if self is not ResultadoTipo.COUNT:
-			return self.to_ratio(series)
+			return self.to_percent_0_100(series)
 		return series
 
 

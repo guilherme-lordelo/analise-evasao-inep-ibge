@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from brpipe.inep.config import ARQUIVOS, ANOS
+from brpipe.ibge.config import NOME_FINAL
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -56,6 +57,9 @@ arquivo_nacional = (
 	  f"{_NOME_NACIONAL}{_ano_ini}_{_ano_fim}"
 	  f"{ARQUIVOS.transformacao_ext_out}"
 )
+
+# Resultado IBGE
+arquivo_ibge_final = PROCESSED_IBGE / NOME_FINAL
 
 # Visualizações
 MAPAS_RENDER = DATA_DIR / "rendered" / "mapas"

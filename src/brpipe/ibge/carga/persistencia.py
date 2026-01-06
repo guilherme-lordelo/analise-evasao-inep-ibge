@@ -1,8 +1,7 @@
 from pandas import DataFrame
 
-from brpipe.ibge.config import ARQUIVO_FINAL_IBGE
-from brpipe.utils.paths import PROCESSED_IBGE
 from brpipe.utils.io import write_csv
+from brpipe.utils.paths import arquivo_ibge_final
 
 
 def persistir_tabela_final(
@@ -15,6 +14,4 @@ def persistir_tabela_final(
 		print(f"Nenhum dado para persistir.")
 		return
 
-	path_out = PROCESSED_IBGE / ARQUIVO_FINAL_IBGE
-
-	write_csv(df, path_out)
+	write_csv(df, arquivo_ibge_final)

@@ -22,10 +22,8 @@ class VariaveisIBGE:
 	def __init__(
 		self,
 		tabelas_cfg: dict[str, TabelaIBGEConfig],
-		arquivo_final: str,
 		tipo_default: ResultadoTipo,
 	):
-		self._arquivo_final = arquivo_final
 		self._map = {}
 
 		for tabela in tabelas_cfg.values():

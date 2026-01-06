@@ -1,5 +1,5 @@
 from pandas import DataFrame
-from brpipe.viz.charts.common.consumiveis import ConsumiveisINEP
+from brpipe.viz.charts.common.consumiveis import Consumiveis
 from brpipe.viz.charts.common.plot_spec import PlotSpecBase
 
 
@@ -13,7 +13,7 @@ def _exige_drop(itens) -> int:
 def filtrar_ano_inicial(
     df: DataFrame,
     *,
-    consumiveis: ConsumiveisINEP,
+    consumiveis: Consumiveis,
     coluna_ano: str,
     plot_spec: PlotSpecBase,
 ) -> DataFrame:

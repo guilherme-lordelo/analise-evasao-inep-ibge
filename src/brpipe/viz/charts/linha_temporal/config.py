@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import List
-from brpipe.bridge.inep.tipos import ResultadoTipo
+from brpipe.bridge.common.tipos import ResultadoTipo
 from brpipe.utils.config import load_config
-from brpipe.viz.charts.common import NormalizacaoPlot, PlotSpecBase, ConsumiveisINEP, TerritoriosINEP
+from brpipe.viz.charts.common import NormalizacaoPlot, PlotSpecBase, Consumiveis, TerritoriosINEP
 
 _CFG = load_config("charts")
 
@@ -32,7 +32,7 @@ class LinhaTemporalConfig:
 
 
 def carregar_linha_temporal(
-	consumiveis: ConsumiveisINEP,
+	consumiveis: Consumiveis,
 	territorios: TerritoriosINEP,
 ) -> LinhaTemporalConfig:
 	cfg = _CFG["linha_temporal"]

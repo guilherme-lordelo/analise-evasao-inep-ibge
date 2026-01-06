@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from brpipe.bridge.inep.tipos import ResultadoTipo
+from brpipe.bridge.common.tipos import ResultadoTipo
 
 @dataclass(frozen=True)
 class MetaVisual:

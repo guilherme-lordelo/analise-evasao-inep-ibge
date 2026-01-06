@@ -5,14 +5,14 @@ from brpipe.viz.charts.common import (
     Visualizador,
     TipoChart,
 )
-from brpipe.viz.charts.common.consumiveis import ConsumiveisINEP
+from brpipe.viz.charts.common.consumiveis import Consumiveis
 from brpipe.viz.charts.common.render_utils import finalizar_chart
 from brpipe.viz.charts.linha_temporal.config import LinhaTemporalConfig, LinhaTemporalPlotSpec
 
 
 def render_linha_temporal(
     df: DataFrame,
-    consumiveis: ConsumiveisINEP,
+    consumiveis: Consumiveis,
     coluna_ano: str,
     plot_spec: LinhaTemporalPlotSpec,
     cfg: LinhaTemporalConfig,

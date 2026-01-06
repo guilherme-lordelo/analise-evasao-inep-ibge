@@ -1,6 +1,6 @@
 from pandas import Series
-from brpipe.bridge.inep.tipos import ResultadoTipo, resolver_resultado_tipo
-from brpipe.bridge.inep.wrappers import SerieFormatada
+from brpipe.bridge.common.tipos import ResultadoTipo, resolver_resultado_tipo
+from brpipe.bridge.common.wrappers import SerieFormatada
 from brpipe.inep.config.formulas import FormulasConfig
 
 class MetricaINEP:

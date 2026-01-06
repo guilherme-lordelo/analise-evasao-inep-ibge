@@ -2,7 +2,7 @@ from enum import Enum, auto
 from matplotlib.axes import Axes
 from matplotlib.ticker import PercentFormatter, ScalarFormatter
 from pandas import Series
-from brpipe.bridge.inep.wrappers import SerieFormatada
+from brpipe.bridge.common.wrappers import SerieFormatada
 from brpipe.utils.transformacoes import logit, inv_logit
 
 class ResultadoTipo(Enum):

@@ -139,8 +139,8 @@ variaveis:
       valores:
         1: "Presencial"
         2: "Educação a Distância"
-      filtro_excluir:
-        - 2  # Excluir EAD
+      #filtro_excluir:
+      #  - 2  # Excluir EAD
 
   quantitativas:
     QT_ING_TOTAL: "Alunos ingressantes"

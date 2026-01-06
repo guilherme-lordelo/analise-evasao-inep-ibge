@@ -1,6 +1,6 @@
 from pandas import Series
-from brpipe.bridge.inep.tipos import ResultadoTipo
-from brpipe.bridge.inep.wrappers import SerieFormatada
+from brpipe.bridge.common.tipos import ResultadoTipo
+from brpipe.bridge.common.wrappers import SerieFormatada
 from brpipe.inep.config.variaveis import VariaveisConfig
 
 from dataclasses import dataclass

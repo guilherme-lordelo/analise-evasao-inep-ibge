@@ -1,9 +1,18 @@
+from typing import Protocol
+from pandas import Series
 from brpipe.bridge.inep.metricas import FormulasParaMetricas
-from brpipe.bridge.inep.tipos import ResultadoTipo
+from brpipe.bridge.common.tipos import ResultadoTipo
 from brpipe.bridge.inep.variaveis import VariaveisINEP
+from brpipe.bridge.common.wrappers import SerieFormatada
 
+class Consumivel(Protocol):
+    nome: str
+    resultado: ResultadoTipo
 
-class ConsumiveisINEP:
+    def aplicar_formato(self, series: Series) -> SerieFormatada:
+        ...
+
+class Consumiveis:
     def __init__(
         self,
         variaveis: VariaveisINEP,
@@ -12,7 +21,7 @@ class ConsumiveisINEP:
         self._variaveis = variaveis
         self._metricas = metricas
 
-    def get(self, nome: str):
+    def get(self, nome: str) -> Consumivel:
         try:
             return self._variaveis.get_variavel(nome)
         except KeyError:

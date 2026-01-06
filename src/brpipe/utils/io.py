@@ -4,23 +4,27 @@ from pathlib import Path
 from brpipe.inep.config import IO
 
 
-# Leitura CSV
-def read_csv(path, **kwargs):
+def read_csv_raw(path, **kwargs):
 	kwargs.setdefault("sep", IO.sep_in)
 	kwargs.setdefault("encoding", IO.encoding_in)
+	kwargs.setdefault("low_memory", False)
+
+	return pd.read_csv(path, **kwargs)
+
+# Leitura CSV
+def read_csv(path, **kwargs):
+	kwargs.setdefault("sep", IO.sep_out)
+	kwargs.setdefault("encoding", IO.encoding_out)
 	kwargs.setdefault("low_memory", False)
 
 	return pd.read_csv(path, **kwargs)
 
 
 # Leitura CSV em chunks
-def read_csv_chunks(path, **kwargs):
-	kwargs.setdefault("sep", IO.sep_in)
-	kwargs.setdefault("encoding", IO.encoding_in)
-	kwargs.setdefault("low_memory", False)
+def read_csv_raw_chunks(path, **kwargs):
 	kwargs.setdefault("chunksize", IO.chunksize)
 
-	return pd.read_csv(path, **kwargs)
+	return read_csv_raw(path, **kwargs)
 
 
 # Leitura do cabeçalho

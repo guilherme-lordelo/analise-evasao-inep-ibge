@@ -1,8 +1,8 @@
 import pandas as pd
-from brpipe.utils.io import read_csv_chunks
+from brpipe.utils.io import read_csv_raw_chunks
 
 def ler_em_chunks(path, colunas):
-    chunks = read_csv_chunks(path, usecols=colunas)
+    chunks = read_csv_raw_chunks(path, usecols=colunas)
 
     df_list = []
     total = 0

@@ -14,17 +14,9 @@ from brpipe.viz.charts.scatter.config import ScatterConfig, ScatterPlotSpec
 def render_scatter(
     df: DataFrame,
     consumiveis: Consumiveis,
-    coluna_ano: str,
     plot_spec: ScatterPlotSpec,
     cfg: ScatterConfig,
 ):
-    filtrar_ano_inicial(
-        df,
-        consumiveis=consumiveis,
-        coluna_ano=coluna_ano,
-        plot_spec=plot_spec,
-    )
-
     item_x = consumiveis.get(plot_spec.eixo_x)
     item_y = consumiveis.get(plot_spec.eixo_y)
 

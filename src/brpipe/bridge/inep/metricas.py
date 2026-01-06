@@ -13,6 +13,7 @@ class MetricaINEP:
         self.nome = nome.upper()
         self._cfg = formula_cfg
         self.resultado = resultado
+        self.dim_temporal: bool = True
 
     @property
     def lag(self) -> int:

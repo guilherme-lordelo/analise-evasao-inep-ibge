@@ -10,15 +10,15 @@ from brpipe.viz.charts.scatter.config import carregar_scatter
 from ..linha_temporal.config import LinhaTemporalConfig, carregar_linha_temporal
 from brpipe.bridge.inep import CONTEXTO
 
-_variaveis=CONTEXTO.variaveis
-_metricas=CONTEXTO.metricas
-_territorios=TerritoriosINEP(_variaveis)
+_variaveis_inep=CONTEXTO.variaveis
+_metricas_inep=CONTEXTO.metricas
+_territorios=TerritoriosINEP(_variaveis_inep)
 
 CONSUMIVEIS = Consumiveis(
-    variaveis=_variaveis,
-    metricas=_metricas,
+    variaveis_inep=_variaveis_inep,
+    metricas_inep=_metricas_inep,
 )
-COLUNA_ANO =_variaveis.coluna_ano
+COLUNA_ANO =_variaveis_inep.coluna_ano
 
 LINHA_TEMPORAL = carregar_linha_temporal(CONSUMIVEIS, _territorios)
 SCATTER = carregar_scatter(CONSUMIVEIS, _territorios)

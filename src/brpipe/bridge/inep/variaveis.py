@@ -9,6 +9,7 @@ from dataclasses import dataclass
 class VariavelINEP:
 	nome: str
 	resultado: "ResultadoTipo"
+	dim_temporal: bool = True
 
 	def aplicar_formato(self, series: Series) -> SerieFormatada:
 		return self.resultado.apply(series)
@@ -59,14 +60,14 @@ class VariaveisINEP:
 	def is_categorica(self, nome: str) -> bool:
 		return nome in self._cfg.categoricas
 	
-	def get_variavel(self, nome: str) -> VariavelINEP:
+	def resolver(self, nome: str) -> VariavelINEP:
 		try:
 			return self._variaveis[nome]
 		except KeyError:
 			raise KeyError(f"Variável '{nome}' não encontrada")
 
 	def get_meta_label(self, nome: str) -> str:
-		var = self.get_variavel(nome)
+		var = self.resolver(nome)
 
 		if var.resultado == ResultadoTipo.PERCENT_0_100:
 			return f"{nome} (%)"

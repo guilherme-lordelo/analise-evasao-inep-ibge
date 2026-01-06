@@ -1,4 +1,3 @@
-from brpipe.bridge.inep import CONTEXTO
 from brpipe.viz.charts.linha_temporal.pipeline import executar_linha_temporal
 
 def main():

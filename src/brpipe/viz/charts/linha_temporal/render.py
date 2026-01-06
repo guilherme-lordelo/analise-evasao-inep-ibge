@@ -7,6 +7,7 @@ from brpipe.viz.charts.common import (
 )
 from brpipe.viz.charts.common.consumiveis import Consumiveis
 from brpipe.viz.charts.common.render_utils import finalizar_chart
+from brpipe.viz.charts.common.temporalidade import exigir_temporalidade
 from brpipe.viz.charts.linha_temporal.config import LinhaTemporalConfig, LinhaTemporalPlotSpec
 
 
@@ -22,6 +23,7 @@ def render_linha_temporal(
 
     for nome in plot_spec.variaveis:
         item = consumiveis.get(nome)
+        exigir_temporalidade(item, "Linha Temporal")
         coluna = item.nome
 
         viz = Visualizador(item)

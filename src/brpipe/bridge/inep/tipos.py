@@ -57,10 +57,13 @@ class ResultadoTipo(Enum):
 
 		return None
 	
-	def formatar(self, ax: Axes) -> None:
+	def formatar(self, ax: Axes, orientacao: str = "y") -> None:
 		formatador = self._get_formatador()
 		if formatador is not None:
-			ax.yaxis.set_major_formatter(formatador)
+			if orientacao.lower() == "y":
+				ax.yaxis.set_major_formatter(formatador)
+			elif orientacao.lower() == "x":
+				ax.xaxis.set_major_formatter(formatador)
 
 		scale = self._get_scale()
 		if scale is not None:

@@ -33,8 +33,10 @@ def render_scatter(
 
     df_plot = df[[item_x.nome, item_y.nome]].copy()
 
-    x = item_x.aplicar_formato(df_plot[item_x.nome])
-    y = item_y.aplicar_formato(df_plot[item_y.nome])
+    x_formatado = item_x.aplicar_formato(df_plot[item_x.nome])
+    y_formatado = item_y.aplicar_formato(df_plot[item_y.nome])
+    x = x_formatado.serie
+    y = y_formatado.serie
 
     x = viz_x.preparar_para_chart(x, TipoChart.SCATTER)
     y = viz_y.preparar_para_chart(y, TipoChart.SCATTER)
@@ -45,6 +47,9 @@ def render_scatter(
     fig, ax = plt.subplots(figsize=cfg.plot.figsize)
 
     ax.scatter(x, y, alpha=0.7)
+
+    x_formatado.resultado.formatar(ax, "x")
+    y_formatado.resultado.formatar(ax, "y")
 
     ax.set_xlabel(meta_x.x_label)
     ax.set_ylabel(meta_y.y_label)

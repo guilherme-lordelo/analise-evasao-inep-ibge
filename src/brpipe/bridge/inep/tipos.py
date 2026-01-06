@@ -1,6 +1,8 @@
 from enum import Enum, auto
-
+from matplotlib.axes import Axes
+from matplotlib.ticker import PercentFormatter, ScalarFormatter
 from pandas import Series
+from brpipe.bridge.inep.wrappers import SerieFormatada
 from brpipe.utils.transformacoes import logit, inv_logit
 
 class ResultadoTipo(Enum):
@@ -36,11 +38,41 @@ class ResultadoTipo(Enum):
 		if self == ResultadoTipo.PERCENT_0_100:
 			return logit(series / 100)
 		raise ValueError("Conversão para logit não suportada")
+
+	def _get_scale(self):
+		if self is ResultadoTipo.LOGIT:
+			return "logit"
+		return None
 	
-	def apply(self, series) -> Series:
+	def _get_formatador(self):
+		if self is ResultadoTipo.COUNT:
+			return ScalarFormatter()
+
+		if self in {
+			ResultadoTipo.RATIO,
+			ResultadoTipo.PROPORTION,
+			ResultadoTipo.PERCENT_0_100,
+		}:
+			return PercentFormatter(xmax=100)
+
+		return None
+	
+	def formatar(self, ax: Axes) -> None:
+		formatador = self._get_formatador()
+		if formatador is not None:
+			ax.yaxis.set_major_formatter(formatador)
+
+		scale = self._get_scale()
+		if scale is not None:
+			ax.set_yscale(scale)
+	
+	def apply(self, series: Series) -> SerieFormatada:
 		if self is not ResultadoTipo.COUNT:
-			return self.to_percent_0_100(series)
-		return series
+			series = self.to_percent_0_100(series)
+		return SerieFormatada(
+			serie=series,
+			resultado=self,
+		)
 
 
 def resolver_resultado_tipo(valor) -> ResultadoTipo:

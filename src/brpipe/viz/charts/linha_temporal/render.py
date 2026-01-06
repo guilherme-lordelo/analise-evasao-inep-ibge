@@ -18,6 +18,7 @@ def render_linha_temporal(
     cfg: LinhaTemporalConfig,
 ):
     fig, ax = plt.subplots(figsize=cfg.plot.figsize)
+    tipo = None
 
     for nome in plot_spec.variaveis:
         item = consumiveis.get(nome)
@@ -27,7 +28,9 @@ def render_linha_temporal(
 
         df_plot = df[[coluna_ano, coluna]].copy()
 
-        serie = item.aplicar_formato(df_plot[coluna])
+        serie_formatada = item.aplicar_formato(df_plot[coluna])
+        serie = serie_formatada.serie
+        tipo = serie_formatada.resultado
 
         serie = viz.preparar_para_chart(
             serie,
@@ -42,7 +45,8 @@ def render_linha_temporal(
             marker="o",
             label=meta.y_label,
         )
-
+    if(tipo):
+        tipo.formatar(ax)
     ax.set_xlabel("Ano")
     ax.legend()
 

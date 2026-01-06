@@ -1,5 +1,7 @@
+from pandas import Series
 from brpipe.bridge.inep.tipos import ResultadoTipo, resolver_resultado_tipo
-from brpipe.inep.config.formulas import FormulaConfig, FormulasConfig
+from brpipe.bridge.inep.wrappers import SerieFormatada
+from brpipe.inep.config.formulas import FormulasConfig
 
 class MetricaINEP:
     def __init__(
@@ -16,7 +18,7 @@ class MetricaINEP:
     def lag(self) -> int:
         return 1
 
-    def aplicar_formato(self, series):
+    def aplicar_formato(self, series: Series) -> SerieFormatada:
         return self.resultado.apply(series)
 
 

@@ -1,5 +1,6 @@
 # src/inep/load/loader_evasao.py
 
+from brpipe.utils.colunas_base import COL_NACIONAL
 from brpipe.utils.io import write_csv
 from brpipe.utils.paths import (
     arquivo_municipal,
@@ -32,7 +33,10 @@ def salvar_resultados(dfs_calculados: dict):
             path = ARQUIVOS[nivel]
         except KeyError:
             raise ValueError(f"Nível desconhecido: '{nivel}'")
-
+        print(df.columns)
+        if nivel == "nacional":
+            df.rename(columns={'UF_x': COL_NACIONAL}, inplace=True)
+        print(df.columns)
         df_saida, kwargs = csv_kwargs_saida(df)
 
         write_csv(df_saida, path, **kwargs)

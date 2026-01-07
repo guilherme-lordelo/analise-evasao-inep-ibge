@@ -6,3 +6,6 @@ municipio:
 
 estado:
   sigla: "SG_UF"
+
+nacional:
+  coluna: "BRASIL"  # Nome para agregação nacional, decidido pelo usuário

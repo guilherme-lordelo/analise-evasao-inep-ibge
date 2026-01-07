@@ -7,6 +7,7 @@ _cfg = load_config("colunas_base")
 COD_MUNICIPIO = _cfg["municipio"]["codigo"]
 NOME_MUNICIPIO = _cfg["municipio"]["nome"]
 UF = _cfg["estado"]["sigla"]
+COL_NACIONAL = _cfg["nacional"]["coluna"]
 
 # ----------- Funções utilitárias ----------------
 

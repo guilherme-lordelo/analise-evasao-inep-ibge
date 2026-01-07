@@ -3,7 +3,6 @@ from brpipe.bridge.ibge.contexto import IbgeContext
 from brpipe.bridge.ibge.variaveis import VariaveisIBGE
 from brpipe.ibge.config.runtime import (
 	TABELAS_IBGE,
-	NOME_FINAL,
 )
 from brpipe.ibge.config.runtime import TIPO_DEFAULT_IBGE
 

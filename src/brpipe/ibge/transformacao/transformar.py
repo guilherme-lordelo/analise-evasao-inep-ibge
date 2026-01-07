@@ -23,6 +23,7 @@ def _transformar_sheet(
 
 	nome_interim = sheet.arquivo.replace(".csv", "_interim.csv")
 	path_in = IBGE_REDUZIDO / nome_interim
+	colunas = [coluna.nome for coluna in sheet.colunas_especificas]
 
 	if not path_in.exists():
 		return None
@@ -36,7 +37,7 @@ def _transformar_sheet(
 	df = aplicar_schema_ibge(
 		df,
 		COLUNAS_BASE_IBGE,
-		sheet.colunas_especificas
+		colunas,
 	)
 	df = aplicar_merges_colunas(df, sheet)
 	df = aplicar_transformacoes_colunas(df, sheet)

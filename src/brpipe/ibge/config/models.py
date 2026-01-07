@@ -1,6 +1,13 @@
 from dataclasses import dataclass
 from typing import List, Optional
 
+from brpipe.bridge.common.tipos import ResultadoTipo
+
+@dataclass(frozen=True)
+class ColunaIBGEConfig:
+    nome: str
+    tipo: Optional[ResultadoTipo] = None
+    
 @dataclass(frozen=True)
 class TransformacaoColunaConfig:
     fonte: str                 # coluna original (ex: PERC_HOMEM)
@@ -21,7 +28,7 @@ class SheetIBGEConfig:
     descricao: str
     arquivo: str
 
-    colunas_especificas: List[str]
+    colunas_especificas: List[ColunaIBGEConfig]
 
     merges_colunas: Optional[List[MergeColunasConfig]] = None
     transformacoes_colunas: Optional[List[TransformacaoColunaConfig]] = None

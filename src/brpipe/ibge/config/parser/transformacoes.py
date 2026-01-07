@@ -1,15 +1,16 @@
-from brpipe.ibge.config.models import TransformacaoColunaConfig
+from brpipe.ibge.config.models import ColunaIBGEConfig, TransformacaoColunaConfig
 
 _METODOS_TRANSFORMACAO_SUPORTADOS = {"logit"}
 
 def parse_transformacoes(
 	transformacoes_cfg: list[dict],
-	colunas_especificas: list[str],
+	colunas_cfg: list[ColunaIBGEConfig],
 	destinos_merge: set[str],
 	remover_colunas: list[str],
 	ctx: str,
 ):
-	colunas_disponiveis = set(colunas_especificas) | destinos_merge
+	colunas = [coluna_cfg.nome for coluna_cfg in colunas_cfg]
+	colunas_disponiveis = set(colunas) | destinos_merge
 
 	destinos_transformacao = set()
 	transformacoes = []
@@ -31,7 +32,7 @@ def parse_transformacoes(
 				f"{ctx} Coluna fonte '{fonte}' da transformação não pode ser removida"
 			)
 
-		if destino in colunas_especificas:
+		if destino in colunas:
 			raise ValueError(
 				f"{ctx} Destino de transformação já existe como coluna: '{destino}'"
 			)

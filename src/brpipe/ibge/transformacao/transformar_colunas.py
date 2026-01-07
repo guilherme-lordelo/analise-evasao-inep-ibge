@@ -35,7 +35,6 @@ def _aplicar_transformacao(
 
 	if transf.fonte not in df.columns:
 		print(f"Aviso: coluna fonte '{transf.fonte}' não encontrada")
-		print(f"para transformação '{transf.destino}'. Pulando.")
 		return df
 
 	serie = pd.to_numeric(df[transf.fonte], errors="coerce")

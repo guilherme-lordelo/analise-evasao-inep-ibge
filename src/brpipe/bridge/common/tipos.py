@@ -3,7 +3,6 @@ from matplotlib.axes import Axes
 from matplotlib.ticker import PercentFormatter, ScalarFormatter
 from pandas import Series
 from brpipe.bridge.common.wrappers import SerieFormatada
-from brpipe.ibge.config.models import TransformacaoColunaConfig
 from brpipe.utils.transformacoes import logit, inv_logit
 
 class ResultadoTipo(Enum):
@@ -119,7 +118,7 @@ _TRANSFORMACAO_PARA_TIPO: dict[str, ResultadoTipo] = {
 def resolver_tipo_variavel_ibge(
 	*,
 	tipo_coluna: str | ResultadoTipo | None,
-	transformacao: TransformacaoColunaConfig | None,
+	transformacao,
 	tipo_default: ResultadoTipo,
 	ctx: str,
 ) -> ResultadoTipo:

@@ -35,7 +35,7 @@ class VariaveisIBGE:
 
 		for col in sheet.colunas_especificas:
 			tipo = resolver_tipo_variavel_ibge(
-				tipo_coluna=None,
+				tipo_coluna=col.tipo,
 				transformacao=None,
 				tipo_default=tipo_default,
 				ctx=f"{ctx_base}[{col}]",

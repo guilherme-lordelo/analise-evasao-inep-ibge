@@ -1,4 +1,4 @@
-from brpipe.ibge.config.runtime import TABELAS_IBGE
+from brpipe.ibge.config import TABELAS_IBGE
 from brpipe.utils.iterador import iterar_sheets_ibge
 from pandas import DataFrame
 from brpipe.ibge.config import COLUNAS_BASE_IBGE

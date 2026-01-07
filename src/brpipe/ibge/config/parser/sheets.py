@@ -3,6 +3,7 @@ from brpipe.ibge.config.parser.validacoes import validar_remocao_colunas
 from brpipe.ibge.config.parser.merges import parse_merges
 from brpipe.ibge.config.parser.transformacoes import parse_transformacoes
 from brpipe.ibge.config.models import SheetIBGEConfig
+from brpipe.ibge.config.runtime import TIPO_DEFAULT_IBGE
 
 
 def parse_sheets(
@@ -16,7 +17,7 @@ def parse_sheets(
 		ctx = f"[IBGE][{tabela_id}][{sheet['arquivo']}]"
 
 		colunas_cfg  = sheet.get("colunas", [])
-		colunas = parse_colunas(colunas_cfg, ctx)
+		colunas = parse_colunas(colunas_cfg, tipo_default=TIPO_DEFAULT_IBGE, ctx=ctx)
 		remover = sheet.get("remover_colunas", [])
 
 		validar_remocao_colunas(colunas, remover, ctx)

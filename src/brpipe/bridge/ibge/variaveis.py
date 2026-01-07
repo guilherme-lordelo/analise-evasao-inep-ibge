@@ -1,5 +1,5 @@
 from pandas import Series
-from brpipe.bridge.common.tipos import ResultadoTipo, resolver_tipo_variavel_ibge
+from brpipe.bridge.common.tipos import ResultadoTipo
 from brpipe.ibge.config.models import SheetIBGEConfig, TabelaIBGEConfig
 from brpipe.viz.charts.common.consumiveis import Consumivel
 
@@ -32,29 +32,20 @@ class VariaveisIBGE:
 
 	def _registrar_sheet(self, sheet: SheetIBGEConfig, tipo_default: ResultadoTipo, tabela_id: str):
 		ctx_base = f"[IBGE][{tabela_id}][{sheet.arquivo}]"
-
 		for col in sheet.colunas_especificas:
-			tipo = resolver_tipo_variavel_ibge(
-				tipo_coluna=col.tipo,
-				transformacao=None,
-				tipo_default=tipo_default,
-				ctx=f"{ctx_base}[{col}]",
-			)
+			print(col.tipo)
+		for col in sheet.colunas_especificas:
+			tipo = col.tipo
 
-			self._map[col.upper()] = VariavelIBGE(
-				nome=col,
-				coluna=col,
+			self._map[col.nome.upper()] = VariavelIBGE(
+				nome=col.nome,
+				coluna=col.nome,
 				resultado=tipo,
 			)
 
 		if sheet.merges_colunas:
 			for merge in sheet.merges_colunas:
-				tipo = resolver_tipo_variavel_ibge(
-					tipo_coluna=None,
-					transformacao=None,
-					tipo_default=tipo_default,
-					ctx=f"{ctx_base}[MERGE:{merge.destino}]",
-				)
+				tipo = col.tipo
 
 				self._map[merge.destino.upper()] = VariavelIBGE(
 					nome=merge.destino,
@@ -64,12 +55,7 @@ class VariaveisIBGE:
 
 		if sheet.transformacoes_colunas:
 			for t in sheet.transformacoes_colunas:
-				tipo = resolver_tipo_variavel_ibge(
-					tipo_coluna=None,
-					transformacao=t,
-					tipo_default=tipo_default,
-					ctx=f"{ctx_base}[TRANSF:{t.destino}]",
-				)
+				tipo = tipo = col.tipo
 
 				self._map[t.destino.upper()] = VariavelIBGE(
 					nome=t.destino,

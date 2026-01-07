@@ -1,6 +1,6 @@
 import os
 from pandas import DataFrame
-from brpipe.utils.colunas_base import get_colunas_municipio
+from brpipe.utils.colunas_base import COL_NACIONAL, get_colunas_municipio
 from brpipe.viz.charts.common import PlotSpecBase
 from brpipe.utils.paths import (
 	arquivo_nacional,
@@ -47,7 +47,7 @@ def unir_inep_ibge(
 	chaves = get_colunas_municipio()
 
 	if plot_spec.nivel == "nacional":
-		chaves = ["UF_x"]
+		chaves = [COL_NACIONAL]
 
 	if plot_spec.nivel == "estadual":
 		chaves = [chaves["UF"]]

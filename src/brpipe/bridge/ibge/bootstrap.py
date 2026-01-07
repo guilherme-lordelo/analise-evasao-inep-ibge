@@ -1,7 +1,7 @@
 from brpipe.bridge.common.tipos import resolver_resultado_tipo
 from brpipe.bridge.ibge.contexto import IbgeContext
 from brpipe.bridge.ibge.variaveis import VariaveisIBGE
-from brpipe.ibge.config.runtime import (
+from brpipe.ibge.config import (
 	TABELAS_IBGE,
 )
 from brpipe.ibge.config.runtime import TIPO_DEFAULT_IBGE

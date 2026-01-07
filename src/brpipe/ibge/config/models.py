@@ -5,8 +5,8 @@ from brpipe.bridge.common.tipos import ResultadoTipo
 
 @dataclass(frozen=True)
 class ColunaIBGEConfig:
-    nome: str
-    tipo: Optional[ResultadoTipo] = None
+	nome: str
+	tipo: ResultadoTipo
     
 @dataclass(frozen=True)
 class TransformacaoColunaConfig:

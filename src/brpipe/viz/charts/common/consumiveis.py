@@ -48,7 +48,7 @@ class Consumiveis:
 
         if obj.resultado == ResultadoTipo.PERCENT_0_100:
             return f"{nome} (%)"
-        if obj.resultado == ResultadoTipo.PROPORTION:
+        if obj.resultado == ResultadoTipo.PROPORCAO:
             return f"{nome} (0–1)"
         return nome
     

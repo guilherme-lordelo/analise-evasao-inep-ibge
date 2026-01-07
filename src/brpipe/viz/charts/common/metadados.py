@@ -18,7 +18,7 @@ def _limites_por_resultado(item):
     if item.resultado == ResultadoTipo.PERCENT_0_100:
         return 0, 100
 
-    if item.resultado == ResultadoTipo.PROPORTION:
+    if item.resultado == ResultadoTipo.PROPORCAO:
         return 0, 1
 
     return None, None

@@ -22,16 +22,14 @@ class VariaveisIBGE:
 	def __init__(
 		self,
 		tabelas_cfg: dict[str, TabelaIBGEConfig],
-		tipo_default: ResultadoTipo,
 	):
 		self._map = {}
 
 		for tabela in tabelas_cfg.values():
 			for sheet in tabela.sheets:
-				self._registrar_sheet(sheet, tipo_default, tabela.tabela_id)
+				self._registrar_sheet(sheet)
 
-	def _registrar_sheet(self, sheet: SheetIBGEConfig, tipo_default: ResultadoTipo, tabela_id: str):
-		ctx_base = f"[IBGE][{tabela_id}][{sheet.arquivo}]"
+	def _registrar_sheet(self, sheet: SheetIBGEConfig):
 		for col in sheet.colunas_especificas:
 			print(col.tipo)
 		for col in sheet.colunas_especificas:

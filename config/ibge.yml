@@ -2,7 +2,7 @@ arquivo_final_municipios: "ibge_final_municipios.csv"
 arquivo_final_estados: "ibge_final_estados.csv"
 arquivo_final_nacional: "ibge_final_nacional.csv"
 
-formato_padrao: "PERCENT_0_100"
+formato_padrao: "PROPORCAO"
 
 tabelas:
   tab1:

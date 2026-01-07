@@ -8,7 +8,7 @@ from brpipe.utils.transformacoes import logit, inv_logit
 class ResultadoTipo(Enum):
 	COUNT = auto()
 	RATIO = auto()
-	PROPORTION = auto()
+	PROPORCAO = auto()
 	LOGIT = auto()
 	PERCENT_0_100 = auto()
 
@@ -26,14 +26,14 @@ class ResultadoTipo(Enum):
 			raise ValueError("COUNT não ser convertido para percentual")
 		if self == ResultadoTipo.LOGIT:
 			return inv_logit(series) * 100
-		if self in (ResultadoTipo.RATIO, ResultadoTipo.PROPORTION):
+		if self in (ResultadoTipo.RATIO, ResultadoTipo.PROPORCAO):
 			return series * 100
 		return series
 
 	def to_logit(self, series):
 		if self == ResultadoTipo.LOGIT:
 			return series
-		if self in (ResultadoTipo.RATIO, ResultadoTipo.PROPORTION):
+		if self in (ResultadoTipo.RATIO, ResultadoTipo.PROPORCAO):
 			return logit(series)
 		if self == ResultadoTipo.PERCENT_0_100:
 			return logit(series / 100)
@@ -50,7 +50,7 @@ class ResultadoTipo(Enum):
 
 		if self in {
 			ResultadoTipo.RATIO,
-			ResultadoTipo.PROPORTION,
+			ResultadoTipo.PROPORCAO,
 			ResultadoTipo.PERCENT_0_100,
 		}:
 			return PercentFormatter(xmax=100)
@@ -107,7 +107,7 @@ def resolver_resultado_tipo(
 def resolver_tipo_metrica(valor) -> ResultadoTipo:
 	return resolver_resultado_tipo(
 		valor,
-		padrao=ResultadoTipo.PROPORTION,
+		padrao=ResultadoTipo.PROPORCAO,
 		ctx="[INEP][MÉTRICA]",
 	)
 

@@ -71,6 +71,6 @@ class VariaveisINEP:
 
 		if var.resultado == ResultadoTipo.PERCENT_0_100:
 			return f"{nome} (%)"
-		if var.resultado == ResultadoTipo.PROPORTION:
+		if var.resultado == ResultadoTipo.PROPORCAO:
 			return f"{nome} (0–1)"
 		return nome

@@ -76,7 +76,7 @@ def carregar_linha_temporal(
 			normalizacao = NormalizacaoPlot.COUNT
 		elif resultados.issubset({
 			ResultadoTipo.LOGIT,
-			ResultadoTipo.PROPORTION,
+			ResultadoTipo.PROPORCAO,
 			ResultadoTipo.PERCENT_0_100,
 		}):
 			normalizacao = NormalizacaoPlot.RATIO

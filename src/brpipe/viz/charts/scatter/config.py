@@ -83,7 +83,7 @@ def carregar_scatter(
 
         elif resultados.issubset({
             ResultadoTipo.LOGIT,
-            ResultadoTipo.PROPORTION,
+            ResultadoTipo.PROPORCAO,
             ResultadoTipo.PERCENT_0_100,
         }):
             normalizacao = NormalizacaoPlot.RATIO

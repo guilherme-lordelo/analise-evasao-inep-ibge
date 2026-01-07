@@ -45,7 +45,7 @@ class FormulasParaMetricas:
         cfg = self._cfg.formulas[nome_real]
 
         resultado = resolver_tipo_metrica(
-            cfg.formato or ResultadoTipo.PROPORTION
+            cfg.formato or ResultadoTipo.PROPORCAO
         )
 
         return MetricaINEP(

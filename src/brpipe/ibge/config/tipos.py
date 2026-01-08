@@ -1,10 +1,10 @@
 from enum import Enum, auto
 
 class TipoDado(Enum):
-	COUNT = auto()
-	PERCENT = auto()
+	CONTAGEM = auto()
+	PORCENTAGEM = auto()
 	MEDIA = auto()
-	RATIO = auto()
+	PROPORCAO = auto()
 
 	@classmethod
 	def from_str(cls, valor: str, ctx: str) -> "TipoDado":

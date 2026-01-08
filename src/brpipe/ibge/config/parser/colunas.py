@@ -3,10 +3,10 @@ from brpipe.ibge.config.tipos import TipoDado, TipoAgregacao
 from brpipe.bridge.common.tipos import ResultadoTipo
 
 MAPA_TIPO_DADO = {
-	TipoDado.COUNT: (TipoAgregacao.SOMA, ResultadoTipo.COUNT),
-	TipoDado.PERCENT: (TipoAgregacao.MEDIA_PONDERADA, ResultadoTipo.PERCENT_0_100),
+	TipoDado.CONTAGEM: (TipoAgregacao.SOMA, ResultadoTipo.COUNT),
+	TipoDado.PORCENTAGEM: (TipoAgregacao.MEDIA_PONDERADA, ResultadoTipo.PERCENT_0_100),
 	TipoDado.MEDIA: (TipoAgregacao.MEDIA_PONDERADA, ResultadoTipo.VALUE),
-	TipoDado.RATIO: (TipoAgregacao.MEDIA_PONDERADA, ResultadoTipo.RATIO),
+	TipoDado.PROPORCAO: (TipoAgregacao.MEDIA_PONDERADA, ResultadoTipo.RATIO),
 }
 
 
@@ -72,7 +72,7 @@ def parse_colunas(
 
 				tipo_dado = TipoDado.from_str(formato, ctx)
 
-				if tipo_dado not in {TipoDado.RATIO, TipoDado.MEDIA}:
+				if tipo_dado not in {TipoDado.PROPORCAO, TipoDado.MEDIA}:
 					raise ValueError(
 						f"{ctx} Coluna '{nome}' só pode usar formato expandido para RATIO ou MEDIA"
 					)

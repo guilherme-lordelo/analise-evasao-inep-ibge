@@ -2,11 +2,10 @@ arquivo_final_municipios: "ibge_final_municipios.csv"
 arquivo_final_estados: "ibge_final_estados.csv"
 arquivo_final_nacional: "ibge_final_nacional.csv"
 
-formato_padrao: "COUNT"
+formato_padrao: "CONTAGEM"
 
 colunas_peso:
   populacao: POP_TOTAL
-  residentes: POP_RESIDENTE_TOTAL
   unidades: UNIDADES_DOMESTICAS_TOTAL
   domicilios: DOMICILIOS_TOTAL
 
@@ -19,13 +18,13 @@ tabelas:
         arquivo: "tab1_populacao_total.csv"
 
         colunas:
-          - POP_TOTAL: COUNT         # idx 1
+          - POP_TOTAL: CONTAGEM         # idx 1
           - PERC_URBANA:             # idx 2
-              formato: RATIO
+              formato: PROPORCAO
               coluna_peso: populacao
           - PERC_RURAL              # idx 3
           - PERC_HOMEM:             # idx 4
-              formato: RATIO
+              formato: PROPORCAO
               coluna_peso: populacao
           - PERC_MULHER             # idx 5
           - RAZAO_SEXO              # idx 6
@@ -44,7 +43,7 @@ tabelas:
         arquivo: "tab2_faixas_etarias_total.csv"
 
         colunas:
-          - POP_RESIDENTE_TOTAL: COUNT    # idx 1
+          - POP_RESIDENTE_TOTAL: CONTAGEM   # idx 1
           - PERC_0_A_5                   # idx 2
           - PERC_6_A_14                  # idx 3
           - PERC_15_A_24                 # idx 4
@@ -53,13 +52,15 @@ tabelas:
           - PERC_60_OU_MAIS              # idx 7
 
         merges_colunas:
-          - destino: IDADE_MEDIA_RESIDENTE_ESTIMADA
+          - destino: IDADE_MEDIA_ESTIMADA
             fontes_idx: [2, 3, 4, 5, 6, 7]
             metodo: MEDIA_PONDERADA
             peso_merge: [2.5, 10, 19.5, 32, 49.5, 70]
             formato: MEDIA
-            coluna_peso: "residentes"
+            coluna_peso: "populacao"
 
+        remover_colunas_idx:
+          - 1
 
       - sheet_id: B
         descricao_sheet: "População urbana por faixas etárias."
@@ -75,13 +76,12 @@ tabelas:
           - PERC_60_OU_MAIS_URBANA
 
         merges_colunas:
-          - destino: IDADE_MEDIA_RESIDENTE_ESTIMADA_URBANA
+          - destino: IDADE_MEDIA_ESTIMADA_URBANA
             fontes_idx: [2, 3, 4, 5, 6, 7]
             metodo: MEDIA_PONDERADA
             peso_merge: [2.5, 10, 19.5, 32, 49.5, 70]
-            formato: RATIO
-            coluna_peso: "residentes"
-
+            formato: PROPORCAO
+            coluna_peso: "populacao"
 
       - sheet_id: C
         descricao_sheet: "População rural por faixas etárias."
@@ -97,47 +97,12 @@ tabelas:
           - PERC_60_OU_MAIS_RURAL
 
         merges_colunas:
-          - destino: IDADE_MEDIA_RESIDENTE_ESTIMADA_RURAL
+          - destino: IDADE_MEDIA_ESTIMADA_RURAL
             fontes_idx: [2, 3, 4, 5, 6, 7]
             metodo: MEDIA_PONDERADA
             peso_merge: [2.5, 10, 19.5, 32, 49.5, 70]
             formato: MEDIA
-            coluna_peso: "residentes"
-
-  tab3:
-    descricao_tabela: "Distribuição da população com 15 anos ou mais por grandes faixas etárias."
-    sheets:
-      - sheet_id: A
-        descricao_sheet: "Totais gerais de população de 15 anos ou mais subdivididos por faixa etária."
-        arquivo: "tab3_populacao_15_mais.csv"
-
-        colunas:
-          - PESSOAS_15_MAIS_TOTAL: COUNT  # idx 1
-          - PERC_15_MAIS                  # idx 2
-          - PESSOAS_15_24_TOTAL: COUNT    # idx 3
-          - PERC_15_24                    # idx 4
-          - PESSOAS_25_39_TOTAL: COUNT    # idx 5
-          - PERC_25_39                    # idx 6
-          - PESSOAS_40_59_TOTAL: COUNT    # idx 7
-          - PERC_40_59                    # idx 8
-          - PESSOAS_60_MAIS_TOTAL: COUNT  # idx 9
-          - PERC_60_MAIS                  # idx 10
-
-        merges_colunas:
-          - destino: IDADE_MEDIA_ESTIMADA
-            fontes_idx: [4, 6, 8, 10]
-            metodo: MEDIA_PONDERADA
-            peso_merge: [19.5, 32, 49.5, 70]
-            formato: MEDIA
             coluna_peso: "populacao"
-
-        remover_colunas_idx:
-          - 1
-          - 2
-          - 3
-          - 5
-          - 7
-          - 9
 
   tab4:
     descricao_tabela: "Unidades domésticas segundo o sexo do responsável, incluindo indicadores de responsabilidade única ou compartilhada."
@@ -146,15 +111,15 @@ tabelas:
         arquivo: "tab4_unidades_domesticas_por_sexo.csv"
 
         colunas:
-          - UNIDADES_DOMESTICAS_TOTAL: COUNT  # idx 1
+          - UNIDADES_DOMESTICAS_TOTAL: CONTAGEM  # idx 1
           - PERC_UNICO_RESP:                  # idx 2
-              formato: RATIO
+              formato: PROPORCAO
               coluna_peso: unidades
           - PERC_MAIS_DE_1_RESP               # idx 3
-          - UNIDADES_DOMESTICAS_HOMEM: COUNT  # idx 4
+          - UNIDADES_DOMESTICAS_HOMEM: CONTAGEM  # idx 4
           - PERC_UNICO_RESP_HOMEM             # idx 5
           - PERC_MAIS_DE_1_RESP_HOMEM         # idx 6
-          - UNIDADES_DOMESTICAS_MULHER: COUNT # idx 7
+          - UNIDADES_DOMESTICAS_MULHER: CONTAGEM # idx 7
           - PERC_UNICO_RESP_MULHER            # idx 8
           - PERC_MAIS_DE_1_RESP_MULHER        # idx 9
 
@@ -175,12 +140,12 @@ tabelas:
         arquivo: "tab7_saneamento_total.csv"
 
         colunas:
-          - DOMICILIOS_TOTAL: COUNT          # idx 1
-          - PERC_SANEAMENTO_ADEQUADO:        # idx 2
-              formato: RATIO
-              coluna_peso: domicilios
+          - DOMICILIOS_TOTAL: CONTAGEM          # idx 1
+          - PERC_SANEAMENTO_ADEQUADO        # idx 2
           - PERC_SANEAMENTO_SEMI_ADEQUADO    # idx 3
-          - PERC_SANEAMENTO_INADEQUADO       # idx 4
+          - PERC_SANEAMENTO_INADEQUADO:      # idx 4
+              formato: PROPORCAO
+              coluna_peso: domicilios
 
         remover_colunas_idx:
           - 2
@@ -213,7 +178,7 @@ tabelas:
         descricao_sheet: "Distribuição do rendimento domiciliar per capita para o total dos domicílios."
         arquivo: "tab8_rendimento_total.csv"
         colunas:
-          - VALOR_MEDIO_TOTAL:
+          - RENDA_MEDIA_PER_CAPITA:
               formato: MEDIA
               coluna_peso: populacao
           - QUARTIL_1_TOTAL
@@ -229,7 +194,7 @@ tabelas:
         descricao_sheet: "Distribuição do rendimento domiciliar per capita apenas para áreas urbanas."
         arquivo: "tab8_rendimento_urbano.csv"
         colunas:
-          - VALOR_MEDIO_URBANO
+          - RENDA_MEDIA_PER_CAPITA_URBANA
           - QUARTIL_1_URBANO
           - QUARTIL_2_URBANO
           - QUARTIL_3_URBANO
@@ -238,7 +203,7 @@ tabelas:
         descricao_sheet: "Distribuição do rendimento domiciliar per capita apenas para áreas rurais."
         arquivo: "tab8_rendimento_rural.csv"
         colunas:
-          - VALOR_MEDIO_RURAL
+          - RENDA_MEDIA_PER_CAPITA_RURAL
           - QUARTIL_1_RURAL
           - QUARTIL_2_RURAL
           - QUARTIL_3_RURAL
@@ -255,8 +220,8 @@ tabelas:
           - PERC_ATE_70_REAIS              # idx 2
           - PERC_ATE_QUARTO_SM             # idx 3
           - PERC_ATE_MEIO_SM:              # idx 4
-              formato: RATIO
-              coluna_peso: residentes
+              formato: PROPORCAO
+              coluna_peso: populacao
           - PERC_ATE_60_PERC_MEDIANA       # idx 5
 
         remover_colunas_idx:
@@ -300,7 +265,7 @@ tabelas:
           - PERC_SANEAMENTO_INADEQUADO_2010            # idx 4
           - PERC_AMBOS_ANALFABETO_E_INADEQUADO_2000    # idx 5
           - PERC_AMBOS_ANALFABETO_E_INADEQUADO_2010:   # idx 6
-              formato: RATIO
+              formato: PROPORCAO
               coluna_peso: domicilios
 
         remover_colunas_idx:

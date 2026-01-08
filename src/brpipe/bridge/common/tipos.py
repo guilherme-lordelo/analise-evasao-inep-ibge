@@ -11,6 +11,7 @@ class ResultadoTipo(Enum):
 	PROPORCAO = auto()
 	LOGIT = auto()
 	PERCENT_0_100 = auto()
+	VALUE = auto() 
 
 	def to_ratio(self, series):
 		if self == ResultadoTipo.COUNT:

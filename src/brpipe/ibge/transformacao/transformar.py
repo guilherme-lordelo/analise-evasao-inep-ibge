@@ -7,7 +7,6 @@ from brpipe.ibge.transformacao.limpar_linhas import limpar
 from brpipe.ibge.transformacao.aplicar_schema import aplicar_schema_ibge
 from brpipe.ibge.transformacao.remocao_colunas import remover_colunas
 from brpipe.ibge.transformacao.merge_colunas import aplicar_merges_colunas
-from brpipe.ibge.transformacao.transformar_colunas import aplicar_transformacoes_colunas
 from brpipe.ibge.checkpoints import carregar_checkpoint
 from brpipe.utils.paths import IBGE_REDUZIDO
 
@@ -32,7 +31,6 @@ def _transformar_sheet(
 
 	if df.empty:
 		return None
-
 	df = limpar(df)
 	df = aplicar_schema_ibge(
 		df,
@@ -40,7 +38,6 @@ def _transformar_sheet(
 		colunas,
 	)
 	df = aplicar_merges_colunas(df, sheet)
-	df = aplicar_transformacoes_colunas(df, sheet)
 	df = remover_colunas(df, sheet)
 
 	return df

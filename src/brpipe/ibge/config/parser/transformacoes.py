@@ -1,22 +1,19 @@
-from brpipe.ibge.config.models import ColunaIBGEConfig, TransformacaoColunaConfig
+from brpipe.ibge.config.models import TransformacaoColunaConfig
 
 _METODOS_TRANSFORMACAO_SUPORTADOS = {"logit"}
 
 def parse_transformacoes(
 	transformacoes_cfg: list[dict],
-	colunas_cfg: list[ColunaIBGEConfig],
-	destinos_merge: set[str],
-	remover_colunas: list[str],
+	qtd_colunas: int,
+	destinos_merge: set[int],
+	remover_idx: list[int],
 	ctx: str,
 ):
-	colunas = [coluna_cfg.nome for coluna_cfg in colunas_cfg]
-	colunas_disponiveis = set(colunas) | destinos_merge
-
 	destinos_transformacao = set()
 	transformacoes = []
 
 	for t in transformacoes_cfg:
-		fonte = t["fonte"]
+		fonte_idx = t["fonte_idx"]
 		destino = t["destino"]
 		tipo = t["tipo"]
 		escala = t.get("escala_origem")
@@ -24,34 +21,34 @@ def parse_transformacoes(
 		if tipo not in _METODOS_TRANSFORMACAO_SUPORTADOS:
 			raise ValueError(f"{ctx} Tipo de transformação não suportado: '{tipo}'")
 
-		if fonte not in colunas_disponiveis:
-			raise ValueError(f"{ctx} Coluna fonte da transformação inexistente: '{fonte}'")
+		if fonte_idx < 0 or fonte_idx >= qtd_colunas:
+			raise ValueError(f"{ctx} Índice de fonte inválido: {fonte_idx}")
 
-		if fonte in remover_colunas:
+		if fonte_idx in remover_idx:
 			raise ValueError(
-				f"{ctx} Coluna fonte '{fonte}' da transformação não pode ser removida"
+				f"{ctx} Fonte da transformação removida: índice {fonte_idx}"
 			)
 
-		if destino in colunas:
+		if destino < qtd_colunas:
 			raise ValueError(
-				f"{ctx} Destino de transformação já existe como coluna: '{destino}'"
+				f"{ctx} Índice de destino já existe como coluna: {destino}"
 			)
 
 		if destino in destinos_merge:
 			raise ValueError(
-				f"{ctx} Destino de transformação conflita com destino de merge: '{destino}'"
+				f"{ctx} Destino de transformação conflita com merge: {destino}"
 			)
 
 		if destino in destinos_transformacao:
 			raise ValueError(
-				f"{ctx} Destino de transformação duplicado: '{destino}'"
+				f"{ctx} Destino de transformação duplicado: {destino}"
 			)
 
 		destinos_transformacao.add(destino)
 
 		transformacoes.append(
 			TransformacaoColunaConfig(
-				fonte=fonte,
+				fonte=fonte_idx,
 				destino=destino,
 				tipo=tipo,
 				escala_origem=escala,

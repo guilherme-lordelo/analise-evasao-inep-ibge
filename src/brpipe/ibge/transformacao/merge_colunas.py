@@ -19,23 +19,38 @@ def aplicar_merges_colunas(
 
 def _aplicar_merge(df: DataFrame, merge: MergeColunasConfig) -> DataFrame:
 
-	fontes_validas = [c for c in merge.fontes if c in df.columns]
-
-	if not fontes_validas:
+	fontes = [c for c in merge.fontes if c in df.columns]
+	if not fontes:
 		return df
 
-	valores = (
-		df[fontes_validas]
-		.apply(pd.to_numeric, errors="coerce")
-	)
+	valores = df[fontes].apply(pd.to_numeric, errors="coerce")
 
 	if merge.metodo == "soma":
 		df[merge.destino] = valores.sum(axis=1, skipna=True)
 
-	elif merge.metodo == "media":
-		df[merge.destino] = valores.mean(axis=1, skipna=True)
+	elif merge.metodo == "media_ponderada":
+		if not merge.peso_merge:
+			raise ValueError(f"Merge '{merge.destino}' exige peso_merge")
 
-	# remove colunas fonte após o merge
-	df = df.drop(columns=fontes_validas)
+		if len(merge.peso_merge) != len(fontes):
+			raise ValueError(
+				f"Merge '{merge.destino}': peso_merge e fontes têm tamanhos diferentes"
+			)
 
-	return df
+		pesos = pd.Series(merge.peso_merge, index=fontes)
+
+		if merge.coluna_peso:
+			base = pd.to_numeric(df[merge.coluna_peso], errors="coerce")
+			valores_abs = valores.mul(base, axis=0)
+		else:
+			valores_abs = valores
+
+		numerador = valores_abs.mul(pesos, axis=1).sum(axis=1)
+		denominador = valores_abs.sum(axis=1)
+
+		df[merge.destino] = numerador / denominador.replace(0, pd.NA)
+
+	else:
+		raise ValueError(f"Método de merge não suportado: {merge.metodo}")
+
+	return df.drop(columns=fontes)

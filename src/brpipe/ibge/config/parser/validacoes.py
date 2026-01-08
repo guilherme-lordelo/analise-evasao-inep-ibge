@@ -1,14 +1,10 @@
-from brpipe.ibge.config.models import ColunaIBGEConfig
-
-
 def validar_remocao_colunas(
-	colunas: list[ColunaIBGEConfig],
-	remover_colunas: list[str],
+	qtd_colunas: int,
+	remover_idx: list[int],
 	ctx: str,
 ):
-	nomes = [coluna.nome for coluna in colunas]
-	for col in remover_colunas:
-		if col not in nomes:
+	for idx in remover_idx:
+		if idx < 1 or idx >= qtd_colunas + 1:
 			raise ValueError(
-				f"{ctx} Coluna para remoção inexistente: '{col}'"
+				f"{ctx} Índice inválido para remoção de coluna: {idx}"
 			)

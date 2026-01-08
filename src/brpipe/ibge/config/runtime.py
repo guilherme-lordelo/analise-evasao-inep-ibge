@@ -4,6 +4,7 @@ from brpipe.utils.colunas_base import get_colunas_municipio
 _cfg_ibge = load_config("ibge")
 _cfg_base = load_config("base")
 
+COLUNAS_PESO = _cfg_ibge.get("colunas_peso")
 TIPO_DEFAULT_IBGE = _cfg_ibge.get("formato_padrao", "COUNT")
 COLUNAS_BASE_IBGE = get_colunas_municipio(include_nome=True)
 SAIDA_IBGE = _cfg_base.get("saida")

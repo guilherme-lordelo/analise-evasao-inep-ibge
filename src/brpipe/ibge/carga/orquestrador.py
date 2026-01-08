@@ -1,25 +1,23 @@
 from collections import defaultdict
-from functools import reduce
 import pandas as pd
 
+from brpipe.ibge.carga.agregacao import executar_agregacoes
 from brpipe.ibge.carga.integracao import integrar_sheets_tabela
-from brpipe.ibge.carga.persistencia import persistir_tabela_final
 from brpipe.ibge.config.models import SheetsTransformados
 from brpipe.ibge.transformacao.merge_tabela import (
 	registrar_merges_tabela,
 	executar_merges_lazy,
 )
-from brpipe.ibge.config import COLUNAS_BASE_IBGE
+from brpipe.ibge.config import COLUNAS_BASE_IBGE, TABELAS_IBGE
 
 
 def carregar_ibge(
 	sheets_transformados: list[SheetsTransformados],
-) -> None:
+) -> pd.DataFrame | None:
 	"""
 	Camada LOAD do IBGE:
-	- Processa cada tabela IBGE
-	- Consolida tudo em um único DataFrame
-	- Persiste apenas uma vez
+	- Consolida todas as tabelas
+	- Retorna o DataFrame municipal final
 	"""
 
 	por_tabela: dict[str, list[SheetsTransformados]] = defaultdict(list)
@@ -27,7 +25,7 @@ def carregar_ibge(
 	for item in sheets_transformados:
 		por_tabela[item.tabela.tabela_id].append(item)
 
-	df_global: pd.DataFrame | None = None
+	df_municipal: pd.DataFrame | None = None
 
 	for tabela_id, items in por_tabela.items():
 		dfs = {
@@ -53,14 +51,13 @@ def carregar_ibge(
 			ops=merge_ops,
 		)
 
-		if df_global is None:
-			df_global = df_tabela
+		if df_municipal is None:
+			df_municipal = df_tabela
 		else:
-			df_global = df_global.merge(
+			df_municipal = df_municipal.merge(
 				df_tabela,
 				on=COLUNAS_BASE_IBGE,
 				how="outer",
 			)
 
-	if df_global is not None and not df_global.empty:
-		persistir_tabela_final(df=df_global)
+	executar_agregacoes(df_municipal, TABELAS_IBGE)

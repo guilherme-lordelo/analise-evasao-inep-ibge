@@ -294,12 +294,18 @@ tabelas:
         arquivo: "tab16_vulnerabilidade_0a5.csv"
 
         colunas:
-          - PERC_RESPONSAVEL_ANALFABETO_2010           # idx 1
-          - PERC_SANEAMENTO_INADEQUADO_2010            # idx 2
-          - PERC_AMBOS_ANALFABETO_E_INADEQUADO_2010:   # idx 3
+          - PERC_RESPONSAVEL_ANALFABETO_2000           # idx 1
+          - PERC_RESPONSAVEL_ANALFABETO_2010           # idx 2
+          - PERC_SANEAMENTO_INADEQUADO_2000            # idx 3
+          - PERC_SANEAMENTO_INADEQUADO_2010            # idx 4
+          - PERC_AMBOS_ANALFABETO_E_INADEQUADO_2000    # idx 5
+          - PERC_AMBOS_ANALFABETO_E_INADEQUADO_2010:   # idx 6
               formato: RATIO
               coluna_peso: domicilios
 
         remover_colunas_idx:
           - 1
           - 2
+          - 3
+          - 4
+          - 5

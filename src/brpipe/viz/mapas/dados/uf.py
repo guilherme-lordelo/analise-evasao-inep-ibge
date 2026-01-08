@@ -1,11 +1,11 @@
 import pandas as pd
 from brpipe.utils.io import read_csv
-from brpipe.utils.paths import arquivo_estadual
+from brpipe.utils.paths import inep_estadual
 from brpipe.viz.mapas.config import VARIAVEIS, ANOS
 from brpipe.viz.mapas.dados.normalizar import normalizar_metrica_long
 
 def carregar_metrica_uf() -> pd.DataFrame:
-	df = read_csv(arquivo_estadual)
+	df = read_csv(inep_estadual)
 
 	return normalizar_metrica_long(
 		df,

@@ -1,4 +1,5 @@
 from brpipe.ibge.config.models import ColunaIBGEConfig, MergeColunasConfig
+from brpipe.ibge.config.parser.colunas import build_coluna_config
 
 _METODOS_MERGE_SUPORTADOS = {
 	"soma",
@@ -23,6 +24,11 @@ def parse_merges(
 		metodo = m.get("metodo", "soma").lower()
 		coluna_peso_alias = m.get("coluna_peso")
 		peso_merge = m.get("peso_merge")
+		formato = m.get("formato")
+		if not formato:
+			raise ValueError(
+				f"{ctx} Merge '{destino}' exige formato"
+			)
 
 		if metodo not in _METODOS_MERGE_SUPORTADOS:
 			raise ValueError(
@@ -73,12 +79,20 @@ def parse_merges(
 			raise ValueError(
 				f"{ctx} Merge '{destino}': peso_merge e fontes têm tamanhos diferentes"
 			)
+		coluna_merge = build_coluna_config(
+			nome=destino,
+			formato=formato,
+			coluna_peso_alias=coluna_peso_alias,
+			colunas_peso=colunas_peso,
+			ctx=f"{ctx} Merge '{destino}':"
+		)
 
 		merges.append(
 			MergeColunasConfig(
 				destino=destino,
 				fontes=fontes_nomes,
 				metodo=metodo,
+				coluna=coluna_merge,
 				coluna_peso=(
 					colunas_peso.get(coluna_peso_alias)
 					if coluna_peso_alias else None

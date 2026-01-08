@@ -5,7 +5,6 @@ class TipoDado(Enum):
 	PERCENT = auto()
 	MEDIA = auto()
 	RATIO = auto()
-	PESO = auto()
 
 	@classmethod
 	def from_str(cls, valor: str, ctx: str) -> "TipoDado":
@@ -28,6 +27,3 @@ class TipoDado(Enum):
 class TipoAgregacao(Enum):
 	SOMA = auto()              # soma direta
 	MEDIA_PONDERADA = auto()   # exige peso
-	MEDIA_SIMPLES = auto()     # raramente correta
-	RATIO_RECALCULADO = auto() # numerador / denominador
-	NAO_AGREGAVEL = auto()     # quartil, mediana, índice

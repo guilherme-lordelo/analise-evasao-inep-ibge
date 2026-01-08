@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from brpipe.inep.config import ARQUIVOS, ANOS
-from brpipe.ibge.config import NOME_FINAL_MUNICIPIOS
+from brpipe.ibge.config import NOME_FINAL_MUNICIPIOS, NOME_FINAL_ESTADOS, NOME_FINAL_NACIONAL
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -37,21 +37,21 @@ _ano_fim = max(ANOS)
 
 
 # Resultados INEP
-arquivo_municipal = (
+inep_municipal = (
 	INEP_TRANSFORMACOES
 	/ f"{ARQUIVOS.transformacao_prefixo_out}"
 	  f"{_NOME_MUNICIPAL}{_ano_ini}_{_ano_fim}"
 	  f"{ARQUIVOS.transformacao_ext_out}"
 )
 
-arquivo_estadual = (
+inep_estadual = (
 	INEP_TRANSFORMACOES
 	/ f"{ARQUIVOS.transformacao_prefixo_out}"
 	  f"{_NOME_ESTADUAL}{_ano_ini}_{_ano_fim}"
 	  f"{ARQUIVOS.transformacao_ext_out}"
 )
 
-arquivo_nacional = (
+inep_nacional = (
 	INEP_TRANSFORMACOES
 	/ f"{ARQUIVOS.transformacao_prefixo_out}"
 	  f"{_NOME_NACIONAL}{_ano_ini}_{_ano_fim}"
@@ -59,7 +59,9 @@ arquivo_nacional = (
 )
 
 # Resultado IBGE
-arquivo_ibge_final = PROCESSED_IBGE / NOME_FINAL_MUNICIPIOS
+ibge_municipio = PROCESSED_IBGE / NOME_FINAL_MUNICIPIOS
+ibge_estadual = PROCESSED_IBGE / NOME_FINAL_ESTADOS
+ibge_nacional = PROCESSED_IBGE / NOME_FINAL_NACIONAL
 
 # Visualizações
 MAPAS_RENDER = DATA_DIR / "rendered" / "mapas"

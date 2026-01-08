@@ -11,6 +11,12 @@ class MergeLazyOp:
 	apply: Callable[[], pd.Series]
 
 @dataclass(frozen=True)
+class AgregacaoColuna:
+	nome: str
+	tipo: TipoAgregacao
+	coluna_peso: str | None
+
+@dataclass(frozen=True)
 class ColunaIBGEConfig:
 	nome: str
 	tipo_dado: TipoDado
@@ -23,6 +29,7 @@ class MergeColunasConfig:
 	destino: str
 	fontes: list[str]
 	metodo: str
+	coluna: ColunaIBGEConfig
 	coluna_peso: str | None = None
 	peso_merge: list[float] | None = None
 

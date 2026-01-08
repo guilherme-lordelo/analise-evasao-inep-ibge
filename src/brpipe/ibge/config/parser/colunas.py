@@ -1,15 +1,43 @@
 from brpipe.ibge.config.models import ColunaIBGEConfig
-from brpipe.ibge.config.tipos import TipoDado
+from brpipe.ibge.config.tipos import TipoDado, TipoAgregacao
 from brpipe.bridge.common.tipos import ResultadoTipo
-from brpipe.ibge.config.tipos import TipoAgregacao
 
 MAPA_TIPO_DADO = {
 	TipoDado.COUNT: (TipoAgregacao.SOMA, ResultadoTipo.COUNT),
 	TipoDado.PERCENT: (TipoAgregacao.MEDIA_PONDERADA, ResultadoTipo.PERCENT_0_100),
 	TipoDado.MEDIA: (TipoAgregacao.MEDIA_PONDERADA, ResultadoTipo.VALUE),
-	TipoDado.RATIO: (TipoAgregacao.RATIO_RECALCULADO, ResultadoTipo.RATIO),
-	TipoDado.PESO: (TipoAgregacao.SOMA, ResultadoTipo.COUNT),
+	TipoDado.RATIO: (TipoAgregacao.MEDIA_PONDERADA, ResultadoTipo.RATIO),
 }
+
+
+def build_coluna_config(
+	*,
+	nome: str,
+	formato: str,
+	coluna_peso_alias: str | None,
+	colunas_peso: dict[str, str],
+	ctx: str,
+) -> ColunaIBGEConfig:
+
+	tipo_dado = TipoDado.from_str(formato, ctx)
+
+	coluna_peso_resolvida = None
+	if coluna_peso_alias:
+		if coluna_peso_alias not in colunas_peso:
+			raise ValueError(
+				f"{ctx} Coluna '{nome}' usa coluna_peso desconhecida: {coluna_peso_alias}"
+			)
+		coluna_peso_resolvida = colunas_peso[coluna_peso_alias]
+
+	agreg, viz = MAPA_TIPO_DADO[tipo_dado]
+
+	return ColunaIBGEConfig(
+		nome=nome,
+		tipo_dado=tipo_dado,
+		tipo_agregacao=agreg,
+		tipo_visualizacao=viz,
+		coluna_peso=coluna_peso_resolvida,
+	)
 
 
 def parse_colunas(
@@ -23,7 +51,7 @@ def parse_colunas(
 	colunas: list[ColunaIBGEConfig] = []
 
 	for c in colunas_cfg:
-		coluna_peso_resolvida = None
+		coluna_peso_alias = None
 
 		if isinstance(c, str):
 			nome = c
@@ -59,25 +87,19 @@ def parse_colunas(
 						f"{ctx} Coluna '{nome}' usa coluna_peso desconhecida: {coluna_peso_alias}"
 					)
 
-				# 🔑 resolve alias → real column name
-				coluna_peso_resolvida = colunas_peso[coluna_peso_alias]
-
-			# formato antigo
 			else:
 				tipo_dado = TipoDado.from_str(raw, ctx)
 
 		else:
 			raise TypeError(f"{ctx} Formato inválido de coluna: {c}")
 
-		agreg, viz = MAPA_TIPO_DADO[tipo_dado]
-
 		colunas.append(
-			ColunaIBGEConfig(
+			build_coluna_config(
 				nome=nome,
-				tipo_dado=tipo_dado,
-				tipo_agregacao=agreg,
-				tipo_visualizacao=viz,
-				coluna_peso=coluna_peso_resolvida,
+				formato=tipo_dado.name,
+				coluna_peso_alias=None if not coluna_peso_alias else coluna_peso_alias,
+				colunas_peso=colunas_peso,
+				ctx=ctx,
 			)
 		)
 

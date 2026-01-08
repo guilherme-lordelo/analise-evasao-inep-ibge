@@ -3,28 +3,28 @@ from pandas import DataFrame
 from brpipe.utils.colunas_base import COL_NACIONAL, get_colunas_municipio
 from brpipe.viz.charts.common import PlotSpecBase
 from brpipe.utils.paths import (
-	arquivo_nacional,
-	arquivo_estadual,
-	arquivo_municipal,
-	arquivo_ibge_final,
+	inep_nacional,
+	inep_estadual,
+	inep_municipal,
+	ibge_municipio,
 )
 from brpipe.utils.io import read_csv
 
 def carregar_df_inep(plot_spec: PlotSpecBase) -> DataFrame:
 	if plot_spec.nivel == "nacional":
-		return read_csv(arquivo_nacional)
+		return read_csv(inep_nacional)
 
 	if plot_spec.nivel == "estadual":
-		return read_csv(arquivo_estadual)
+		return read_csv(inep_estadual)
 
 	if plot_spec.nivel == "municipal":
-		return read_csv(arquivo_municipal)
+		return read_csv(inep_municipal)
 
 	raise ValueError(f"Nível desconhecido: {plot_spec.nivel}")
 
 def carregar_df_ibge() -> DataFrame | None:
-	if os.path.exists(arquivo_ibge_final):
-		return read_csv(arquivo_ibge_final)
+	if os.path.exists(ibge_municipio):
+		return read_csv(ibge_municipio)
 
 def aplicar_filtro_territorial(
 	df: DataFrame,

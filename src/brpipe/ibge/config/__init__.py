@@ -1,7 +1,7 @@
 # src/ibge/_config/__init__.py
 from brpipe.ibge.config.models import TabelaIBGEConfig
 from brpipe.ibge.config.parser.tabelas import parse_tabelas
-from brpipe.ibge.config.runtime import COLUNAS_BASE_IBGE,SAIDA_IBGE, NOME_FINAL_MUNICIPIOS
+from brpipe.ibge.config.runtime import COLUNAS_BASE_IBGE,SAIDA_IBGE, NOME_FINAL_MUNICIPIOS, NOME_FINAL_ESTADOS, NOME_FINAL_NACIONAL
 from brpipe.utils.config import load_config
 
 _cfg_ibge = load_config("ibge")
@@ -12,5 +12,7 @@ __all__ = [
     "TABELAS_IBGE",
     "SAIDA_IBGE",
     "NOME_FINAL_MUNICIPIOS",
+    "NOME_FINAL_ESTADOS",
+    "NOME_FINAL_NACIONAL",
     "TABELAS_IBGE",
 ]

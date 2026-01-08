@@ -3,17 +3,17 @@
 from brpipe.utils.colunas_base import COL_NACIONAL
 from brpipe.utils.io import write_csv
 from brpipe.utils.paths import (
-    arquivo_municipal,
-    arquivo_estadual,
-    arquivo_nacional,
+    inep_municipal,
+    inep_estadual,
+    inep_nacional,
 )
 from brpipe.inep.carga.csv_saida import csv_kwargs_saida
 
 
 ARQUIVOS = {
-    "municipal": arquivo_municipal,
-    "estadual": arquivo_estadual,
-    "nacional": arquivo_nacional,
+    "municipal": inep_municipal,
+    "estadual": inep_estadual,
+    "nacional": inep_nacional,
 }
 
 

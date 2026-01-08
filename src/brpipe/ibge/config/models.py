@@ -1,8 +1,14 @@
 from dataclasses import dataclass
-from typing import List, Optional
-
+import pandas as pd
+from typing import Callable, List, Optional
+from pandas import DataFrame
 from brpipe.bridge.common.tipos import ResultadoTipo
 from brpipe.ibge.config.tipos import TipoAgregacao, TipoDado
+
+@dataclass
+class MergeLazyOp:
+	destino: str
+	apply: Callable[[], pd.Series]
 
 @dataclass(frozen=True)
 class ColunaIBGEConfig:
@@ -29,6 +35,7 @@ class SheetIBGEConfig:
 	merges_colunas: Optional[List[MergeColunasConfig]] = None
 	remover_colunas: Optional[List[str]] = None
 
+
 @dataclass(frozen=True)
 class TabelaIBGEConfig:
     tabela_id: str
@@ -36,3 +43,9 @@ class TabelaIBGEConfig:
     arquivo_xls: str
 
     sheets: List[SheetIBGEConfig]
+
+@dataclass(frozen=True)
+class SheetsTransformados:
+	tabela: TabelaIBGEConfig
+	sheet: SheetIBGEConfig
+	df: DataFrame

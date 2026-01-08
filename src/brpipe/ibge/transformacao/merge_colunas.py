@@ -1,56 +1,88 @@
 import pandas as pd
 from pandas import DataFrame
-from brpipe.ibge.config.models import SheetIBGEConfig, MergeColunasConfig
+from brpipe.ibge.config.models import MergeLazyOp, SheetIBGEConfig, MergeColunasConfig
 
 
-def aplicar_merges_colunas(
-	df: DataFrame,
-	sheet_cfg: SheetIBGEConfig
-) -> DataFrame:
+def _registrar_merge(merge: MergeColunasConfig) -> MergeLazyOp:
 
-	if not sheet_cfg.merges_colunas:
-		return df
+	fontes = merge.fontes
 
-	for merge in sheet_cfg.merges_colunas:
-		df = _aplicar_merge(df, merge)
+	def _calc(df: DataFrame) -> pd.Series:
+		valores = df[fontes].apply(pd.to_numeric, errors="coerce")
 
-	return df
+		if merge.metodo == "soma":
+			return valores.sum(axis=1, skipna=True)
 
+		if merge.metodo == "media_ponderada":
+			if not merge.peso_merge:
+				raise ValueError(f"Merge '{merge.destino}' exige peso_merge")
 
-def _aplicar_merge(df: DataFrame, merge: MergeColunasConfig) -> DataFrame:
+			pesos = pd.Series(merge.peso_merge, index=fontes)
 
-	fontes = [c for c in merge.fontes if c in df.columns]
-	if not fontes:
-		return df
+			if merge.coluna_peso:
+				base = pd.to_numeric(df[merge.coluna_peso], errors="coerce")
+				valores = valores.mul(base, axis=0)
 
-	valores = df[fontes].apply(pd.to_numeric, errors="coerce")
+			numerador = valores.mul(pesos, axis=1).sum(axis=1)
+			denominador = valores.sum(axis=1)
 
-	if merge.metodo == "soma":
-		df[merge.destino] = valores.sum(axis=1, skipna=True)
+			return numerador / denominador.replace(0, pd.NA)
 
-	elif merge.metodo == "media_ponderada":
-		if not merge.peso_merge:
-			raise ValueError(f"Merge '{merge.destino}' exige peso_merge")
-
-		if len(merge.peso_merge) != len(fontes):
-			raise ValueError(
-				f"Merge '{merge.destino}': peso_merge e fontes têm tamanhos diferentes"
-			)
-
-		pesos = pd.Series(merge.peso_merge, index=fontes)
-
-		if merge.coluna_peso:
-			base = pd.to_numeric(df[merge.coluna_peso], errors="coerce")
-			valores_abs = valores.mul(base, axis=0)
-		else:
-			valores_abs = valores
-
-		numerador = valores_abs.mul(pesos, axis=1).sum(axis=1)
-		denominador = valores_abs.sum(axis=1)
-
-		df[merge.destino] = numerador / denominador.replace(0, pd.NA)
-
-	else:
 		raise ValueError(f"Método de merge não suportado: {merge.metodo}")
 
-	return df.drop(columns=fontes)
+	return MergeLazyOp(
+		destino=merge.destino,
+		fontes=fontes,
+		coluna_peso=merge.coluna_peso,
+		apply=_calc,
+		drop_cols=fontes,
+	)
+
+def registrar_merges_sheet(
+	sheet_cfg: SheetIBGEConfig,
+) -> list[MergeLazyOp]:
+
+	if not sheet_cfg.merges_colunas:
+		return []
+
+	return [
+		_registrar_merge(merge)
+		for merge in sheet_cfg.merges_colunas
+	]
+
+def registrar_merges_tabela(
+	sheets_cfg: list[SheetIBGEConfig],
+) -> list[MergeLazyOp]:
+
+	ops: list[MergeLazyOp] = []
+
+	for sheet in sheets_cfg:
+		ops.extend(registrar_merges_sheet(sheet))
+
+	return ops
+
+def executar_merges_lazy(
+	df: DataFrame,
+	ops: list[MergeLazyOp],
+) -> DataFrame:
+
+	for op in ops:
+		colunas_faltantes = set(op.fontes)
+		if op.coluna_peso:
+			colunas_faltantes.add(op.coluna_peso)
+
+		colunas_faltantes -= set(df.columns)
+
+		if colunas_faltantes:
+			raise ValueError(
+				f"Merge '{op.destino}' não pode ser executado. "
+				f"Colunas ausentes: {colunas_faltantes}"
+			)
+
+		df[op.destino] = op.apply(df)
+
+		df = df.drop(columns=[
+			c for c in op.drop_cols if c in df.columns
+		])
+
+	return df

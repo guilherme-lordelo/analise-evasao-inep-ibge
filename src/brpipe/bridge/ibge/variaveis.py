@@ -5,61 +5,64 @@ from brpipe.viz.charts.common.consumiveis import Consumivel
 
 
 class VariavelIBGE:
-    def __init__(
-        self,
-        nome: str,
-        resultado: ResultadoTipo,
-        coluna: str,
-    ):
-        self.nome = nome.upper()
-        self.coluna = coluna
-        self.resultado = resultado
+	def __init__(
+		self,
+		nome: str,
+		coluna: str,
+		resultado: ResultadoTipo,
+	):
+		self.nome = nome.upper()
+		self.coluna = coluna
+		self.resultado = resultado
 
-    def aplicar_formato(self, series: Series):
-        return self.resultado.apply(series)
+	def aplicar_formato(self, series: Series):
+		return self.resultado.apply(series)
+
 
 class VariaveisIBGE:
 	def __init__(
 		self,
 		tabelas_cfg: dict[str, TabelaIBGEConfig],
 	):
-		self._map = {}
+		self._map: dict[str, VariavelIBGE] = {}
+
+		fontes_remover: set[str] = set()
 
 		for tabela in tabelas_cfg.values():
 			for sheet in tabela.sheets:
-				self._registrar_sheet(sheet)
+				self._registrar_colunas_sheet(sheet)
+				self._registrar_merges_sheet(sheet, fontes_remover)
 
-	def _registrar_sheet(self, sheet: SheetIBGEConfig):
-		for col in sheet.colunas_especificas:
-			print(col.tipo)
-		for col in sheet.colunas_especificas:
-			tipo = col.tipo
+		for fonte in fontes_remover:
+			self._map.pop(fonte.upper(), None)
 
+	def _registrar_colunas_sheet(self, sheet: SheetIBGEConfig):
+		for col in sheet.colunas_especificas:
 			self._map[col.nome.upper()] = VariavelIBGE(
 				nome=col.nome,
 				coluna=col.nome,
-				resultado=tipo,
+				resultado=col.tipo_visualizacao,
 			)
 
-		if sheet.merges_colunas:
-			for merge in sheet.merges_colunas:
-				tipo = col.tipo
+	def _registrar_merges_sheet(
+		self,
+		sheet: SheetIBGEConfig,
+		fontes_remover: set[str],
+	):
+		if not sheet.merges_colunas:
+			return
 
-				self._map[merge.destino.upper()] = VariavelIBGE(
-					nome=merge.destino,
-					coluna=merge.destino,
-					resultado=tipo,
-				)
+		for merge in sheet.merges_colunas:
+			col = merge.coluna
 
-		if sheet.transformacoes_colunas:
-			for t in sheet.transformacoes_colunas:
-				tipo = tipo = col.tipo
+			self._map[merge.destino.upper()] = VariavelIBGE(
+				nome=merge.destino,
+				coluna=merge.destino,
+				resultado=col.tipo_visualizacao,
+			)
 
-				self._map[t.destino.upper()] = VariavelIBGE(
-					nome=t.destino,
-					coluna=t.destino,
-					resultado=tipo,
-				)
+			for fonte in merge.fontes:
+				fontes_remover.add(fonte)
 
 	def resolver(self, nome: str) -> Consumivel:
 		chave = nome.upper()

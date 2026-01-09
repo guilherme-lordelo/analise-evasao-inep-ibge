@@ -7,6 +7,8 @@ from brpipe.utils.paths import (
 	inep_estadual,
 	inep_municipal,
 	ibge_municipio,
+	ibge_estadual,
+	ibge_nacional,
 )
 from brpipe.utils.io import read_csv
 
@@ -22,9 +24,17 @@ def carregar_df_inep(plot_spec: PlotSpecBase) -> DataFrame:
 
 	raise ValueError(f"Nível desconhecido: {plot_spec.nivel}")
 
-def carregar_df_ibge() -> DataFrame | None:
-	if os.path.exists(ibge_municipio):
+def carregar_df_ibge(plot_spec: PlotSpecBase) -> DataFrame | None:
+	if plot_spec.nivel == "municipal" and os.path.exists(ibge_municipio):
 		return read_csv(ibge_municipio)
+
+	if plot_spec.nivel == "estadual" and os.path.exists(ibge_estadual):
+		return read_csv(ibge_estadual)
+
+	if plot_spec.nivel == "nacional" and os.path.exists(ibge_nacional):
+		return read_csv(ibge_nacional)
+
+	return None
 
 def aplicar_filtro_territorial(
 	df: DataFrame,
@@ -47,10 +57,10 @@ def unir_inep_ibge(
 	chaves = get_colunas_municipio()
 
 	if plot_spec.nivel == "nacional":
-		chaves = [COL_NACIONAL]
+		chaves = COL_NACIONAL
 
 	if plot_spec.nivel == "estadual":
-		chaves = [chaves["UF"]]
+		chaves = chaves[1]
 
 	return df_inep.merge(
 		df_ibge,
@@ -67,10 +77,9 @@ def carregar_dataframe_por_plot(
 	df_inep = carregar_df_inep(plot_spec)
 	df_inep = aplicar_filtro_territorial(df_inep, plot_spec)
 
-	df_ibge = carregar_df_ibge()
+	df_ibge = carregar_df_ibge(plot_spec)
 	if df_ibge is None:
 		return df_inep
 
 	df_ibge = aplicar_filtro_territorial(df_ibge, plot_spec)
-
 	return unir_inep_ibge(df_inep, df_ibge, plot_spec)

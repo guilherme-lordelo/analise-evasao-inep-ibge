@@ -30,7 +30,8 @@ formulas:
 
   evasao_anual_financiados:
     descricao: "Evasão entre estudantes com financiamento"
-    expressao: "1 - ((QT_MAT_FINANC_{n} - QT_ING_FINANC_{n}) / (QT_MAT_FINANC_{p} - QT_CONC_FINANC_{p}))"
+    expressao: "1 - ((QT_MAT_FINANC_{n} - QT_ING_FINANC_{n}) / (QT_MAT_FINANC_{p}
+      - QT_CONC_FINANC_{p}))"
     validacao:
       regras:
         - "QT_MAT_FINANC_{p} >= minimo_m_prev"
@@ -73,7 +74,7 @@ arquivos:
   transformacao:
     prefixo_output: "inep_"
     extensao_output: ".csv"
-    niveis: 
+    niveis:
       - "municipios_"
       - "estados_"
       - "nacional_"
@@ -174,6 +175,6 @@ mapeamento_colunas:
 limpeza:
   comportamento_sem_municipio: "atribuir"  # "descartar" ou "atribuir"
   valor_padrao_sem_municipio:
-    CO_MUNICIPIO: -1
+    CO_MUNICIPIO: '-1'
     SG_UF: "ND"
     NO_MUNICIPIO: "SEM_MUNICIPIO"

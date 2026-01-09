@@ -52,14 +52,11 @@ class VisaoTerritorial:
 
     def _aplicar_filtro_ano(self, gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
         if not self.coluna_ano or self._ano is None:
+            gdf["_visivel_ano"] = True
             return gdf
 
         col = self.coluna_ano
         ano = str(self._ano) if gdf[col].dtype == object else self._ano
 
-        mask = (gdf[col] == ano) | (gdf[col].isna())
-        return gdf[mask]
-
-    def _build_view(self) -> gpd.GeoDataFrame:
-        gdf = self._gdf_base.copy()
-        return self._aplicar_filtro_ano(gdf)
+        gdf["_visivel_ano"] = gdf[col] == ano
+        return gdf

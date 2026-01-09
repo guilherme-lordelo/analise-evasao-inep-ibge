@@ -31,7 +31,7 @@ def _render_por_ano(
     """
 
     out_dir = MAPAS_RENDER / nome
-
+    out_dir.mkdir(parents=True, exist_ok=True)
     gdf_base = merge_fn()
 
     gdf_base["sem_inep"] = gdf_base[VARIAVEIS.coluna_ano].isna()
@@ -40,6 +40,8 @@ def _render_por_ano(
         tolerance=0.01,
         preserve_topology=True,
     )
+
+
 
     visao = visao_classe(gdf_base)
 
@@ -52,10 +54,24 @@ def _render_por_ano(
             visao.set_ano(ano)
             gdf_view = visao.get_view().copy()
 
+            gdf_view["sem_dado_ano"] = (
+                ~gdf_view["sem_inep"] &
+                ~gdf_view["_visivel_ano"]
+            )
+
             gdf_view["sem_metrica"] = (
                 ~gdf_view["sem_inep"] &
+                ~gdf_view["sem_dado_ano"] &
                 gdf_view[formula].isna()
             )
+
+            mask_valido = (
+                gdf_view["_visivel_ano"] &
+                ~gdf_view["sem_inep"] &
+                ~gdf_view["sem_metrica"]
+            )
+            
+            gdf_view["com_metrica"] = mask_valido
 
             titulo = None
             if parse_bool(PLOT.mostrar_titulo):

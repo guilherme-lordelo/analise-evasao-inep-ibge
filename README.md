@@ -103,12 +103,13 @@ O arquivo de configuração controla os seguintes aspectos da `Extração`:
             descricao_sheet: "Totais gerais de população por faixas etárias."
             arquivo: "tab2_faixas_etarias_total.csv" # Nome de saída da primeira planilha
             colunas: # Novos nomes de colunas
-                - POP_TOTAL
-                - PERC_URBANA
-                - PERC_RURAL
-                - PERC_HOMEM
-                - PERC_MULHER
-                - RAZAO_SEXO
+                - POP_RESIDENTE_TOTAL
+                - PERC_0_A_5
+                - PERC_6_A_14
+                - PERC_15_A_24
+                - PERC_25_A_39
+                - PERC_40_A_59
+                - PERC_60_OU_MAIS
 
           - sheet_id: B # Segunda planilha do arquivo
             descricao_sheet: "População urbana por faixas etárias."
@@ -137,54 +138,55 @@ O arquivo de configuração controla os seguintes aspectos da `Extração`:
 
 **Transformação**
 
-A etapa de `transformação` realiza todas as mudanças estruturais dentro de planilhas.
+A etapa de `transformação` realiza todas as mudanças estruturais nas de planilhas, incluindo agrupamentos de coluna, agrupamentos de registro por estado e nacional, bem como definição de tipos de dado para gráficos.
 
 O arquivo de configuração controla os seguintes aspectos da `Transformação`:
 
+*   **Definição das colunas de peso:** Determina quais as colunas que podem ser usadas para ponderação. Essas colunas não podem ser usadas como fonte de agrupamento de coluna e não podem ser removidas.
+
+Exemplo:
+
+    colunas_peso:
+    populacao: POP_TOTAL
+    unidades: UNIDADES_DOMESTICAS_TOTAL
+    domicilios: DOMICILIOS_TOTAL
+
+*   **Definição de tipos:** Os campos `formato` e `coluna_peso` devem ser incluídos para caracterizar os tipos `PORCENTAGEM`, `MEDIA` e `PROPORCAO`. Enquanto que `CONTAGEM` é considerado campo padrão sem peso e dispensa declarações explicítas.
+
+        colunas:
+          - POP_TOTAL      # Usa padrão "CONTAGEM"
+          - PERC_URBANA:   # "PROPORCAO" deve declarar formato e coluna de peso
+              formato: PROPORCAO
+              coluna_peso: populacao
+Colunas usadas como fonte de agrupamento ou que serão removidas também dispensam declaração de formato.
+
 *   **Agrupamento de Colunas (`merges_colunas`):** Permite agrupar faixas de dados de forma declarativa.
-    *   **fontes:** Colunas originais do CSV.
-    *   **destino:** Nova coluna consolidada.
-    *   **metodo:** Operação aplicada (ex: `soma`).
+    *   **destino:** Nome da nova coluna.
+    *   **fontes:** Índices das colunas originais do CSV.
+    *   **metodo:** Define a lógica de agrupamento.
+    *   **peso_merge:** Valor de cada índice para ponderação, um valor para cada coluna fonte.
+    *   **formato:** Define o o tipo de dado para posterior agregação e análises.
+    *   **coluna_peso:** Define a coluna peso usada no agrupamento de colunas e no agrupamento de registro por estado e nacional.
 
 Exemplo:
 
         merges_colunas:
-        - destino: PERC_0_A_24_RURAL
-            fontes:
-            - PERC_0_A_5_RURAL
-            - PERC_6_A_14_RURAL
-            - PERC_15_A_24_RURAL
-            metodo: soma
-*   **Transformação Logit (`transformacoes_logit`):** Aplica a transformação logit em variáveis de porcentagem.
-    *   **fonte:** Coluna original
-    *   **destino:** Nova coluna contendo o valor transformado em logit.
-    *   **metodo:** Transformação matemática `logit(x) = ln(x / (1 - x))`.
+          - destino: IDADE_MEDIA_ESTIMADA
+            fontes_idx: [2, 3, 4, 5, 6, 7]
+            metodo: MEDIA_PONDERADA
+            peso_merge: [2.5, 10, 19.5, 32, 49.5, 70]
+            formato: MEDIA
+            coluna_peso: "populacao"
+
+*   **Remoção:** O campo `remover_colunas` permite excluir colunas por índice.
 
 Exemplo:
 
-        transformacoes_colunas:
-
-            - fonte: PERC_URBANA
-            destino: PERC_URBANA_LOGIT
-            tipo: logit
-            escala_origem: "0-100"
-
-            - fonte: PERC_HOMEM
-            destino: PERC_HOMEM_LOGIT
-            tipo: logit
-            escala_origem: "0-100"
+        remover_colunas_idx:
+          - 1
 
 
-*   **Remoção:** O campo `remover_colunas` permite excluir colunas .
-
-Exemplo:
-
-        remover_colunas:
-          - PERC_RURAL
-          - PERC_MULHER
-          - RAZAO_SEXO
-
-Colunas usadas como base para transformações são automaticamente removidas e não precisam ser incluídas para remoção. O objetivo é não manter colunas redundantes no conjunto de análise final.
+Colunas usadas como base para transformações são automaticamente removidas e não precisam ser incluídas para remoção.
 
 **Carga**
 
@@ -192,7 +194,13 @@ A etapa de `carga` une todas as planilhas transformadas e persiste o resultado e
 
 O arquivo de configuração controla os seguintes aspectos da `Carga`:
 
-*   **Definição do nome final** O usuário decide o nome do arquivo IBGE unido final.
+*   **Definição do nome final** O usuário decide o nome do arquivo IBGE unido final nos níveis municipal, estadual e nacional.
+
+Exemplo:
+
+    arquivo_final_municipios: "ibge_final_municipios.csv"
+    arquivo_final_estados: "ibge_final_estados.csv"
+    arquivo_final_nacional: "ibge_final_nacional.csv"
 
 ## Requisitos
 
@@ -215,7 +223,7 @@ Manter os arquivos originais INEP em:
 Manter os arquivos originais IBGE em:
 
     data/RAW/ibge_xls/
-## Alinhar o comportamento do pipeline ao desejado através dos arquivos de configuração YAML
+## Alinhamento do Comportamento do Pipeline
 ### Edição do arquivo de configuração INEP em:
     config/inep.yml
 ### Edição do arquivo de configuração IBGE em:

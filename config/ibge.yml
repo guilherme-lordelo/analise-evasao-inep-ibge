@@ -18,7 +18,7 @@ tabelas:
         arquivo: "tab1_populacao_total.csv"
 
         colunas:
-          - POP_TOTAL: CONTAGEM         # idx 1
+          - POP_TOTAL                # idx 1
           - PERC_URBANA:             # idx 2
               formato: PROPORCAO
               coluna_peso: populacao

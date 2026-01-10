@@ -1,67 +1,69 @@
 import streamlit as st
 from ui.state import init_state
-from ui.yaml_io import save_yaml
-from ui.sections.formulas.section import FormulasSection
-from ui.sections.variaveis.section import VariaveisSection
-from ui.sections.mapeamento_colunas.section import MapeamentoColunasSection
-from ui.sections.coluna_peso.section import ColunaPesoSection
-from ui.sections.arquivos.section import ArquivosSection
-from ui.sections.anos.section import AnosSection
-from ui.sections.extracao.section import ExtracaoSection
-from ui.sections.validacao_limites.section import ValidacaoLimitesSection
-from ui.sections.limpeza.section import LimpezaSection
+from ui.modules.inep import INEPModule
+from ui.modules.ibge import IBGEModule
 
 
-SECTIONS = [
-	FormulasSection(),
-	VariaveisSection(),
-	MapeamentoColunasSection(),
-	ColunaPesoSection(),
-	ArquivosSection(),
-	AnosSection(),
-	ExtracaoSection(),
-	ValidacaoLimitesSection(),
-	LimpezaSection(),
+MODULES = [
+	INEPModule(),
+	IBGEModule(),
 ]
 
-init_state()
 
-doc = st.session_state.doc
+def main():
+	init_state()
 
-st.set_page_config(page_title="Editor INEP", layout="wide")
-st.title("Editor de Configuração INEP")
+	st.set_page_config(
+		page_title="Editor de Configurações",
+		layout="wide"
+	)
 
-labels = [s.label for s in SECTIONS]
-keys = [s.key for s in SECTIONS]
+	st.title("Editor de Configurações")
 
-if "section" not in st.session_state:
-	st.session_state.section = keys[0]
+	st.sidebar.title("Módulo")
 
-selected = st.sidebar.radio("Configurações", keys, format_func=dict(zip(keys, labels)).get)
-st.session_state.section = selected
+	module_labels = {m.key: m.label for m in MODULES}
+	module_keys = list(module_labels.keys())
 
-section = next(s for s in SECTIONS if s.key == selected)
-section.render(doc)
+	if "active_module" not in st.session_state:
+		st.session_state.active_module = module_keys[0]
 
-st.divider()
+	st.session_state.active_module = st.sidebar.radio(
+		"",
+		module_keys,
+		format_func=module_labels.get
+	)
 
-col1, col2 = st.columns(2)
+	active = next(
+		m for m in MODULES
+		if m.key == st.session_state.active_module
+	)
 
-with col1:
-	if st.button("Validar configuração"):
-		erros = []
+	st.sidebar.divider()
 
-		for s in SECTIONS:
-			erros.extend(s.validate(doc) or [])
+	active.render_sidebar()
 
-		if erros:
-			st.error("Foram encontrados erros na configuração:")
-			for e in erros:
-				st.write(f"• {e}")
-		else:
-			st.success("Configuração válida")
+	active.render_main()
 
-with col2:
-	if st.button("Salvar arquivo"):
-		save_yaml(doc, "config/inep.yml")
-		st.success("Arquivo salvo")
+	st.divider()
+
+	col1, col2 = st.columns(2)
+
+	with col1:
+		if st.button("Validar configuração"):
+			erros = active.validate()
+			if erros:
+				st.error("Foram encontrados erros:")
+				for e in erros:
+					st.write(f"• {e}")
+			else:
+				st.success("Configuração válida")
+
+	with col2:
+		if st.button("Salvar arquivo"):
+			active.save()
+			st.success(f"Arquivo {active.label} salvo")
+
+
+if __name__ == "__main__":
+	main()

@@ -65,7 +65,7 @@ class ArquivosSection:
 				)
 
 			with col2:
-				if st.button("🗑", key=f"arquivos_transformacao_del_nivel_{i}"):
+				if st.button("Remover", key=f"arquivos_transformacao_del_nivel_{i}"):
 					niveis.pop(i)
 					st.rerun()
 

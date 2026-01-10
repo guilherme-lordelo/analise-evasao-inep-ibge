@@ -31,7 +31,7 @@ def render_lista(formulas: dict):
 			pass
 
 		with col4:
-			if st.button("🗑", key=f"del_{nome}"):
+			if st.button("Remover", key=f"del_{nome}"):
 				del formulas[nome]
 
 				if st.session_state.formula_atual == nome:

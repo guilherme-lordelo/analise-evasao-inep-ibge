@@ -28,7 +28,7 @@ class ValidacaoLimitesSection:
 				)
 
 			with col3:
-				if st.button("🗑", key=f"lim_del_{nome}"):
+				if st.button("Remover", key=f"lim_del_{nome}"):
 					del limites[nome]
 					st.rerun()
 

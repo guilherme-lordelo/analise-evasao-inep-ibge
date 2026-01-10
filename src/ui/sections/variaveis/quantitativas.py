@@ -21,7 +21,7 @@ def render_quantitativas(quantitativas: dict):
 			)
 
 		with col3:
-			if st.button("🗑", key=f"qt_del_{nome}"):
+			if st.button("Remover", key=f"qt_del_{nome}"):
 				del quantitativas[nome]
 				st.rerun()
 

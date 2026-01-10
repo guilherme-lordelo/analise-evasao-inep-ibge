@@ -28,7 +28,7 @@ class MapeamentoColunasSection:
 				)
 
 			with col3:
-				if st.button("🗑", key=f"map_del_{origem}"):
+				if st.button("Remover", key=f"map_del_{origem}"):
 					del mapeamentos[origem]
 					st.rerun()
 

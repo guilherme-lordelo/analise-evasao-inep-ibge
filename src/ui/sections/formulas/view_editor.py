@@ -37,7 +37,7 @@ def render_editor(formulas: dict, nome: str):
 			)
 
 		with col2:
-			if st.button("🗑", key=f"del_{nome}_{i}"):
+			if st.button("Remover", key=f"del_{nome}_{i}"):
 				regras.pop(i)
 				st.rerun()
 

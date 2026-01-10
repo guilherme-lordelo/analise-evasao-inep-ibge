@@ -25,5 +25,23 @@ class VariaveisSection:
 		with tab3:
 			render_quantitativas(vars.setdefault("quantitativas", {}))
 
-	def validate(self, doc: dict):
-		pass
+	def validate(self, doc: dict) -> list[str]:
+		erros = []
+
+		variaveis = doc.get("variaveis", {})
+		quantitativas = variaveis.get("quantitativas", {})
+
+		quantitativas = {str(k): str(v) for k, v in quantitativas.items()}
+
+		colunas_quantitativas = set(quantitativas.keys())
+
+		mapeamento = doc.get("mapeamento_colunas", {})
+		mapeamento = {str(k): str(v) for k, v in mapeamento.items()}
+
+		for origem, destino in mapeamento.items():
+			if destino not in colunas_quantitativas:
+				erros.append(
+					f"Coluna '{destino}' não está definida como variável quantitativa."
+				)
+
+		return erros

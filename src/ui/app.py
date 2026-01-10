@@ -49,9 +49,17 @@ col1, col2 = st.columns(2)
 
 with col1:
 	if st.button("Validar configuração"):
+		erros = []
+
 		for s in SECTIONS:
-			s.validate(doc)
-		st.success("Configuração válida")
+			erros.extend(s.validate(doc) or [])
+
+		if erros:
+			st.error("Foram encontrados erros na configuração:")
+			for e in erros:
+				st.write(f"• {e}")
+		else:
+			st.success("Configuração válida")
 
 with col2:
 	if st.button("Salvar arquivo"):

@@ -1,4 +1,5 @@
 import streamlit as st
+from ui.modules.persistencia_ibge import commit_ibge_edicao
 from ui.yaml_io import save_yaml
 
 from ui.sections.ibge.colunas_peso.section import ColunasPesoSection
@@ -47,7 +48,10 @@ class IBGEModule(ConfigModule):
 		return erros
 
 	def save(self):
+		doc = st.session_state.doc_ibge
+		commit_ibge_edicao(doc)
+
 		save_yaml(
-			st.session_state.doc_ibge,
+			doc,
 			"config/ibge.yml"
 		)

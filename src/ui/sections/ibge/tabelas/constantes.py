@@ -1,0 +1,6 @@
+FORMATOS = [
+	"CONTAGEM",
+	"PORCENTAGEM",
+	"PROPORCAO",
+	"MEDIA",
+]

@@ -1,5 +1,5 @@
 import streamlit as st
-from ui.sections.formulas.model import nova_formula
+from ui.sections.inep.formulas.model import nova_formula
 
 def render_lista(formulas: dict):
 	st.subheader("Fórmulas")

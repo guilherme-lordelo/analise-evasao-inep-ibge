@@ -19,7 +19,18 @@ class IBGETabelasSection:
 
 		for tab_key in list(tabelas.keys()):
 			with st.expander(f"Tabela {tab_key}", expanded=False):
-				self._render_tabela(tab_key, tabelas[tab_key], doc)
+				col1, col2 = st.columns([0.85, 0.15])
+
+				with col1:
+					self._render_tabela(tab_key, tabelas[tab_key], doc)
+
+				with col2:
+					if st.button(
+						"Remover",
+						key=f"{tab_key}_remove"
+					):
+						del tabelas[tab_key]
+						st.rerun()
 
 		if st.button("Adicionar tabela"):
 			n = len(tabelas) + 1
@@ -27,6 +38,7 @@ class IBGETabelasSection:
 				"descricao_tabela": "",
 				"sheets": []
 			}
+
 
 	def _render_tabela(self, tab_key: str, tabela: dict, doc: dict):
 		tabela["descricao_tabela"] = st.text_input(

@@ -1,14 +1,14 @@
 import streamlit as st
 from ui.yaml_io import save_yaml
-from ui.sections.formulas.section import FormulasSection
-from ui.sections.variaveis.section import VariaveisSection
-from ui.sections.mapeamento_colunas.section import MapeamentoColunasSection
-from ui.sections.coluna_peso.section import ColunaPesoSection
-from ui.sections.arquivos.section import ArquivosSection
-from ui.sections.anos.section import AnosSection
-from ui.sections.extracao.section import ExtracaoSection
-from ui.sections.validacao_limites.section import ValidacaoLimitesSection
-from ui.sections.limpeza.section import LimpezaSection
+from ui.sections.inep.formulas.section import FormulasSection
+from ui.sections.inep.variaveis.section import VariaveisSection
+from ui.sections.inep.mapeamento_colunas.section import MapeamentoColunasSection
+from ui.sections.inep.coluna_peso.section import ColunaPesoSection
+from ui.sections.inep.arquivos.section import ArquivosSection
+from ui.sections.inep.anos.section import AnosSection
+from ui.sections.inep.extracao.section import ExtracaoSection
+from ui.sections.inep.validacao_limites.section import ValidacaoLimitesSection
+from ui.sections.inep.limpeza.section import LimpezaSection
 
 from ui.modules.base import ConfigModule
 

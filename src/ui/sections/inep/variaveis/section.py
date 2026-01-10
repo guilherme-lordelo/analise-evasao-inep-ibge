@@ -1,7 +1,7 @@
 import streamlit as st
-from ui.sections.variaveis.temporais import render_temporais
-from ui.sections.variaveis.categoricas import render_categoricas
-from ui.sections.variaveis.quantitativas import render_quantitativas
+from ui.sections.inep.variaveis.temporais import render_temporais
+from ui.sections.inep.variaveis.categoricas import render_categoricas
+from ui.sections.inep.variaveis.quantitativas import render_quantitativas
 
 class VariaveisSection:
 	key = "variaveis"

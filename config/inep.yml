@@ -164,7 +164,7 @@ variaveis:
 # ----------------------------------------------
 
 mapeamento_colunas:
-  QT_ING: QT_ING_TOTA
+  QT_ING: QT_ING_TOTAL
   QT_MAT: QT_MAT_TOTAL
   QT_CONC: QT_CONC_TOTAL
 

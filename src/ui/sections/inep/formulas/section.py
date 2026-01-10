@@ -1,7 +1,7 @@
 import streamlit as st
-from ui.sections.formulas.validacao import validar_expressao
-from ui.sections.formulas.view_lista import render_lista
-from ui.sections.formulas.view_editor import render_editor
+from ui.sections.inep.formulas.validacao import validar_expressao
+from ui.sections.inep.formulas.view_lista import render_lista
+from ui.sections.inep.formulas.view_editor import render_editor
 
 class FormulasSection:
 	key = "formulas"

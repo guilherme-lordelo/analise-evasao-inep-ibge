@@ -12,45 +12,43 @@ colunas_peso:
 
 tabelas:
   tab1:
-    descricao_tabela: "População total do município, com distribuição urbano/rural e por sexo."
+    descricao_tabela: "População total do município, com distribuição urbano/rural
+      e por sexo."
     sheets:
       - descricao_sheet: "Conjunto completo da tabela, sem subdivisões."
         arquivo: "tab1_populacao_total.csv"
 
         colunas:
-          - POP_TOTAL                # idx 1
-          - PERC_URBANA:             # idx 2
+          - POP_TOTAL: CONTAGEM
+          - PERC_URBANA:
               formato: PROPORCAO
               coluna_peso: populacao
-          - PERC_RURAL              # idx 3
-          - PERC_HOMEM:             # idx 4
+          - PERC_RURAL: CONTAGEM
+          - PERC_HOMEM:
               formato: PROPORCAO
               coluna_peso: populacao
-          - PERC_MULHER             # idx 5
-          - RAZAO_SEXO              # idx 6
-
+          - PERC_MULHER: CONTAGEM
+          - RAZAO_SEXO: CONTAGEM
         remover_colunas_idx:
           - 3
           - 5
           - 6
-
-
   tab2:
-    descricao_tabela: "População residente por faixas etárias, com detalhamento total, urbano e rural."
+    descricao_tabela: "População residente por faixas etárias, com detalhamento total,
+      urbano e rural."
     sheets:
       - sheet_id: A
         descricao_sheet: "Totais gerais de população por faixas etárias."
         arquivo: "tab2_faixas_etarias_total.csv"
 
         colunas:
-          - POP_RESIDENTE_TOTAL: CONTAGEM   # idx 1
-          - PERC_0_A_5                   # idx 2
-          - PERC_6_A_14                  # idx 3
-          - PERC_15_A_24                 # idx 4
-          - PERC_25_A_39                 # idx 5
-          - PERC_40_A_59                 # idx 6
-          - PERC_60_OU_MAIS              # idx 7
-
+          - POP_RESIDENTE_TOTAL: CONTAGEM
+          - PERC_0_A_5: CONTAGEM
+          - PERC_6_A_14: CONTAGEM
+          - PERC_15_A_24: CONTAGEM
+          - PERC_25_A_39: CONTAGEM
+          - PERC_40_A_59: CONTAGEM
+          - PERC_60_OU_MAIS: CONTAGEM
         merges_colunas:
           - destino: IDADE_MEDIA_ESTIMADA
             fontes_idx: [2, 3, 4, 5, 6, 7]
@@ -61,20 +59,18 @@ tabelas:
 
         remover_colunas_idx:
           - 1
-
       - sheet_id: B
         descricao_sheet: "População urbana por faixas etárias."
         arquivo: "tab2_faixas_etarias_urbana.csv"
 
         colunas:
-          - POP_RESIDENTE_URBANA
-          - PERC_0_A_5_URBANA
-          - PERC_6_A_14_URBANA
-          - PERC_15_A_24_URBANA
-          - PERC_25_A_39_URBANA
-          - PERC_40_A_59_URBANA
-          - PERC_60_OU_MAIS_URBANA
-
+          - POP_RESIDENTE_URBANA: CONTAGEM
+          - PERC_0_A_5_URBANA: CONTAGEM
+          - PERC_6_A_14_URBANA: CONTAGEM
+          - PERC_15_A_24_URBANA: CONTAGEM
+          - PERC_25_A_39_URBANA: CONTAGEM
+          - PERC_40_A_59_URBANA: CONTAGEM
+          - PERC_60_OU_MAIS_URBANA: CONTAGEM
         merges_colunas:
           - destino: IDADE_MEDIA_ESTIMADA_URBANA
             fontes_idx: [2, 3, 4, 5, 6, 7]
@@ -88,14 +84,13 @@ tabelas:
         arquivo: "tab2_faixas_etarias_rural.csv"
 
         colunas:
-          - POP_RESIDENTE_RURAL
-          - PERC_0_A_5_RURAL
-          - PERC_6_A_14_RURAL
-          - PERC_15_A_24_RURAL
-          - PERC_25_A_39_RURAL
-          - PERC_40_A_59_RURAL
-          - PERC_60_OU_MAIS_RURAL
-
+          - POP_RESIDENTE_RURAL: CONTAGEM
+          - PERC_0_A_5_RURAL: CONTAGEM
+          - PERC_6_A_14_RURAL: CONTAGEM
+          - PERC_15_A_24_RURAL: CONTAGEM
+          - PERC_25_A_39_RURAL: CONTAGEM
+          - PERC_40_A_59_RURAL: CONTAGEM
+          - PERC_60_OU_MAIS_RURAL: CONTAGEM
         merges_colunas:
           - destino: IDADE_MEDIA_ESTIMADA_RURAL
             fontes_idx: [2, 3, 4, 5, 6, 7]
@@ -105,24 +100,25 @@ tabelas:
             coluna_peso: "populacao"
 
   tab4:
-    descricao_tabela: "Unidades domésticas segundo o sexo do responsável, incluindo indicadores de responsabilidade única ou compartilhada."
+    descricao_tabela: "Unidades domésticas segundo o sexo do responsável, incluindo
+      indicadores de responsabilidade única ou compartilhada."
     sheets:
-      - descricao_sheet: "Tabela única contendo totais e distribuição por sexo do responsável."
+      - descricao_sheet: "Tabela única contendo totais e distribuição por sexo do
+          responsável."
         arquivo: "tab4_unidades_domesticas_por_sexo.csv"
 
         colunas:
-          - UNIDADES_DOMESTICAS_TOTAL: CONTAGEM  # idx 1
-          - PERC_UNICO_RESP:                  # idx 2
+          - UNIDADES_DOMESTICAS_TOTAL: CONTAGEM
+          - PERC_UNICO_RESP:
               formato: PROPORCAO
               coluna_peso: unidades
-          - PERC_MAIS_DE_1_RESP               # idx 3
-          - UNIDADES_DOMESTICAS_HOMEM: CONTAGEM  # idx 4
-          - PERC_UNICO_RESP_HOMEM             # idx 5
-          - PERC_MAIS_DE_1_RESP_HOMEM         # idx 6
-          - UNIDADES_DOMESTICAS_MULHER: CONTAGEM # idx 7
-          - PERC_UNICO_RESP_MULHER            # idx 8
-          - PERC_MAIS_DE_1_RESP_MULHER        # idx 9
-
+          - PERC_MAIS_DE_1_RESP: CONTAGEM
+          - UNIDADES_DOMESTICAS_HOMEM: CONTAGEM
+          - PERC_UNICO_RESP_HOMEM: CONTAGEM
+          - PERC_MAIS_DE_1_RESP_HOMEM: CONTAGEM
+          - UNIDADES_DOMESTICAS_MULHER: CONTAGEM
+          - PERC_UNICO_RESP_MULHER: CONTAGEM
+          - PERC_MAIS_DE_1_RESP_MULHER: CONTAGEM
         remover_colunas_idx:
           - 3
           - 4
@@ -131,143 +127,138 @@ tabelas:
           - 7
           - 8
           - 9
-
   tab7:
-    descricao_tabela: "Condições de saneamento dos domicílios, separadas por totais, área urbana e área rural."
+    descricao_tabela: "Condições de saneamento dos domicílios, separadas por totais,
+      área urbana e área rural."
     sheets:
       - sheet_id: A
-        descricao_sheet: "Situação de saneamento considerando todos os domicílios do município."
+        descricao_sheet: "Situação de saneamento considerando todos os domicílios
+          do município."
         arquivo: "tab7_saneamento_total.csv"
 
         colunas:
-          - DOMICILIOS_TOTAL: CONTAGEM          # idx 1
-          - PERC_SANEAMENTO_ADEQUADO        # idx 2
-          - PERC_SANEAMENTO_SEMI_ADEQUADO    # idx 3
-          - PERC_SANEAMENTO_INADEQUADO:      # idx 4
+          - DOMICILIOS_TOTAL: CONTAGEM
+          - PERC_SANEAMENTO_ADEQUADO: CONTAGEM
+          - PERC_SANEAMENTO_SEMI_ADEQUADO: CONTAGEM
+          - PERC_SANEAMENTO_INADEQUADO:
               formato: PROPORCAO
               coluna_peso: domicilios
-
         remover_colunas_idx:
           - 2
           - 3
-
       - sheet_id: B
         descricao_sheet: "Situação de saneamento dos domicílios em áreas urbanas."
         arquivo: "tab7_saneamento_urbano.csv"
 
         colunas:
-          - DOMICILIOS_URBANOS
-          - PERC_SANEAMENTO_ADEQUADO_URBANO
-          - PERC_SANEAMENTO_SEMI_ADEQUADO_URBANO
-          - PERC_SANEAMENTO_INADEQUADO_URBANO
-
+          - DOMICILIOS_URBANOS: CONTAGEM
+          - PERC_SANEAMENTO_ADEQUADO_URBANO: CONTAGEM
+          - PERC_SANEAMENTO_SEMI_ADEQUADO_URBANO: CONTAGEM
+          - PERC_SANEAMENTO_INADEQUADO_URBANO: CONTAGEM
       - sheet_id: C
         descricao_sheet: "Situação de saneamento dos domicílios em áreas rurais."
         arquivo: "tab7_saneamento_rural.csv"
 
         colunas:
-          - DOMICILIOS_RURAIS
-          - PERC_SANEAMENTO_ADEQUADO_RURAL
-          - PERC_SANEAMENTO_SEMI_ADEQUADO_RURAL
-          - PERC_SANEAMENTO_INADEQUADO_RURAL
-
+          - DOMICILIOS_RURAIS: CONTAGEM
+          - PERC_SANEAMENTO_ADEQUADO_RURAL: CONTAGEM
+          - PERC_SANEAMENTO_SEMI_ADEQUADO_RURAL: CONTAGEM
+          - PERC_SANEAMENTO_INADEQUADO_RURAL: CONTAGEM
   tab8:
-    descricao_tabela: "Rendimento domiciliar per capita, com estatísticas de valor médio e quartis, segmentado por total, área urbana e rural."
+    descricao_tabela: "Rendimento domiciliar per capita, com estatísticas de valor
+      médio e quartis, segmentado por total, área urbana e rural."
     sheets:
       - sheet_id: A
-        descricao_sheet: "Distribuição do rendimento domiciliar per capita para o total dos domicílios."
+        descricao_sheet: "Distribuição do rendimento domiciliar per capita para o
+          total dos domicílios."
         arquivo: "tab8_rendimento_total.csv"
         colunas:
           - RENDA_MEDIA_PER_CAPITA:
               formato: MEDIA
               coluna_peso: populacao
-          - QUARTIL_1_TOTAL
-          - QUARTIL_2_TOTAL
-          - QUARTIL_3_TOTAL
-        
+          - QUARTIL_1_TOTAL: CONTAGEM
+          - QUARTIL_2_TOTAL: CONTAGEM
+          - QUARTIL_3_TOTAL: CONTAGEM
         remover_colunas_idx:
           - 2
           - 3
           - 4
-
       - sheet_id: B
-        descricao_sheet: "Distribuição do rendimento domiciliar per capita apenas para áreas urbanas."
+        descricao_sheet: "Distribuição do rendimento domiciliar per capita apenas
+          para áreas urbanas."
         arquivo: "tab8_rendimento_urbano.csv"
         colunas:
-          - RENDA_MEDIA_PER_CAPITA_URBANA
-          - QUARTIL_1_URBANO
-          - QUARTIL_2_URBANO
-          - QUARTIL_3_URBANO
-
+          - RENDA_MEDIA_PER_CAPITA_URBANA: CONTAGEM
+          - QUARTIL_1_URBANO: CONTAGEM
+          - QUARTIL_2_URBANO: CONTAGEM
+          - QUARTIL_3_URBANO: CONTAGEM
       - sheet_id: C
-        descricao_sheet: "Distribuição do rendimento domiciliar per capita apenas para áreas rurais."
+        descricao_sheet: "Distribuição do rendimento domiciliar per capita apenas
+          para áreas rurais."
         arquivo: "tab8_rendimento_rural.csv"
         colunas:
-          - RENDA_MEDIA_PER_CAPITA_RURAL
-          - QUARTIL_1_RURAL
-          - QUARTIL_2_RURAL
-          - QUARTIL_3_RURAL
-
+          - RENDA_MEDIA_PER_CAPITA_RURAL: CONTAGEM
+          - QUARTIL_1_RURAL: CONTAGEM
+          - QUARTIL_2_RURAL: CONTAGEM
+          - QUARTIL_3_RURAL: CONTAGEM
   tab12:
-    descricao_tabela: "População residente por faixas de rendimento, com detalhamento total, urbano e rural."
+    descricao_tabela: "População residente por faixas de rendimento, com detalhamento
+      total, urbano e rural."
     sheets:
       - sheet_id: A
         descricao_sheet: "População residente total por faixas de rendimento."
         arquivo: "tab12_rendimento_total.csv"
 
         colunas:
-          - POP_RESIDENTE_RENDAS_TOTAL     # idx 1
-          - PERC_ATE_70_REAIS              # idx 2
-          - PERC_ATE_QUARTO_SM             # idx 3
-          - PERC_ATE_MEIO_SM:              # idx 4
+          - POP_RESIDENTE_RENDAS_TOTAL: CONTAGEM
+          - PERC_ATE_70_REAIS: CONTAGEM
+          - PERC_ATE_QUARTO_SM: CONTAGEM
+          - PERC_ATE_MEIO_SM:
               formato: PROPORCAO
               coluna_peso: populacao
-          - PERC_ATE_60_PERC_MEDIANA       # idx 5
-
+          - PERC_ATE_60_PERC_MEDIANA: CONTAGEM
         remover_colunas_idx:
           - 1
           - 2
           - 3
           - 5
-
       - sheet_id: B
         descricao_sheet: "População residente urbana por faixas de rendimento."
         arquivo: "tab12_rendimento_urbano.csv"
 
         colunas:
-          - POP_RESIDENTE_RENDAS_URBANA
-          - PERC_ATE_70_REAIS_URBANA
-          - PERC_ATE_QUARTO_SM_URBANA
-          - PERC_ATE_MEIO_SM_URBANA
-          - PERC_ATE_60_PERC_MEDIANA_URBANA
-
+          - POP_RESIDENTE_RENDAS_URBANA: CONTAGEM
+          - PERC_ATE_70_REAIS_URBANA: CONTAGEM
+          - PERC_ATE_QUARTO_SM_URBANA: CONTAGEM
+          - PERC_ATE_MEIO_SM_URBANA: CONTAGEM
+          - PERC_ATE_60_PERC_MEDIANA_URBANA: CONTAGEM
       - sheet_id: C
         descricao_sheet: "População residente rural por faixas de rendimento."
         arquivo: "tab12_rendimento_rural.csv"
 
         colunas:
-          - POP_RESIDENTE_RENDAS_RURAL
-          - PERC_ATE_70_REAIS_RURAL
-          - PERC_ATE_QUARTO_SM_RURAL
-          - PERC_ATE_MEIO_SM_RURAL
-          - PERC_ATE_60_PERC_MEDIANA_RURAL
-
+          - POP_RESIDENTE_RENDAS_RURAL: CONTAGEM
+          - PERC_ATE_70_REAIS_RURAL: CONTAGEM
+          - PERC_ATE_QUARTO_SM_RURAL: CONTAGEM
+          - PERC_ATE_MEIO_SM_RURAL: CONTAGEM
+          - PERC_ATE_60_PERC_MEDIANA_RURAL: CONTAGEM
   tab16:
-    descricao_tabela: "Indicadores de vulnerabilidade de crianças de 0 a 5 anos, considerando alfabetização do responsável e condições de saneamento."
+    descricao_tabela: "Indicadores de vulnerabilidade de crianças de 0 a 5 anos, considerando
+      alfabetização do responsável e condições de saneamento."
     sheets:
-      - descricao_sheet: "Tabela única contendo indicadores de vulnerabilidade em 2000 e 2010."
+      - descricao_sheet: "Tabela única contendo indicadores de vulnerabilidade em
+          2000 e 2010."
         arquivo: "tab16_vulnerabilidade_0a5.csv"
 
         colunas:
-          - PERC_RESPONSAVEL_ANALFABETO_2000           # idx 1
-          - PERC_RESPONSAVEL_ANALFABETO_2010           # idx 2
-          - PERC_SANEAMENTO_INADEQUADO_2000            # idx 3
-          - PERC_SANEAMENTO_INADEQUADO_2010            # idx 4
-          - PERC_AMBOS_ANALFABETO_E_INADEQUADO_2000    # idx 5
-          - PERC_AMBOS_ANALFABETO_E_INADEQUADO_2010:   # idx 6
+          - PERC_RESPONSAVEL_ANALFABETO_2000: CONTAGEM
+          - PERC_RESPONSAVEL_ANALFABETO_2010: CONTAGEM
+          - PERC_SANEAMENTO_INADEQUADO_2000: CONTAGEM
+          - PERC_SANEAMENTO_INADEQUADO_2010: CONTAGEM
+          - PERC_AMBOS_ANALFABETO_E_INADEQUADO_2000: CONTAGEM
+          - PERC_AMBOS_ANALFABETO_E_INADEQUADO_2010:
               formato: PROPORCAO
               coluna_peso: domicilios
-
         remover_colunas_idx:
           - 1
           - 2

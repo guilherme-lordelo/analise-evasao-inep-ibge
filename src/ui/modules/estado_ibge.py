@@ -1,5 +1,5 @@
 import streamlit as st
-from ui.sections.ibge.tabelas.parsers import parse_coluna_yaml
+from ui.modules.parsers import parse_coluna_yaml
 
 
 def sheet_state_key(tab_key: str, idx: int) -> str:

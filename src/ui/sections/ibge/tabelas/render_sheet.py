@@ -33,17 +33,22 @@ def render_sheet(
 	st.markdown("### Colunas")
 	pesos = list(doc.get("colunas_peso", {}).keys())
 
-	for c_idx, col in enumerate(state["colunas"]):
+	for col in state["colunas"]:
+		def _remove(col=col):
+			state["colunas"].remove(col)
+			st.rerun()
 		render_coluna(
 			col,
-			key_prefix=f"{tab_key}_{idx}_{c_idx}",
-			pesos=pesos
-		)
+			key_prefix=f"{tab_key}_{idx}_{col.uid}",
+			pesos=pesos,
+			on_remove=_remove,
+	)
 
 	if st.button("Adicionar coluna", key=f"{tab_key}_{idx}_add_col"):
 		state["colunas"].append(
 			ColunaEditavel(nome="", forma=FormaColuna.CRUA)
 		)
+		st.rerun()
 
 	st.markdown("### Remoção de colunas (por índice)")
 

@@ -47,96 +47,95 @@ def agrega_quantitativas(df: pd.DataFrame, nivel: str = "municipal") -> pd.DataF
 
     return agg
 
+def descobrir_categoricas_presentes(df):
+    """
+    Retorna:
+    {
+        "TP_REDE": [
+            ("TP_REDE_1", "TP_REDE_Publica"),
+            ("TP_REDE_2", "TP_REDE_Privada"),
+        ],
+        "IN_CAPITAL": [
+            ("IN_CAPITAL_0", "IN_CAPITAL_Capital"),
+            ("IN_CAPITAL_1", "IN_CAPITAL_Nao_Capital"),
+        ]
+    }
+    """
+    presentes = {}
+
+    for var, meta in VARIAVEIS_YAML.categoricas.items():
+        valores = meta.get("valores", {})
+
+        for codigo, descricao in valores.items():
+            col_entrada = f"{var}_{codigo}"
+
+            if col_entrada in df.columns:
+                col_saida = f"{var}_{descricao}"
+                presentes.setdefault(var, []).append(
+                    (col_entrada, col_saida)
+                )
+
+    return presentes
 
 def agrega_categoricas_ano(df: pd.DataFrame, ano: str, nivel: str = "municipal") -> pd.DataFrame:
-    """
-    Versão LONG da agregação categórica.
-    
-    Espera DF com:
-      - VARIAVEL_VALOR (ex.: TP_REDE_1)
-      - COLUNA_ANO  (ex.: 'NU_ANO_CENSO')
-      - COLUNA_PESO  (ex.: 'QT_MAT_TOTAL')
-    """
 
-    # Nome da coluna de ano
     col_ano = VARIAVEIS_YAML.coluna_ano
+    col_peso = VARIAVEIS_YAML.coluna_peso
+
     if col_ano not in df.columns:
         raise ValueError(f"Coluna temporal '{col_ano}' não existe no dataframe.")
 
     anos_df = set(df[col_ano].unique())
-    if len(anos_df) > 1:
-        raise ValueError(f"DF contém múltiplos anos: {anos_df}. A função LONG aceita apenas um ano por vez.")
-
-    if str(list(anos_df)[0]) != str(ano):
-        raise ValueError(f"Parâmetro ano='{ano}', mas o DF contém ano {list(anos_df)[0]}.")
-
-    presentes = {}
-
-    for var, valores in VARIAVEIS_YAML.valores_categoricos.items():
-        lista_valores = list(valores) + ["OUTROS"]
-        for valor in lista_valores:
-            col = f"{var}_{valor}"
-            if col in df.columns:
-                presentes.setdefault(var, []).append(col)
-
-    if not presentes:
-        if nivel == "municipal":
-            return df[VARIAVEIS_YAML.campos_padrao].drop_duplicates()
-        elif nivel == "estadual":
-            return df[[VARIAVEIS_YAML.campos_padrao[1]]].drop_duplicates()
-        else:
-            return pd.DataFrame({"UF": ["BRASIL"]})
+    if len(anos_df) != 1 or str(list(anos_df)[0]) != str(ano):
+        raise ValueError(f"DF contém ano inválido: {anos_df}")
 
     if nivel == "municipal":
         campos_group = VARIAVEIS_YAML.campos_padrao
     elif nivel == "estadual":
-        campos_group = [VARIAVEIS_YAML.campos_padrao[1]]
+        campos_group = [VARIAVEIS_YAML.coluna_uf]
     elif nivel == "nacional":
         campos_group = []
     else:
         raise ValueError("nivel deve ser 'municipal', 'estadual' ou 'nacional'")
 
-    # Verifica se a coluna de peso existe
-    col_peso = VARIAVEIS_YAML.coluna_peso
     if col_peso not in df.columns:
         raise ValueError(f"A coluna de peso '{col_peso}' não existe no DF.")
 
-    df_aux = df[campos_group + [col_peso]].copy()
-
     resultados = []
 
-    for var, colunas_var in presentes.items():
+    for var, codigos in VARIAVEIS_YAML.valores_categoricos.items():
 
-        ordem = VARIAVEIS_YAML.valores_categoricos[var]
-        colunas_var.sort(
-            key=lambda c: (
-                ordem.index(c.split("_")[-1])
-                if c.split("_")[-1] in ordem
-                else len(ordem)
-            )
-        )
+        descricoes = VARIAVEIS_YAML.descricoes_categoricos[var]
 
         dfs_var = []
 
-        for col in colunas_var:
-            df_aux["_VAL"] = df[col].astype(float) * df[col_peso]
+        for codigo in codigos:
+            col_entrada = f"{var}_{codigo}"
+
+            if col_entrada not in df.columns:
+                continue
+
+            descricao = descricoes[codigo]
+            col_saida = f"{var}_{descricao}"
+
+            df_aux = df.copy()
+            df_aux["_VAL"] = df_aux[col_entrada].astype(float) * df_aux[col_peso]
 
             if campos_group:
-                df_sum = df_aux.groupby(campos_group)["_VAL"].sum()
-                df_total = df_aux.groupby(campos_group)[col_peso].sum()
+                soma = df_aux.groupby(campos_group)["_VAL"].sum()
+                total = df_aux.groupby(campos_group)[col_peso].sum()
             else:
-                df_sum = pd.Series([df_aux["_VAL"].sum()])
-                df_total = pd.Series([df_aux[col_peso].sum()])
+                soma = pd.Series([df_aux["_VAL"].sum()])
+                total = pd.Series([df_aux[col_peso].sum()])
 
-            df_pct = (df_sum / df_total) * 100
+            pct = (soma / total) * 100
+            dfs_var.append(pct.rename(col_saida).to_frame())
 
-            col_saida = col
+        if dfs_var:
+            resultados.append(pd.concat(dfs_var, axis=1))
 
-            df_pct = df_pct.to_frame(col_saida)
-            dfs_var.append(df_pct)
-
-        resultado_var = pd.concat(dfs_var, axis=1)
-        resultados.append(resultado_var)
+    if not resultados:
+        return pd.DataFrame()
 
     df_final = pd.concat(resultados, axis=1)
 

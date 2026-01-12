@@ -110,21 +110,21 @@ variaveis:
     IN_CAPITAL:
       descricao: "Indicador se o município é capital"
       valores:
-        0: "Não é capital"
-        1: "É capital"
+        0: "Capital"
+        1: "Nao_Capital"
 
     TP_ORGANIZACAO_ACADEMICA:
       descricao: "Tipo de organização acadêmica"
       valores:
         1: "Universidade"
-        2: "Centro Universitário"
+        2: "Centro_Universitario"
         3: "Faculdade"
-        4: "Instituto Federal"
+        4: "Instituto_Federal"
 
     TP_REDE:
       descricao: "Tipo de rede"
       valores:
-        1: "Pública"
+        1: "Publica"
         2: "Privada"
 
     TP_GRAU_ACADEMICO:
@@ -132,14 +132,14 @@ variaveis:
       valores:
         1: "Bacharelado"
         2: "Licenciatura"
-        3: "Tecnológico"
-        4: "Bacharelado e Licenciatura"
+        3: "Tecnologico"
+        4: "Bacharelado_e_Licenciatura"
 
     TP_MODALIDADE_ENSINO:
       descricao: "Modalidade de ensino"
       valores:
         1: "Presencial"
-        2: "Educação a Distância"
+        2: "EaD"
       #filtro_excluir:
       #  - 2  # Excluir EAD
 

@@ -32,9 +32,9 @@ class VariaveisINEP:
 			for nome in q:
 				variaveis[nome] = VariavelINEP(nome, ResultadoTipo.COUNT)
 
-		for nome_base, valores in self._cfg.valores_categoricos.items():
-			for valor in valores:
-				nome_coluna = f"{nome_base}_{valor}"
+		for nome_base, descricoes in self._cfg.descricoes_categoricos.items():
+			for _, sufixo in descricoes.items():
+				nome_coluna = f"{nome_base}_{sufixo}"
 
 				variaveis[nome_coluna] = VariavelINEP(
 					nome=nome_coluna,
@@ -42,6 +42,7 @@ class VariaveisINEP:
 				)
 
 		return variaveis
+
 
 	@property
 	def coluna_ano(self) -> str:

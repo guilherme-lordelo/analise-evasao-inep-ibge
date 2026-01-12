@@ -23,6 +23,7 @@ class VariaveisConfig:
     quantitativas: List[str]
 
     valores_categoricos: Dict[str, Set[str]]
+    descricoes_categoricos: Dict[str, Dict[str, str]]
 
     coluna_ano: str
     coluna_peso: str
@@ -65,10 +66,12 @@ def carregar_variaveis(_cfg: dict) -> VariaveisConfig:
     variaveis = list(dict.fromkeys(variaveis))
 
     valores_categoricos: Dict[str, Set[str]] = {}
+    descricoes_categoricos: Dict[str, Dict[str, str]] = {}
     categoricas_original: List[str] = []
 
     for var, props in variaveis_cfg.get("categoricas", {}).items():
-        valores = set(props.get("valores", {}).keys())
+        valores_dict = props.get("valores", {})
+        valores = set(valores_dict.keys())
         filtro_excluir = set(props.get("filtro_excluir", []))
 
         if filtro_excluir:
@@ -83,7 +86,7 @@ def carregar_variaveis(_cfg: dict) -> VariaveisConfig:
             )
 
         valores_categoricos[var] = valores_filtrados
-
+        descricoes_categoricos[var] = valores_dict
 
     coluna_peso = _cfg.get("coluna_peso_inep", "QT_MAT_TOTAL")
 
@@ -109,6 +112,7 @@ def carregar_variaveis(_cfg: dict) -> VariaveisConfig:
         categoricas_original=categoricas_original,
         quantitativas=quantitativas,
         valores_categoricos=valores_categoricos,
+        descricoes_categoricos=descricoes_categoricos,
         coluna_ano=coluna_ano,
         coluna_peso=coluna_peso
     )

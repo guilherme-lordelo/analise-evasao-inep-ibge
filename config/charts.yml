@@ -6,29 +6,37 @@ linha_temporal:
     max_variaveis_por_plot: 4
 
   plots:
-    - nome: Ingresso Nacional Total
+    - nome: Ingressantes x Concluintes Nacional
       nivel: nacional
       variaveis:
         - QT_ING_TOTAL
+        - QT_CONC_TOTAL
 
     - nome: Evasão Anual Nacional
       nivel: nacional
       variaveis:
         - evasao_anual
+        - evasao_anual_financiados
 
-    - nome: Ingresso vs Tipos de Redes
+    - nome: Percentuais de Matriculados por Tipo de Rede
       nivel: nacional
       variaveis:
-        - TP_REDE_1
-        - TP_REDE_2
-        - evasao_anual
+        - TP_REDE_Publica
+        - TP_REDE_Privada
 
-    - nome: Evasão na Bahia
+    - nome: Percentuais de Matriculados por Tipo de Modalidade de Ensino
+      nivel: nacional
+      variaveis:
+        - TP_MODALIDADE_ENSINO_Presencial
+        - TP_MODALIDADE_ENSINO_EaD
+
+    - nome: Evasão Anual na Bahia
       nivel: estadual
       territorio:
         ufs: "BA"
       variaveis:
         - evasao_anual
+        - evasao_anual_financiados
 
   saida:
     formato: png
@@ -48,12 +56,12 @@ scatter:
 
     - nome: Evasão vs Rede Publica
       nivel: nacional
-      eixo_x: TP_REDE_1
+      eixo_x: TP_REDE_Publica
       eixo_y: evasao_anual
 
     - nome: Evasão vs Rede Privada
       nivel: nacional
-      eixo_x: TP_REDE_2
+      eixo_x: TP_REDE_Privada
       eixo_y: evasao_anual
 
     - nome: Evasão vs Rede Publica na Bahia
@@ -61,7 +69,7 @@ scatter:
       territorio:
         ufs: "BA"
       eixo_x: evasao_anual
-      eixo_y: TP_REDE_1
+      eixo_y: TP_REDE_Publica
 
   saida:
     formato: png

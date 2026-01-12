@@ -9,22 +9,22 @@ DATA_DIR = ROOT / "data"
 
 
 # Fontes originais
-RAW_INEP = DATA_DIR / "raw" / "inep_micros"
-RAW_IBGE = DATA_DIR / "raw" / "ibge_xls"
+RAW_INEP = DATA_DIR / "RAW" / "INEP"
+RAW_IBGE = DATA_DIR / "RAW" / "IBGE"
 
 
 # Resultados intermediários
-INEP_REDUZIDO = DATA_DIR / "interim" / "inep_reduzido"
-IBGE_REDUZIDO = DATA_DIR / "interim" / "ibge_csv"
+INEP_REDUZIDO = DATA_DIR / "INTERIM" / "INEP"
+IBGE_REDUZIDO = DATA_DIR / "INTERIM" / "IBGE"
 
 
 # Resultados processados
-INEP_TRANSFORMACOES = DATA_DIR / "processed" / "inep_integracoes"
-PROCESSED_IBGE = DATA_DIR / "processed" / "ibge_limpo"
+INEP_TRANSFORMACOES = DATA_DIR / "PROCESSED" / "INEP"
+PROCESSED_IBGE = DATA_DIR / "PROCESSED" / "IBGE"
 
 
 # Shapefiles
-DATA_SHAPEFILES = DATA_DIR / "shapefiles"
+DATA_SHAPEFILES = DATA_DIR / "SHAPEFILES"
 
 
 _NOME_MUNICIPAL = ARQUIVOS.transformacao_niveis[0]

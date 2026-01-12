@@ -12,8 +12,6 @@ def extrair_ibge():
 
 	def _extrair_sheet(tabela, sheet, idx):
 		path_xls = Path(RAW_IBGE) / tabela.arquivo_xls
-		if not path_xls.exists():
-			return
 
 		try:
 			xls = pd.ExcelFile(path_xls)
@@ -22,6 +20,7 @@ def extrair_ibge():
 			return
 
 		nome_csv_interim = sheet.arquivo.replace(".csv", "_interim.csv")
+		IBGE_REDUZIDO.mkdir(parents=True, exist_ok=True)
 		out_path = Path(IBGE_REDUZIDO) / nome_csv_interim
 		salvar_checkpoint(df, output_path=out_path)
 

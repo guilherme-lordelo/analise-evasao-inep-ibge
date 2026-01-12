@@ -2,12 +2,12 @@ import streamlit as st
 from ui.modules.parsers import parse_coluna_yaml
 
 
-def sheet_state_key(tab_key: str, idx: int) -> str:
-	return f"sheet_edit_{tab_key}_{idx}"
+def sheet_state_key(tab_key: str, sheet_uid: str) -> str:
+	return f"sheet_edit_{tab_key}_{sheet_uid}"
 
 
-def init_sheet_state(tab_key: str, idx: int, sheet: dict):
-	key = sheet_state_key(tab_key, idx)
+def init_sheet_state(tab_key: str, sheet_uid: str, sheet: dict):
+	key = sheet_state_key(tab_key, sheet_uid)
 
 	if key in st.session_state:
 		return

@@ -1,4 +1,5 @@
 import streamlit as st
+from ui.modules.mapas import MapasModule
 from ui.state import init_state
 from ui.modules.inep import INEPModule
 from ui.modules.ibge import IBGEModule
@@ -10,7 +11,8 @@ MODULES = [
 	INEPModule(),
 	IBGEModule(),
 	PipelineBaseModule(),
-	ChartsModule()
+	ChartsModule(),
+	MapasModule(),
 ]
 
 

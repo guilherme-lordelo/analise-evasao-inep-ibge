@@ -5,6 +5,8 @@ malha:
 plot:
   cmap: OrRd
   legend_shrink: 0.5
-  figsize: [14, 14]
-  mostrar_titulo: False
+  figsize:
+    - 14.0
+    - 14.0
+  mostrar_titulo: false
 

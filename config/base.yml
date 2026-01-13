@@ -1,5 +1,13 @@
-
 saida:
   encoding: "utf-8"
   sep: ";"
-  ordem_colunas: []
+
+municipio:
+  codigo: "CO_MUNICIPIO"
+  nome: "NO_MUNICIPIO"
+
+estado:
+  sigla: "SG_UF"
+
+nacional:
+  coluna: "UF"  # Nome para agregação nacional, decidido pelo usuário

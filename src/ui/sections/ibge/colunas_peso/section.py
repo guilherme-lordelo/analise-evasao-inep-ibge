@@ -1,5 +1,5 @@
 import streamlit as st
-from ui.sections.base import Section
+from ui.sections.base_section import Section
 
 
 class ColunasPesoSection(Section):

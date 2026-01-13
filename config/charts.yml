@@ -1,6 +1,8 @@
 linha_temporal:
   plot:
-    figsize: [8, 4]
+    figsize:
+      - 8.0
+      - 4.0
     mostrar_titulo: true
     grid: true
     max_variaveis_por_plot: 4
@@ -11,25 +13,21 @@ linha_temporal:
       variaveis:
         - QT_ING_TOTAL
         - QT_CONC_TOTAL
-
     - nome: Evasão Anual Nacional
       nivel: nacional
       variaveis:
         - evasao_anual
         - evasao_anual_financiados
-
     - nome: Percentuais de Matriculados por Tipo de Rede
       nivel: nacional
       variaveis:
         - TP_REDE_Publica
         - TP_REDE_Privada
-
     - nome: Percentuais de Matriculados por Tipo de Modalidade de Ensino
       nivel: nacional
       variaveis:
         - TP_MODALIDADE_ENSINO_Presencial
         - TP_MODALIDADE_ENSINO_EaD
-
     - nome: Evasão Anual na Bahia
       nivel: estadual
       territorio:
@@ -37,14 +35,15 @@ linha_temporal:
       variaveis:
         - evasao_anual
         - evasao_anual_financiados
-
   saida:
     formato: png
     dpi: 150
 
 scatter:
   plot:
-    figsize: [6, 6]
+    figsize:
+      - 6.0
+      - 6.0
     mostrar_titulo: true
     grid: true
 

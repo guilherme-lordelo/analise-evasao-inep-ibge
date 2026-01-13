@@ -26,11 +26,13 @@ def render_tabela(tab_key: str, tabela: dict, doc: dict):
 		]
 
 		st.rerun()
+	idx = 0
 
 	for sheet in sheets:
+		idx = idx + 1
 		uid = get_sheet_uid(sheet)
 
-		with st.expander("Sheet", expanded=False):
+		with st.expander(f"Planilha {idx}", expanded=False):
 			render_sheet(
 				tab_key=tab_key,
 				sheet_uid=uid,
@@ -39,12 +41,16 @@ def render_tabela(tab_key: str, tabela: dict, doc: dict):
 				on_remove_sheet=lambda u=uid: remove_sheet(u),
 			)
 
-	if st.button("Adicionar sheet", key=f"{tab_key}_add_sheet"):
-		sheets.append({
+	if st.button("Adicionar Planilha", key=f"{tab_key}_add_sheet"):
+		sheet = {
 			"descricao_sheet": "",
 			"arquivo": "",
 			"colunas": [],
 			"remover_colunas_idx": [],
 			"merges_colunas": [],
-		})
+		}
+
+		get_sheet_uid(sheet)
+		sheets.append(sheet)
+
 		st.rerun()

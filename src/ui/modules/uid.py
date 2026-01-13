@@ -6,5 +6,5 @@ def get_sheet_uid(sheet: dict) -> str:
 	Nunca deve ser persistido no YAML.
 	"""
 	if "_ui_uid" not in sheet:
-		sheet["_ui_uid"] = uuid.uuid4().hex
+		sheet["_ui_uid"] = str(uuid.uuid4())
 	return sheet["_ui_uid"]

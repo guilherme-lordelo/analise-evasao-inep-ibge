@@ -25,7 +25,7 @@ def render_sheet(
 
 	with col1:
 		if st.button(
-			"Remover sheet",
+			"Remover Planilha",
 			key=f"{tab_key}_{sheet_uid}_remove",
 		):
 			on_remove_sheet()
@@ -33,7 +33,7 @@ def render_sheet(
 
 	with col2:
 		state["descricao_sheet"] = st.text_input(
-			"Descrição da sheet",
+			"Descrição da planilha",
 			value=state["descricao_sheet"],
 			key=f"{tab_key}_{sheet_uid}_desc",
 		)

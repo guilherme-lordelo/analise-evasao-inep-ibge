@@ -15,9 +15,8 @@ tabelas:
     descricao_tabela: "População total do município, com distribuição urbano/rural
       e por sexo."
     sheets:
-      - descricao_sheet: "Conjunto completo da tabela, sem subdivisões."
-        arquivo: "tab1_populacao_total.csv"
-
+      - descricao_sheet: Conjunto completo da tabela, sem subdivisões.
+        arquivo: tab1_populacao_total.csv
         colunas:
           - POP_TOTAL: CONTAGEM
           - PERC_URBANA:
@@ -37,10 +36,8 @@ tabelas:
     descricao_tabela: "População residente por faixas etárias, com detalhamento total,
       urbano e rural."
     sheets:
-      - sheet_id: A
-        descricao_sheet: "Totais gerais de população por faixas etárias."
-        arquivo: "tab2_faixas_etarias_total.csv"
-
+      - descricao_sheet: Totais gerais de população por faixas etárias.
+        arquivo: tab2_faixas_etarias_total.csv
         colunas:
           - POP_RESIDENTE_TOTAL: CONTAGEM
           - PERC_0_A_5: CONTAGEM
@@ -49,20 +46,17 @@ tabelas:
           - PERC_25_A_39: CONTAGEM
           - PERC_40_A_59: CONTAGEM
           - PERC_60_OU_MAIS: CONTAGEM
+        remover_colunas_idx:
+          - 1
         merges_colunas:
           - destino: IDADE_MEDIA_ESTIMADA
             fontes_idx: [2, 3, 4, 5, 6, 7]
             metodo: MEDIA_PONDERADA
-            peso_merge: [2.5, 10, 19.5, 32, 49.5, 70]
             formato: MEDIA
+            peso_merge: [2.5, 10.0, 19.5, 32.0, 49.5, 70.0]
             coluna_peso: "populacao"
-
-        remover_colunas_idx:
-          - 1
-      - sheet_id: B
-        descricao_sheet: "População urbana por faixas etárias."
-        arquivo: "tab2_faixas_etarias_urbana.csv"
-
+      - descricao_sheet: População urbana por faixas etárias.
+        arquivo: tab2_faixas_etarias_urbana.csv
         colunas:
           - POP_RESIDENTE_URBANA: CONTAGEM
           - PERC_0_A_5_URBANA: CONTAGEM
@@ -75,14 +69,11 @@ tabelas:
           - destino: IDADE_MEDIA_ESTIMADA_URBANA
             fontes_idx: [2, 3, 4, 5, 6, 7]
             metodo: MEDIA_PONDERADA
-            peso_merge: [2.5, 10, 19.5, 32, 49.5, 70]
             formato: PROPORCAO
+            peso_merge: [2.5, 10.0, 19.5, 32.0, 49.5, 70.0]
             coluna_peso: "populacao"
-
-      - sheet_id: C
-        descricao_sheet: "População rural por faixas etárias."
-        arquivo: "tab2_faixas_etarias_rural.csv"
-
+      - descricao_sheet: População rural por faixas etárias.
+        arquivo: tab2_faixas_etarias_rural.csv
         colunas:
           - POP_RESIDENTE_RURAL: CONTAGEM
           - PERC_0_A_5_RURAL: CONTAGEM
@@ -95,18 +86,16 @@ tabelas:
           - destino: IDADE_MEDIA_ESTIMADA_RURAL
             fontes_idx: [2, 3, 4, 5, 6, 7]
             metodo: MEDIA_PONDERADA
-            peso_merge: [2.5, 10, 19.5, 32, 49.5, 70]
             formato: MEDIA
+            peso_merge: [2.5, 10.0, 19.5, 32.0, 49.5, 70.0]
             coluna_peso: "populacao"
-
   tab4:
     descricao_tabela: "Unidades domésticas segundo o sexo do responsável, incluindo
       indicadores de responsabilidade única ou compartilhada."
     sheets:
-      - descricao_sheet: "Tabela única contendo totais e distribuição por sexo do
-          responsável."
-        arquivo: "tab4_unidades_domesticas_por_sexo.csv"
-
+      - descricao_sheet: Tabela única contendo totais e distribuição por sexo do
+          responsável.
+        arquivo: tab4_unidades_domesticas_por_sexo.csv
         colunas:
           - UNIDADES_DOMESTICAS_TOTAL: CONTAGEM
           - PERC_UNICO_RESP:
@@ -131,11 +120,9 @@ tabelas:
     descricao_tabela: "Condições de saneamento dos domicílios, separadas por totais,
       área urbana e área rural."
     sheets:
-      - sheet_id: A
-        descricao_sheet: "Situação de saneamento considerando todos os domicílios
-          do município."
-        arquivo: "tab7_saneamento_total.csv"
-
+      - descricao_sheet: Situação de saneamento considerando todos os domicílios
+          do município.
+        arquivo: tab7_saneamento_total.csv
         colunas:
           - DOMICILIOS_TOTAL: CONTAGEM
           - PERC_SANEAMENTO_ADEQUADO: CONTAGEM
@@ -146,19 +133,15 @@ tabelas:
         remover_colunas_idx:
           - 2
           - 3
-      - sheet_id: B
-        descricao_sheet: "Situação de saneamento dos domicílios em áreas urbanas."
-        arquivo: "tab7_saneamento_urbano.csv"
-
+      - descricao_sheet: Situação de saneamento dos domicílios em áreas urbanas.
+        arquivo: tab7_saneamento_urbano.csv
         colunas:
           - DOMICILIOS_URBANOS: CONTAGEM
           - PERC_SANEAMENTO_ADEQUADO_URBANO: CONTAGEM
           - PERC_SANEAMENTO_SEMI_ADEQUADO_URBANO: CONTAGEM
           - PERC_SANEAMENTO_INADEQUADO_URBANO: CONTAGEM
-      - sheet_id: C
-        descricao_sheet: "Situação de saneamento dos domicílios em áreas rurais."
-        arquivo: "tab7_saneamento_rural.csv"
-
+      - descricao_sheet: Situação de saneamento dos domicílios em áreas rurais.
+        arquivo: tab7_saneamento_rural.csv
         colunas:
           - DOMICILIOS_RURAIS: CONTAGEM
           - PERC_SANEAMENTO_ADEQUADO_RURAL: CONTAGEM
@@ -168,10 +151,9 @@ tabelas:
     descricao_tabela: "Rendimento domiciliar per capita, com estatísticas de valor
       médio e quartis, segmentado por total, área urbana e rural."
     sheets:
-      - sheet_id: A
-        descricao_sheet: "Distribuição do rendimento domiciliar per capita para o
-          total dos domicílios."
-        arquivo: "tab8_rendimento_total.csv"
+      - descricao_sheet: Distribuição do rendimento domiciliar per capita para o
+          total dos domicílios.
+        arquivo: tab8_rendimento_total.csv
         colunas:
           - RENDA_MEDIA_PER_CAPITA:
               formato: MEDIA
@@ -183,19 +165,17 @@ tabelas:
           - 2
           - 3
           - 4
-      - sheet_id: B
-        descricao_sheet: "Distribuição do rendimento domiciliar per capita apenas
-          para áreas urbanas."
-        arquivo: "tab8_rendimento_urbano.csv"
+      - descricao_sheet: Distribuição do rendimento domiciliar per capita apenas
+          para áreas urbanas.
+        arquivo: tab8_rendimento_urbano.csv
         colunas:
           - RENDA_MEDIA_PER_CAPITA_URBANA: CONTAGEM
           - QUARTIL_1_URBANO: CONTAGEM
           - QUARTIL_2_URBANO: CONTAGEM
           - QUARTIL_3_URBANO: CONTAGEM
-      - sheet_id: C
-        descricao_sheet: "Distribuição do rendimento domiciliar per capita apenas
-          para áreas rurais."
-        arquivo: "tab8_rendimento_rural.csv"
+      - descricao_sheet: Distribuição do rendimento domiciliar per capita apenas
+          para áreas rurais.
+        arquivo: tab8_rendimento_rural.csv
         colunas:
           - RENDA_MEDIA_PER_CAPITA_RURAL: CONTAGEM
           - QUARTIL_1_RURAL: CONTAGEM
@@ -205,10 +185,8 @@ tabelas:
     descricao_tabela: "População residente por faixas de rendimento, com detalhamento
       total, urbano e rural."
     sheets:
-      - sheet_id: A
-        descricao_sheet: "População residente total por faixas de rendimento."
-        arquivo: "tab12_rendimento_total.csv"
-
+      - descricao_sheet: População residente total por faixas de rendimento.
+        arquivo: tab12_rendimento_total.csv
         colunas:
           - POP_RESIDENTE_RENDAS_TOTAL: CONTAGEM
           - PERC_ATE_70_REAIS: CONTAGEM
@@ -222,20 +200,16 @@ tabelas:
           - 2
           - 3
           - 5
-      - sheet_id: B
-        descricao_sheet: "População residente urbana por faixas de rendimento."
-        arquivo: "tab12_rendimento_urbano.csv"
-
+      - descricao_sheet: População residente urbana por faixas de rendimento.
+        arquivo: tab12_rendimento_urbano.csv
         colunas:
           - POP_RESIDENTE_RENDAS_URBANA: CONTAGEM
           - PERC_ATE_70_REAIS_URBANA: CONTAGEM
           - PERC_ATE_QUARTO_SM_URBANA: CONTAGEM
           - PERC_ATE_MEIO_SM_URBANA: CONTAGEM
           - PERC_ATE_60_PERC_MEDIANA_URBANA: CONTAGEM
-      - sheet_id: C
-        descricao_sheet: "População residente rural por faixas de rendimento."
-        arquivo: "tab12_rendimento_rural.csv"
-
+      - descricao_sheet: População residente rural por faixas de rendimento.
+        arquivo: tab12_rendimento_rural.csv
         colunas:
           - POP_RESIDENTE_RENDAS_RURAL: CONTAGEM
           - PERC_ATE_70_REAIS_RURAL: CONTAGEM
@@ -246,10 +220,9 @@ tabelas:
     descricao_tabela: "Indicadores de vulnerabilidade de crianças de 0 a 5 anos, considerando
       alfabetização do responsável e condições de saneamento."
     sheets:
-      - descricao_sheet: "Tabela única contendo indicadores de vulnerabilidade em
-          2000 e 2010."
-        arquivo: "tab16_vulnerabilidade_0a5.csv"
-
+      - descricao_sheet: Tabela única contendo indicadores de vulnerabilidade em
+          2000 e 2010.
+        arquivo: tab16_vulnerabilidade_0a5.csv
         colunas:
           - PERC_RESPONSAVEL_ANALFABETO_2000: CONTAGEM
           - PERC_RESPONSAVEL_ANALFABETO_2010: CONTAGEM

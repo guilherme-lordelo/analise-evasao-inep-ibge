@@ -45,5 +45,6 @@ def render_tabela(tab_key: str, tabela: dict, doc: dict):
 			"arquivo": "",
 			"colunas": [],
 			"remover_colunas_idx": [],
+			"merges_colunas": [],
 		})
 		st.rerun()

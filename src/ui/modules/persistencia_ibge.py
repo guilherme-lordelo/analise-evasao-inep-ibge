@@ -36,8 +36,14 @@ def commit_ibge_edicao(doc: dict):
 					{"remover_colunas_idx": state["remover_colunas_idx"]}
 					if state["remover_colunas_idx"]
 					else {}
-				)
+				),
+				**(
+					{"merges_colunas": state["merges_colunas"]}
+					if state.get("merges_colunas")
+					else {}
+				),
 			})
+
 
 		tabela["sheets"] = sheets_yaml
 
@@ -56,3 +62,8 @@ def _aplicar_sheet_state(sheet: dict, state: dict):
 		sheet["remover_colunas_idx"] = state["remover_colunas_idx"]
 	else:
 		sheet.pop("remover_colunas_idx", None)
+
+	if state.get("merges_colunas"):
+		sheet["merges_colunas"] = state["merges_colunas"]
+	else:
+		sheet.pop("merges_colunas", None)

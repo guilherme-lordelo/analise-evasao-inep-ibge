@@ -12,8 +12,8 @@ class IBGEModule(ConfigModule):
 	label = "IBGE"
 
 	SECTIONS = [
-		ColunasPesoSection(),
 		IBGETabelasSection(),
+		ColunasPesoSection(),
 	]
 
 	def render_sidebar(self):

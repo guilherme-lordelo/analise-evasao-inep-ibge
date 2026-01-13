@@ -20,4 +20,5 @@ def init_sheet_state(tab_key: str, sheet_uid: str, sheet: dict):
 			parse_coluna_yaml(c)
 			for c in sheet.get("colunas", [])
 		],
+		"merges_colunas": list(sheet.get("merges_colunas", [])),
 	}

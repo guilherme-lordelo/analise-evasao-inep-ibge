@@ -4,6 +4,7 @@ from ui.modules.estado_ibge import (
 	sheet_state_key,
 	init_sheet_state,
 )
+from ui.sections.ibge.tabelas.merge_colunas import render_merge_coluna
 from ui.sections.ibge.tabelas.models import ColunaEditavel, FormaColuna
 from .render_coluna import render_coluna
 
@@ -88,3 +89,33 @@ def render_sheet(
 			st.error("Os índices devem ser números inteiros.")
 	else:
 		state["remover_colunas_idx"] = []
+	
+	st.markdown("### Merge de colunas")
+
+	for i, merge in enumerate(list(state["merges_colunas"])):
+
+		def _remove_merge(i=i):
+			state["merges_colunas"].pop(i)
+			st.rerun()
+
+		render_merge_coluna(
+			merge,
+			key_prefix=f"{tab_key}_{sheet_uid}_merge_{i}",
+			pesos=pesos,
+			on_remove=_remove_merge,
+		)
+
+	if st.button(
+		"Adicionar merge de colunas",
+		key=f"{tab_key}_{sheet_uid}_add_merge",
+	):
+		state["merges_colunas"].append({
+			"destino": "",
+			"fontes_idx": [],
+			"metodo": "MEDIA_PONDERADA",
+			"peso_merge": [],
+			"formato": "MEDIA",
+			"coluna_peso": None,
+		})
+		st.rerun()
+

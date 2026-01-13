@@ -5,6 +5,7 @@ from .validacao import validate_tabelas
 def _init_state():
 	st.session_state.setdefault("criando_tabela", False)
 	st.session_state.setdefault("novo_nome_tabela", "")
+	st.session_state.setdefault("merges_colunas", [])
 
 class IBGETabelasSection:
 	key = "tabelas"

@@ -18,7 +18,7 @@ class VariaveisConfig:
     variaveis: List[str]
 
     temporais: List[str]
-    categoricas_original: List[str]
+    categoricas_filtradas: List[str]
     categoricas: List[str]
     quantitativas: List[str]
 
@@ -67,7 +67,7 @@ def carregar_variaveis(_cfg: dict) -> VariaveisConfig:
 
     valores_categoricos: Dict[str, Set[str]] = {}
     descricoes_categoricos: Dict[str, Dict[str, str]] = {}
-    categoricas_original: List[str] = []
+    categoricas_filtradas: List[str] = []
 
     for var, props in variaveis_cfg.get("categoricas", {}).items():
         valores_dict = props.get("valores", {})
@@ -75,7 +75,7 @@ def carregar_variaveis(_cfg: dict) -> VariaveisConfig:
         filtro_excluir = set(props.get("filtro_excluir", []))
 
         if filtro_excluir:
-            categoricas_original.append(var)
+            categoricas_filtradas.append(var)
 
         valores_filtrados = valores - filtro_excluir
 
@@ -109,7 +109,7 @@ def carregar_variaveis(_cfg: dict) -> VariaveisConfig:
         variaveis=variaveis,
         temporais=temporais,
         categoricas=categoricas,
-        categoricas_original=categoricas_original,
+        categoricas_filtradas=categoricas_filtradas,
         quantitativas=quantitativas,
         valores_categoricos=valores_categoricos,
         descricoes_categoricos=descricoes_categoricos,

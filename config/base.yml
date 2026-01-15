@@ -10,4 +10,4 @@ estado:
   sigla: "SG_UF"
 
 nacional:
-  coluna: "UF"  # Nome para agregação nacional, decidido pelo usuário
+  coluna: "ID_BRASIL"  # Nome para agregação nacional, decidido pelo usuário

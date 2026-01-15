@@ -10,7 +10,7 @@ def filtrar_variaveis_categoricas(
 	por configuração (filtro_excluir).
 	"""
 
-	for coluna in VARIAVEIS_YAML.categoricas_original:
+	for coluna in VARIAVEIS_YAML.categoricas_filtradas:
 		if coluna not in df.columns:
 			continue
 

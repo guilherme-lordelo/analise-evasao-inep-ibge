@@ -31,3 +31,21 @@ def render_categoricas(categoricas: dict):
 			if st.button("Adicionar valor", key=f"add_val_{nome}"):
 				valores[max(valores.keys(), default=0) + 1] = ""
 				st.rerun()
+
+			if valores:
+				opcoes = list(valores.keys())
+
+				filtro_atual = cfg.get("filtro_excluir", [])
+
+				selecionados = st.multiselect(
+					"Excluir valores",
+					options=opcoes,
+					default=filtro_atual,
+					format_func=lambda k: f"{k} - {valores.get(k, '')}",
+					key=f"filtro_excluir_{nome}",
+				)
+
+				if selecionados:
+					cfg["filtro_excluir"] = selecionados
+				else:
+					cfg.pop("filtro_excluir", None)

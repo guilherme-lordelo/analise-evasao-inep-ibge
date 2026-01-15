@@ -2,13 +2,13 @@
 name = "analise-evasao-inep-ibge"
 version = "0.0.0"
 dependencies = [
-	"pyyaml",
 	"pandas",
 	"numpy",
     "matplotlib",
     "geopandas",
     "xlrd",
-    "plotly",
+    "ruamel.yaml",
+    "streamlit>=1.30",
 ]
 
 [tool.setuptools]

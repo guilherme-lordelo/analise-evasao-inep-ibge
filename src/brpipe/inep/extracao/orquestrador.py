@@ -28,13 +28,10 @@ def orquestrar_extracao(
 	print(f"Lendo cabeçalho de {input_path.name}...")
 	header = ler_header(input_path)
 
-	# 1. Resolução completa do schema
 	colunas_fisicas, mapeamento, faltantes = resolver_schema_entrada(header)
 
 	if not colunas_fisicas:
 		raise RuntimeError("Nenhuma coluna válida encontrada para leitura")
-
-	print(f"Colunas físicas lidas: {colunas_fisicas}")
 
 	if mapeamento:
 		print(f"Mapeamentos aplicados: {mapeamento}")

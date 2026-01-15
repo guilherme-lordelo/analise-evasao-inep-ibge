@@ -64,5 +64,5 @@ ibge_estadual = PROCESSED_IBGE / NOME_FINAL_ESTADOS
 ibge_nacional = PROCESSED_IBGE / NOME_FINAL_NACIONAL
 
 # Visualizações
-MAPAS_RENDER = DATA_DIR / "rendered" / "mapas"
-CHARTS_RENDER = DATA_DIR / "rendered" / "charts"
+MAPAS_RENDER = DATA_DIR / "RENDERED" / "MAPAS"
+CHARTS_RENDER = DATA_DIR / "RENDERED" / "GRAFICOS"

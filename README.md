@@ -225,10 +225,15 @@ Exemplo:
 
 Posicionar os arquivos originais INEP em:
 
-    data/RAW/inep_micros/
+    data/RAW/INEP/
 Posicionar os arquivos originais IBGE em:
 
-    data/RAW/ibge_xls/
+    data/RAW/IBGE/
+Posicionar as malhas territóriais em:
+    /DATA/SHAPEFILES/BR_Municipios_202
+    /DATA/SHAPEFILES/BR_UF_2024
+
+
 ### Inicialização da Interface Gráfica para Alinhamento do Comportamento
 
     streamlit run src/ui/app.py

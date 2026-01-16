@@ -213,22 +213,27 @@ Exemplo:
 
 ### Clonar repositório
     git clone https://github.com/guilherme-lordelo/analise-evasao-inep-ibge.git
+
+### Instalação em Ambiênte virtual (Recomendado):
+    python -m venv venv
+
+    .\venv\Scripts\activate
+
 ### Instalar projeto como pacote
     pip install -e .
 ### Posicionar arquivos brutos (disponíveis nos portais oficiais das instituições)
 
-Manter os arquivos originais INEP em:
+Posicionar os arquivos originais INEP em:
 
     data/RAW/inep_micros/
-Manter os arquivos originais IBGE em:
+Posicionar os arquivos originais IBGE em:
 
     data/RAW/ibge_xls/
-## Alinhamento do Comportamento do Pipeline
-### Edição do arquivo de configuração INEP em:
-    config/inep.yml
-### Edição do arquivo de configuração IBGE em:
-    config/ibge.yml
-## Execução dos Pipelines
+### Inicialização da Interface Gráfica para Alinhamento do Comportamento
+
+    streamlit run src/ui/app.py
+
+## Execução dos Pipelines e Criação de Visualizações
 
 ### Pipeline INEP
 
@@ -239,4 +244,9 @@ Manter os arquivos originais IBGE em:
 
 - Extração: `python -m brpipe.scripts.ibge.executar_extracao`
 - Transformação: `python -m brpipe.scripts.ibge.executar_transformacao`
+
+### Visualizações
+
+- Linhas Temporais: `python -m brpipe.scripts.viz.gerar_linha_temporal`
+- Gráficos de Dispersão: `python -m brpipe.scripts.viz.gerar_scatter`
 

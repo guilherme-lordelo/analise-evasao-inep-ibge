@@ -1,5 +1,5 @@
 from pandas import DataFrame
-from brpipe.viz.charts.common.consumiveis import Consumiveis
+from brpipe.bridge.common.consumiveis import Consumiveis
 from brpipe.viz.charts.common.plot_spec import PlotSpecBase
 
 

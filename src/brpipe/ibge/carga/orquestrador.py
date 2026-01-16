@@ -1,8 +1,8 @@
 from collections import defaultdict
 import pandas as pd
 
-from brpipe.ibge.carga.agregacao import executar_agregacoes
-from brpipe.ibge.carga.integracao import integrar_sheets_tabela
+from brpipe.ibge.transformacao.agregacao import executar_agregacoes
+from brpipe.ibge.transformacao.integracao import integrar_sheets_tabela
 from brpipe.ibge.config.models import SheetsTransformados
 from brpipe.ibge.transformacao.merge_tabela import (
 	registrar_merges_tabela,

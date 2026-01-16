@@ -2,10 +2,10 @@ arquivo_final_municipios: "ibge_final_municipios.csv"
 arquivo_final_estados: "ibge_final_estados.csv"
 arquivo_final_nacional: "ibge_final_nacional.csv"
 
-formato_padrao: "CONTAGEM"
-
 colunas_peso:
-  populacao: POP_TOTAL
+  populacao: POP_RESIDENTE_TOTAL
+  populacao_urbana: POP_RESIDENTE_URBANA
+  populacao_rural: POP_RESIDENTE_RURAL
   unidades: UNIDADES_DOMESTICAS_TOTAL
   domicilios: DOMICILIOS_TOTAL
 
@@ -29,6 +29,7 @@ tabelas:
           - PERC_MULHER: CONTAGEM
           - RAZAO_SEXO: CONTAGEM
         remover_colunas_idx:
+          - 1
           - 3
           - 5
           - 6
@@ -46,8 +47,6 @@ tabelas:
           - PERC_25_A_39: CONTAGEM
           - PERC_40_A_59: CONTAGEM
           - PERC_60_OU_MAIS: CONTAGEM
-        remover_colunas_idx:
-          - 1
         merges_colunas:
           - destino: IDADE_MEDIA_ESTIMADA
             fontes_idx: [2, 3, 4, 5, 6, 7]
@@ -71,7 +70,7 @@ tabelas:
             metodo: MEDIA_PONDERADA
             formato: PROPORCAO
             peso_merge: [2.5, 10.0, 19.5, 32.0, 49.5, 70.0]
-            coluna_peso: "populacao"
+            coluna_peso: "populacao_urbana"
       - descricao_sheet: População rural por faixas etárias.
         arquivo: tab2_faixas_etarias_rural.csv
         colunas:
@@ -88,7 +87,7 @@ tabelas:
             metodo: MEDIA_PONDERADA
             formato: MEDIA
             peso_merge: [2.5, 10.0, 19.5, 32.0, 49.5, 70.0]
-            coluna_peso: "populacao"
+            coluna_peso: "populacao_rural"
   tab4:
     descricao_tabela: "Unidades domésticas segundo o sexo do responsável, incluindo
       indicadores de responsabilidade única ou compartilhada."

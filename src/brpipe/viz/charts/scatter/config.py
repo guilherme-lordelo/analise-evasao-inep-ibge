@@ -3,7 +3,7 @@ from typing import List, Optional
 from brpipe.bridge.common.tipos import ResultadoTipo
 from brpipe.viz.charts.common import NormalizacaoPlot, PlotSpecBase
 from brpipe.utils.config import load_config
-from brpipe.viz.charts.common.consumiveis import Consumiveis
+from brpipe.bridge.common.consumiveis import Consumiveis
 from brpipe.viz.charts.common.territorio import TerritoriosINEP
 
 _CFG = load_config("charts")

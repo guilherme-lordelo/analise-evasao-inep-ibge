@@ -42,27 +42,17 @@ formulas:
         - "(QT_MAT_FINANC_{p} - QT_CONC_FINANC_{p}) > 0"
         - "(QT_MAT_FINANC_{n} - QT_ING_FINANC_{n}) <= (QT_MAT_FINANC_{p} - QT_CONC_FINANC_{p})"
 
-  total_estudantes:
-    descricao: "Soma total de estudantes"
-    expressao: "QT_MAT_TOTAL_{p} + QT_ING_TOTAL_{n}"
-    validacao:
-      regras: []   # sem validação
-
 validacao_limites:
   minimo_m_prev: 10
   minimo_m_n: 5
   minimo_i_n: 1
   minimo_c_prev: 1
 
-# -----------------------
 # Coluna de peso
-# -----------------------
 
 coluna_peso_inep: "QT_MAT_TOTAL" # Coluna usada como peso na agregação. Deve ser uma variável quantitativa.
 
-# =======================================
 # ARQUIVOS
-# =======================================
 
 arquivos:
   extracao:
@@ -79,26 +69,20 @@ arquivos:
       - "estados_"
       - "nacional_"
 
-#---------------------------------------------------------------------
 # Período de análise
-#---------------------------------------------------------------------
 
 anos:
   inicio: 2016
   fim: 2024
 
-#---------------------------------------------------------------------
 # Configurações de extração de dados INEP
-#---------------------------------------------------------------------
 
 extracao:
   encoding: "latin1"
   sep: ";"
   chunksize: 100000
 
-#---------------------------------------------------------------------
 # Definições de variáveis INEP com tipos
-#---------------------------------------------------------------------
 
 variaveis:
 
@@ -140,8 +124,7 @@ variaveis:
       valores:
         1: "Presencial"
         2: "EaD"
-      #filtro_excluir:
-      #  - 2  # Excluir EAD
+
 
   quantitativas:
     QT_ING_TOTAL: "Alunos ingressantes"
@@ -159,18 +142,14 @@ variaveis:
     QT_SIT_TRANSFERIDO: "Transferidos"
     QT_SIT_FALECIDO: "Falecidos"
 
-# ----------------------------------------------
 # Mapeamento de nomes divergentes encontrados em cabeçalhos do INEP
-# ----------------------------------------------
 
 mapeamento_colunas:
   QT_ING: QT_ING_TOTAL
   QT_MAT: QT_MAT_TOTAL
   QT_CONC: QT_CONC_TOTAL
 
-# ----------------------------------------------
 # Regras de limpeza e tratamento
-# ----------------------------------------------
 
 limpeza:
   comportamento_sem_municipio: "atribuir"  # "descartar" ou "atribuir"

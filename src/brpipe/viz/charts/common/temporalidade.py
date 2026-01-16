@@ -1,4 +1,4 @@
-from brpipe.viz.charts.common.consumiveis import Consumivel
+from brpipe.bridge.common.consumiveis import Consumivel
 
 def exigir_temporalidade(item: Consumivel, nome_chart: str):
     if not getattr(item, "dim_temporal", False):

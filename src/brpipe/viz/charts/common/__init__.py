@@ -1,4 +1,4 @@
-from brpipe.viz.charts.common.consumiveis import Consumiveis
+from brpipe.bridge.common.consumiveis import Consumiveis
 from brpipe.viz.charts.common.persistencia import persistir_chart
 from brpipe.viz.charts.common.plot_spec import PlotSpecBase
 from brpipe.viz.charts.common.dataframe import carregar_dataframe_por_plot

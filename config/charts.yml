@@ -50,7 +50,7 @@ scatter:
   plots:
     - nome: Matriculados vs Ingressantes
       nivel: nacional
-      eixo_x: POP_TOTAL
+      eixo_x: QT_MAT_TOTAL
       eixo_y: QT_ING_TOTAL
 
     - nome: Evasão vs Rede Publica

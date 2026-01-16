@@ -5,7 +5,7 @@ from brpipe.viz.charts.common import (
     Visualizador,
     TipoChart,
 )
-from brpipe.viz.charts.common.consumiveis import Consumiveis
+from brpipe.bridge.common.consumiveis import Consumiveis
 from brpipe.viz.charts.common.filtros import filtrar_ano_inicial
 from brpipe.viz.charts.common.render_utils import finalizar_chart
 from brpipe.viz.charts.scatter.config import ScatterConfig, ScatterPlotSpec

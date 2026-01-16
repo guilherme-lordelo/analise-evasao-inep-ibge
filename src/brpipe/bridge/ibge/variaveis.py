@@ -1,7 +1,7 @@
 from pandas import Series
 from brpipe.bridge.common.tipos import ResultadoTipo
 from brpipe.ibge.config.models import SheetIBGEConfig, TabelaIBGEConfig
-from brpipe.viz.charts.common.consumiveis import Consumivel
+from brpipe.bridge.common.consumiveis import Consumivel
 
 
 class VariavelIBGE:
